@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { Menu, X, Settings, Home, Wrench, Clock, Mail } from "lucide-react"
+import { Menu, X, Settings, Home, Wrench, Clock, Mail, Star } from "lucide-react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { cn } from "@/lib/utils"
@@ -14,6 +14,53 @@ const navLinks = [
   { label: "Timeline", href: "#experience", icon: Clock },
   { label: "Contact", href: "#contact", icon: Mail },
 ]
+
+const RandomFlyingDoraemon = () => {
+  // Generate random fixed path for Doraemon to fly across the screen
+  const pathX = useMemo(() => Array.from({ length: 20 }, () => `${Math.floor(Math.random() * 90)}vw`), [])
+  const pathY = useMemo(() => Array.from({ length: 20 }, () => `${Math.floor(Math.random() * 90)}vh`), [])
+
+  return (
+    <motion.div
+      className="fixed z-40 pointer-events-none"
+      animate={{ x: pathX, y: pathY }}
+      transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+    >
+      <div className="relative">
+        <motion.img
+          src={doraemonFly}
+          alt="Flying Doraemon"
+          className="w-12 sm:w-16 h-auto object-contain drop-shadow-[0_0_15px_rgba(0,112,243,0.4)]"
+          animate={{ y: [0, -10, 0], rotate: [-10, 10, -10] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Twinkling star effects following him */}
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute top-1/2 left-1/2 -mt-2 -ml-2 text-yellow-400"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{
+              x: [0, (Math.random() - 0.5) * 100],
+              y: [0, (Math.random() - 0.5) * 100],
+              opacity: [0, 1, 0],
+              scale: [0, Math.random() * 0.8 + 0.4, 0],
+              rotate: [0, 180]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: i * 0.4,
+              ease: "easeOut"
+            }}
+          >
+            <Star className="w-4 h-4 fill-current blur-[0.5px]" />
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -166,22 +213,22 @@ export default function Navbar() {
               </motion.button>
 
               {/* Floating Doraemon and Nobita */}
-              <motion.div 
+              <motion.div
                 className="flex items-end -mb-2 pointer-events-none"
                 animate={{ y: [0, -5, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
-                <motion.img 
-                  src={doraemonFly} 
-                  alt="Doraemon" 
-                  className="h-10 lg:h-12 w-auto object-contain drop-shadow-md z-10 pointer-events-auto cursor-pointer" 
+                <motion.img
+                  src={doraemonFly}
+                  alt="Doraemon"
+                  className="h-10 lg:h-12 w-auto object-contain drop-shadow-md z-10 pointer-events-auto cursor-pointer"
                   animate={{ x: [0, 4, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                 />
-                <motion.img 
-                  src={nobitaSit} 
-                  alt="Nobita" 
-                  className="h-8 lg:h-10 w-auto object-contain drop-shadow-md -ml-3" 
+                <motion.img
+                  src={nobitaSit}
+                  alt="Nobita"
+                  className="h-8 lg:h-10 w-auto object-contain drop-shadow-md -ml-3"
                   animate={{ x: [0, -3, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
                 />
@@ -313,6 +360,9 @@ export default function Navbar() {
       >
         ↓ scroll ↓
       </motion.div>
+
+      {/* Full website random flying Doraemon with star effect */}
+      <RandomFlyingDoraemon />
     </>
   )
 }
