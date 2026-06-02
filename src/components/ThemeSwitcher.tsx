@@ -65,7 +65,7 @@ export default function ThemeSwitcher() {
     if (save) {
       localStorage.setItem('app-theme', theme.id);
     }
-    
+
     const root = document.documentElement;
     root.style.setProperty('--color-doraemon-blue', theme.primary);
     root.style.setProperty('--color-primary', theme.primary);
@@ -82,7 +82,7 @@ export default function ThemeSwitcher() {
         whileHover={{ rotate: 90 }}
         transition={{ duration: 0.3 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-10 h-10 flex items-center justify-center rounded-full bg-white/60 hover:bg-white shadow-sm border border-gray-100 text-gray-700 transition-colors focus:outline-none"
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-sm border border-gray-100 text-doraemon-blue transition-colors focus:outline-none"
         aria-label="Theme Settings"
       >
         <Settings className="w-5 h-5" />
@@ -114,12 +114,11 @@ export default function ThemeSwitcher() {
                       applyTheme(theme);
                       setIsOpen(false);
                     }}
-                    className={`flex items-center justify-between px-3 py-2 rounded-xl transition-colors ${
-                      activeTheme === theme.id ? 'bg-gray-50 font-bold' : 'hover:bg-gray-50'
-                    }`}
+                    className={`flex items-center justify-between px-3 py-2 rounded-xl transition-colors ${activeTheme === theme.id ? 'bg-gray-50 font-bold' : 'hover:bg-gray-50'
+                      }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div 
+                      <div
                         className="w-5 h-5 rounded-full shadow-inner border border-black/10"
                         style={{ backgroundColor: theme.primary }}
                       />

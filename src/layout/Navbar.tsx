@@ -185,37 +185,37 @@ export default function Navbar() {
 
             <div className="flex items-center gap-2 md:hidden">
               <ThemeSwitcher />
-              
+
               {/* Mobile menu button */}
-            <motion.button
-              className="md:hidden p-2 rounded-full text-gray-600 hover:text-doraemon-blue hover:bg-white/50 backdrop-blur-sm transition-colors"
-              onClick={() => setIsOpen(!isOpen)}
-              whileTap={{ scale: 0.9 }}
-            >
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="w-6 h-6" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="w-6 h-6" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
+              <motion.button
+                className="md:hidden p-2 rounded-full text-gray-600 hover:text-doraemon-blue hover:bg-white/50 backdrop-blur-sm transition-colors"
+                onClick={() => setIsOpen(!isOpen)}
+                whileTap={{ scale: 0.9 }}
+              >
+                <AnimatePresence mode="wait">
+                  {isOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X className="w-6 h-6" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu className="w-6 h-6" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
             </div>
           </div>
         </div>
