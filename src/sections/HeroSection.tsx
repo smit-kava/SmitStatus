@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 import { Star, Bell, Rocket } from "lucide-react"
-import heroImage from "@/assets/hero_image.png"
+import heroImage from "@/assets/smit_hero_image.png"
 
 export default function HeroSection() {
   const scrollTo = (id: string) => {
@@ -53,21 +53,52 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right Image */}
+          {/* Right Image - Custom SVG */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="w-full relative z-10 flex justify-center lg:justify-end"
           >
-            <div className="w-4/5 sm:w-3/4 lg:w-[85%] relative group cursor-pointer">
+            <div className="w-full sm:w-[90%] lg:w-[95%] relative group cursor-pointer">
               <div className="animate-float-delayed">
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#00334e]/10 to-transparent rounded-[2.5rem] transform translate-x-4 translate-y-4 lg:translate-x-6 lg:translate-y-6 -z-10 blur-xl transition-transform duration-500 group-hover:translate-x-8 group-hover:translate-y-8"></div>
-                <img
-                  src={heroImage}
-                  alt="Futuristic Developer Setup"
-                  className="w-full h-auto rounded-[2.5rem] shadow-2xl object-cover transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
-                />
+                <div className="absolute inset-0 bg-linear-to-tr from-[#00334e]/10 to-transparent rounded-[2.5rem] transform translate-x-4 translate-y-4 lg:translate-x-6 lg:translate-y-6 -z-10 blur-xl transition-transform duration-500 group-hover:translate-x-8 group-hover:translate-y-8"></div>
+
+                <div className="w-full aspect-square md:aspect-[4/3] rounded-[2.5rem] bg-white shadow-2xl p-6 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-gray-100">
+                  {/* Background decorative circles */}
+                  <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#0070F3]/10 rounded-full blur-3xl"></div>
+                  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#F59E0B]/20 rounded-full blur-3xl"></div>
+
+                  {/* SVG Illustration */}
+                  <svg viewBox="0 0 400 300" className="w-full h-full drop-shadow-md z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Monitor */}
+                    <rect x="50" y="40" width="300" height="180" rx="12" fill="#1e293b" />
+                    <rect x="60" y="50" width="280" height="150" rx="8" fill="#0f172a" />
+                    {/* Stand */}
+                    <path d="M180 220 L220 220 L230 260 L170 260 Z" fill="#94a3b8" />
+                    <rect x="140" y="260" width="120" height="10" rx="4" fill="#64748b" />
+
+                    {/* Screen Content - Code Lines */}
+                    <rect x="80" y="70" width="140" height="8" rx="4" fill="#3b82f6" opacity="0.8" />
+                    <rect x="80" y="90" width="100" height="8" rx="4" fill="#10b981" opacity="0.8" />
+                    <rect x="100" y="110" width="120" height="8" rx="4" fill="#eab308" opacity="0.8" />
+                    <rect x="100" y="130" width="80" height="8" rx="4" fill="#ef4444" opacity="0.8" />
+                    <rect x="80" y="150" width="160" height="8" rx="4" fill="#8b5cf6" opacity="0.8" />
+
+                    {/* Smit Kava Text Logo on Screen */}
+                    <text x="270" y="125" fontFamily="monospace" fontSize="32" fontWeight="bold" fill="#0070F3" textAnchor="middle">My</text>
+                    <text x="270" y="145" fontFamily="sans-serif" fontSize="12" fontWeight="bold" fill="#ffffff" textAnchor="middle">Portfolio</text>
+
+                    {/* Floating elements */}
+                    <circle cx="340" cy="70" r="15" fill="#F59E0B" opacity="0.2" />
+                    <path d="M335 65 L345 75 M345 65 L335 75" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+
+                    <rect x="30" y="180" width="30" height="30" rx="8" fill="#0070F3" opacity="0.2" />
+                    <text x="45" y="200" fontFamily="monospace" fontSize="16" fontWeight="bold" fill="#0070F3" textAnchor="middle">{"{}"}</text>
+                  </svg>
+
+
+                </div>
               </div>
             </div>
           </motion.div>
