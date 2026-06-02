@@ -1,28 +1,42 @@
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Settings } from "lucide-react"
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
+import { Menu, X, Settings, Home, Wrench, Clock, Mail } from "lucide-react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { cn } from "@/lib/utils"
+import doraemonFly from "@/assets/navImages/Doremon.png"
+import nobitaSit from "@/assets/navImages/Nobita.png"
 
 const navLinks = [
-  { label: "Pocket", href: "#home" },
-  { label: "Gadgets", href: "#skills" },
-  { label: "Timeline", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "Pocket", href: "#home", icon: Home },
+  { label: "Gadgets", href: "#skills", icon: Wrench },
+  { label: "Timeline", href: "#experience", icon: Clock },
+  { label: "Contact", href: "#contact", icon: Mail },
 ]
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  const { scrollY } = useScroll()
+  const doraemonOpacity = useTransform(scrollY, [0, 200], [0, 1])
+  const doraemonX = useTransform(scrollY, [0, 200], [-80, 0])
+  const nobitaOpacity = useTransform(scrollY, [100, 300], [0, 1])
+  const nobitaX = useTransform(scrollY, [100, 300], [80, 0])
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
+      const currentScroll = window.scrollY
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+      const progress = maxScroll > 0 ? (currentScroll / maxScroll) * 100 : 0
+
+      setScrollProgress(progress)
+      setScrolled(currentScroll > 20)
 
       const sections = navLinks.map(link => link.href.replace("#", ""))
-      const scrollPos = window.scrollY + 100
+      const scrollPos = currentScroll + 100
 
       for (const section of sections.reverse()) {
         const el = document.getElementById(section)
@@ -33,7 +47,8 @@ export default function Navbar() {
       }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -47,109 +62,284 @@ export default function Navbar() {
   }
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "bg-surface-bright/80 backdrop-blur-xl shadow-sm border-b border-outline-variant/30"
-          : "bg-transparent py-2"
-      )}
-    >
-      <div className="max-w-container-max mx-auto px-gutter">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link to={ROUTES.HOME} className="flex items-center group font-headline-md text-headline-md tracking-tight">
-              <span className="text-primary">Doraemon</span>
-              <span className="text-primary/80">Dev</span>
-            </Link>
-          </motion.div>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.href.replace("#", "")
-              return (
-                <button
-                  key={link.href}
-                  onClick={() => scrollTo(link.href)}
-                  className={cn(
-                    "relative py-2 font-label-md text-label-md transition-all duration-200",
-                    isActive ? "text-primary font-bold" : "text-on-surface-variant hover:text-primary"
-                  )}
-                >
-                  {link.label}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavUnderline"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-secondary-container"
-                    />
-                  )}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Actions */}
-          <div className="hidden md:flex items-center gap-4">
-            <button className="text-primary hover:rotate-90 hover:bg-surface-container-low transition-all duration-300 p-2 rounded-full">
-              <Settings className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => scrollTo("#contact")}
-              className="bg-primary text-on-primary px-md py-2 rounded-full font-label-md text-label-md font-bold shadow-md hover:-translate-y-0.5 transition-all active:scale-95"
-            >
-              Hire Me
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            className="md:hidden text-primary p-2 hover:bg-surface-container-low rounded-full transition-colors"
-            onClick={() => setIsOpen(!isOpen)}
-            whileTap={{ scale: 0.9 }}
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-surface-container-lowest/95 backdrop-blur-xl border-b border-outline-variant/30 shadow-lg"
-          >
-            <div className="px-gutter py-4 space-y-2">
-              {navLinks.map((link, index) => (
-                <motion.button
-                  key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => scrollTo(link.href)}
-                  className="w-full text-left px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-xl transition-all duration-200 font-label-md text-label-md"
-                >
-                  {link.label}
-                </motion.button>
-              ))}
-              <button
-                className="w-full bg-primary text-on-primary mt-4 py-3 rounded-xl font-label-md text-label-md font-bold shadow-md active:scale-95 transition-transform"
-                onClick={() => scrollTo("#contact")}
-              >
-                Hire Me
-              </button>
-            </div>
-          </motion.div>
+    <>
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+          scrolled
+            ? "bg-white/70 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/20"
+            : "bg-white/30 backdrop-blur-md"
         )}
-      </AnimatePresence>
-    </motion.nav>
+      >
+        {/* Liquid glass effect overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/40 pointer-events-none" />
+
+        {/* Scroll progress bar */}
+        <motion.div
+          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[#0070F3] via-[#00A3FF] to-[#0070F3]"
+          style={{ width: `${scrollProgress}%` }}
+          initial={{ width: 0 }}
+          animate={{ width: `${scrollProgress}%` }}
+          transition={{ duration: 0.1 }}
+        />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Logo */}
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="relative group"
+            >
+              <Link to={ROUTES.HOME} className="flex items-center gap-2">
+                <span className="text-xl lg:text-2xl font-bold text-[#0070F3]">
+                  Doraemon
+                </span>
+                <span className="text-xl lg:text-2xl font-bold text-gray-700">
+                  Dev
+                </span>
+              </Link>
+              <div className="absolute inset-0 rounded-full bg-[#0070F3]/0 group-hover:bg-[#0070F3]/5 blur-xl transition-all duration-500 -z-10" />
+            </motion.div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1 lg:gap-2">
+              {navLinks.map((link) => {
+                const Icon = link.icon
+                const isActive = activeSection === link.href.replace("#", "")
+
+                return (
+                  <motion.button
+                    key={link.href}
+                    onClick={() => scrollTo(link.href)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={cn(
+                      "relative px-4 lg:px-5 py-2.5 rounded-full transition-all duration-300",
+                      "flex items-center gap-2",
+                      isActive
+                        ? "text-[#0070F3] bg-white/50 backdrop-blur-sm"
+                        : "text-gray-600 hover:text-[#0070F3] hover:bg-white/30 backdrop-blur-sm"
+                    )}
+                  >
+                    <Icon className="w-4 h-4 lg:w-4 lg:h-4" />
+                    <span className="font-medium text-sm lg:text-sm">
+                      {link.label}
+                    </span>
+
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavIndicator"
+                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-5 h-0.5 bg-[#0070F3] rounded-full"
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </motion.button>
+                )
+              })}
+            </div>
+
+            {/* Right side actions */}
+            <div className="hidden md:flex items-center gap-2 lg:gap-3">
+              <motion.button
+                whileHover={{ scale: 1.05, rotate: 90 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full text-gray-500 hover:text-[#0070F3] hover:bg-white/50 backdrop-blur-sm transition-all duration-300"
+              >
+                <Settings className="w-5 h-5" />
+              </motion.button>
+
+              <motion.button
+                onClick={() => scrollTo("#contact")}
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative px-5 lg:px-6 py-2 rounded-full font-medium text-sm overflow-hidden group bg-[#0070F3] shadow-lg shadow-[#0070F3]/20"
+              >
+                <div className="absolute inset-0 bg-[#0050C0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="relative z-10 text-white font-medium">Hire Me</span>
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-white/20"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.6 }}
+                />
+              </motion.button>
+            </div>
+
+            {/* Mobile menu button */}
+            <motion.button
+              className="md:hidden p-2 rounded-full text-gray-600 hover:text-[#0070F3] hover:bg-white/50 backdrop-blur-sm transition-colors"
+              onClick={() => setIsOpen(!isOpen)}
+              whileTap={{ scale: 0.9 }}
+            >
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="md:hidden bg-white/80 backdrop-blur-xl border-t border-white/20 shadow-lg"
+            >
+              <div className="px-4 py-6 space-y-2">
+                {navLinks.map((link, index) => {
+                  const Icon = link.icon
+                  return (
+                    <motion.button
+                      key={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ delay: index * 0.05, duration: 0.3 }}
+                      onClick={() => scrollTo(link.href)}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300",
+                        "text-gray-700 hover:text-[#0070F3]",
+                        "hover:bg-white/50 backdrop-blur-sm",
+                        activeSection === link.href.replace("#", "") && "bg-white/50 text-[#0070F3]"
+                      )}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="font-medium">{link.label}</span>
+                      {activeSection === link.href.replace("#", "") && (
+                        <motion.div
+                          layoutId="mobileActiveIndicator"
+                          className="ml-auto w-1.5 h-1.5 rounded-full bg-[#0070F3]"
+                        />
+                      )}
+                    </motion.button>
+                  )
+                })}
+
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="w-full mt-4 px-4 py-3 rounded-xl font-medium text-white bg-[#0070F3] active:scale-98 transition-transform shadow-lg shadow-[#0070F3]/20"
+                  onClick={() => scrollTo("#contact")}
+                >
+                  Hire Me
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Scroll Animation Layer - Pure Doraemon & Nobita */}
+        <div className="absolute bottom-0 left-0 right-0 h-0 overflow-visible pointer-events-none">
+
+          {/* Doraemon - Slides from left on scroll */}
+          <motion.div
+            className="absolute bottom-[-8px] sm:bottom-[-12px] z-50"
+            style={{
+              left: "20px",
+              opacity: doraemonOpacity,
+              x: doraemonX,
+            }}
+            transition={{ type: "spring", stiffness: 120, damping: 25 }}
+          >
+            {/* Blue trail effect */}
+            <motion.div
+              className="absolute -top-3 -left-5 w-14 h-14"
+              animate={{
+                opacity: [0, 0.25, 0],
+                scale: [1, 1.2, 1]
+              }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              <div className="w-full h-full rounded-full bg-[#0070F3]/10 blur-lg" />
+            </motion.div>
+
+            <motion.img
+              src={doraemonFly}
+              alt="Doraemon flying"
+              className="h-10 sm:h-14 w-auto object-contain transform origin-bottom"
+              style={{ filter: "drop-shadow(0 4px 12px rgba(0,112,243,0.2))" }}
+              animate={{
+                y: [0, -6, 0],
+                rotate: [0, -3, 3, 0],
+              }}
+              transition={{
+                y: { repeat: Infinity, duration: 1.5, ease: "easeInOut" },
+                rotate: { repeat: Infinity, duration: 2.5, ease: "easeInOut" },
+              }}
+            />
+          </motion.div>
+
+          {/* Nobita - Slides from right on scroll */}
+          <motion.div
+            className="absolute bottom-[2px] right-6 sm:right-12 z-40"
+            style={{
+              opacity: nobitaOpacity,
+              x: nobitaX,
+            }}
+            transition={{ type: "spring", stiffness: 120, damping: 25 }}
+          >
+            <motion.img
+              src={nobitaSit}
+              alt="Nobita sitting"
+              className="h-10 sm:h-12 w-auto object-contain transform origin-bottom"
+              style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.08))" }}
+              animate={{
+                y: [0, -2, 0],
+              }}
+              transition={{
+                y: { repeat: Infinity, duration: 2.5, ease: "easeInOut" },
+              }}
+            />
+          </motion.div>
+
+          {/* Liquid glass bottom line */}
+          <motion.div
+            className="absolute bottom-[-2px] left-0 h-[2px] bg-gradient-to-r from-[#0070F3]/40 via-[#00A3FF]/60 to-transparent"
+            style={{ width: `${scrollProgress}%` }}
+            initial={{ width: 0 }}
+            animate={{ width: `${scrollProgress}%` }}
+            transition={{ duration: 0.1 }}
+          />
+        </div>
+      </motion.nav>
+
+      {/* Gentle scroll hint */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: scrolled ? 0 : 0.4, y: scrolled ? 20 : 0 }}
+        transition={{ duration: 0.5 }}
+        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 text-xs text-gray-400 bg-white/40 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm pointer-events-none"
+      >
+        ↓ scroll ↓
+      </motion.div>
+    </>
   )
 }
