@@ -1,6 +1,4 @@
 @import "tailwindcss";
-/* @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Geist:wght@400;500&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap'); */
 
 @theme {
   --color-surface: #f4faff;
@@ -65,7 +63,7 @@
   --font-headline-sm: "Plus Jakarta Sans", sans-serif;
   --font-body-lg: "Be Vietnam Pro", sans-serif;
   --font-body-md: "Be Vietnam Pro", sans-serif;
-  --font-label-md: "Geist", monospace;
+  --font-label-md: "Be Vietnam Pro", sans-serif;
   --font-code-sm: "Geist", monospace;
 
   /* Border radius */
