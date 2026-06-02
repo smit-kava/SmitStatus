@@ -1,4 +1,32 @@
 import { motion } from "framer-motion"
+import { FaGithub, FaLinkedin, FaInstagram, FaFileAlt } from "react-icons/fa"
+
+const socialLinks = [
+  {
+    name: "GitHub",
+    url: "https://github.com/smit-kava",
+    icon: FaGithub,
+    color: "hover:bg-[#333333] hover:border-[#333333] hover:text-white"
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/smitkava/",
+    icon: FaLinkedin,
+    color: "hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white"
+  },
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/smit__603/",
+    icon: FaInstagram,
+    color: "hover:bg-linear-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white hover:border-transparent"
+  },
+  {
+    name: "Resume",
+    url: "#",
+    icon: FaFileAlt,
+    color: "hover:bg-doraemon-blue hover:border-doraemon-blue hover:text-white"
+  }
+]
 
 export default function Footer() {
   return (
@@ -8,30 +36,31 @@ export default function Footer() {
           <span className="font-headline-sm text-headline-sm text-primary">DoraemonDev</span>
           <p className="font-body-md text-body-md text-on-surface-variant">© {new Date().getFullYear()} Built with 4D Magic Pocket Technology</p>
         </div>
-        <div className="flex space-x-lg">
-          <motion.a 
-            href="#" 
-            whileHover={{ y: -2 }}
-            className="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100 font-semibold"
-          >
-            GitHub
-          </motion.a>
-          <motion.a 
-            href="#" 
-            whileHover={{ y: -2 }}
-            className="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100 font-semibold"
-          >
-            LinkedIn
-          </motion.a>
-          <motion.a 
-            href="#" 
-            whileHover={{ y: -2 }}
-            className="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors opacity-80 hover:opacity-100 font-semibold"
-          >
-            Resume
-          </motion.a>
+        <div className="flex space-x-4">
+          {socialLinks.map((link) => {
+            const Icon = link.icon
+            return (
+              <motion.a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -4 }}
+                className={`group relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-gray-200 text-gray-600 transition-all duration-300 ${link.color}`}
+              >
+                <Icon className="w-5 h-5" />
+                {/* Tooltip */}
+                <span className="absolute -top-10 px-2.5 py-1 bg-gray-900 text-white text-xs font-medium rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md">
+                  {link.name}
+                  {/* Tooltip Triangle */}
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></span>
+                </span>
+              </motion.a>
+            )
+          })}
         </div>
       </div>
     </footer>
   )
 }
+

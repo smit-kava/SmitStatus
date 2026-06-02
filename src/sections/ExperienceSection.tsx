@@ -3,7 +3,7 @@ import { GraduationCap, Check } from "lucide-react"
 
 const education = [
   {
-    degree: "Master's Degree (MSc IT)",
+    degree: "Master's Degree (Mca)",
     year: "2020",
     institution: "ISTAR Institute",
     description: "Advanced specialization in distributed systems and software architecture, graduating with top honors.",

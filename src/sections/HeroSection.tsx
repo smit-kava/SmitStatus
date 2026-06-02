@@ -12,7 +12,7 @@ export default function HeroSection() {
 
   return (
     <>
-      <section id="home" className="min-h-[90vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
+      <section id="home" className="min-h-[97vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full relative z-10">
           {/* Left Content */}
           <motion.div
@@ -66,8 +66,8 @@ export default function HeroSection() {
 
                 <div className="w-full aspect-square md:aspect-[4/3] rounded-[2.5rem] bg-white shadow-2xl p-6 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-gray-100">
                   {/* Background decorative circles */}
-                  <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#0070F3]/10 rounded-full blur-3xl"></div>
-                  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#F59E0B]/20 rounded-full blur-3xl"></div>
+                  <div className="absolute -top-20 -right-20 w-64 h-64 bg-doraemon-blue/10 rounded-full blur-3xl"></div>
+                  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-doraemon-yellow/20 rounded-full blur-3xl"></div>
 
                   {/* SVG Illustration */}
                   <svg viewBox="0 0 400 300" className="w-full h-full drop-shadow-md z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,15 +86,15 @@ export default function HeroSection() {
                     <rect x="80" y="150" width="160" height="8" rx="4" fill="#8b5cf6" opacity="0.8" />
 
                     {/* Smit Kava Text Logo on Screen */}
-                    <text x="270" y="125" fontFamily="monospace" fontSize="32" fontWeight="bold" fill="#0070F3" textAnchor="middle">My</text>
+                    <text x="270" y="125" fontFamily="monospace" fontSize="32" fontWeight="bold" fill="var(--color-primary)" textAnchor="middle">My</text>
                     <text x="270" y="145" fontFamily="sans-serif" fontSize="12" fontWeight="bold" fill="#ffffff" textAnchor="middle">Portfolio</text>
 
                     {/* Floating elements */}
-                    <circle cx="340" cy="70" r="15" fill="#F59E0B" opacity="0.2" />
-                    <path d="M335 65 L345 75 M345 65 L335 75" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+                    <circle cx="340" cy="70" r="15" fill="var(--color-doraemon-yellow)" opacity="0.2" />
+                    <path d="M335 65 L345 75 M345 65 L335 75" stroke="var(--color-doraemon-yellow)" strokeWidth="2" strokeLinecap="round" />
 
-                    <rect x="30" y="180" width="30" height="30" rx="8" fill="#0070F3" opacity="0.2" />
-                    <text x="45" y="200" fontFamily="monospace" fontSize="16" fontWeight="bold" fill="#0070F3" textAnchor="middle">{"{}"}</text>
+                    <rect x="30" y="180" width="30" height="30" rx="8" fill="var(--color-primary)" opacity="0.2" />
+                    <text x="45" y="200" fontFamily="monospace" fontSize="16" fontWeight="bold" fill="var(--color-primary)" textAnchor="middle">{"{}"}</text>
                   </svg>
 
 

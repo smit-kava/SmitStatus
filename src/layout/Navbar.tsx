@@ -4,6 +4,7 @@ import { Menu, X, Settings, Home, Wrench, Clock, Mail, Star } from "lucide-react
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { cn } from "@/lib/utils"
+import ThemeSwitcher from "@/components/ThemeSwitcher"
 import doraemonFly from "@/assets/navImages/Doremon.png"
 import doraemonRun from "@/assets/navImages/Doraemon Running png.png"
 import nobitaSit from "@/assets/navImages/Nobita.png"
@@ -76,7 +77,7 @@ export default function Navbar() {
 
         {/* Scroll progress bar */}
         <motion.div
-          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[#0070F3] via-[#00A3FF] to-[#0070F3]"
+          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-doraemon-blue via-[#00A3FF] to-doraemon-blue"
           style={{ width: `${scrollProgress}%` }}
           initial={{ width: 0 }}
           animate={{ width: `${scrollProgress}%` }}
@@ -92,14 +93,14 @@ export default function Navbar() {
               className="relative group"
             >
               <Link to={ROUTES.HOME} className="flex items-center gap-2">
-                <span className="text-xl lg:text-2xl font-bold text-[#0070F3]">
+                <span className="text-xl lg:text-2xl font-bold text-doraemon-blue">
                   Doraemon
                 </span>
                 <span className="text-xl lg:text-2xl font-bold text-gray-700">
                   Dev
                 </span>
               </Link>
-              <div className="absolute inset-0 rounded-full bg-[#0070F3]/0 group-hover:bg-[#0070F3]/5 blur-xl transition-all duration-500 -z-10" />
+              <div className="absolute inset-0 rounded-full bg-doraemon-blue/0 group-hover:bg-doraemon-blue/5 blur-xl transition-all duration-500 -z-10" />
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -118,8 +119,8 @@ export default function Navbar() {
                       "relative px-4 lg:px-5 py-2.5 rounded-full transition-all duration-300",
                       "flex items-center gap-2",
                       isActive
-                        ? "text-[#0070F3] bg-white/50 backdrop-blur-sm"
-                        : "text-gray-600 hover:text-[#0070F3] hover:bg-white/30 backdrop-blur-sm"
+                        ? "text-doraemon-blue bg-white/50 backdrop-blur-sm"
+                        : "text-gray-600 hover:text-doraemon-blue hover:bg-white/30 backdrop-blur-sm"
                     )}
                   >
                     <Icon className="w-4 h-4 lg:w-4 lg:h-4" />
@@ -130,7 +131,7 @@ export default function Navbar() {
                     {isActive && (
                       <motion.div
                         layoutId="activeNavIndicator"
-                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-5 h-0.5 bg-[#0070F3] rounded-full"
+                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-5 h-0.5 bg-doraemon-blue rounded-full"
                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
                       />
                     )}
@@ -141,19 +142,13 @@ export default function Navbar() {
 
             {/* Right side actions */}
             <div className="hidden md:flex items-center gap-2 lg:gap-3">
-              <motion.button
-                whileHover={{ scale: 1.05, rotate: 90 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full text-gray-500 hover:text-[#0070F3] hover:bg-white/50 backdrop-blur-sm transition-all duration-300"
-              >
-                <Settings className="w-5 h-5" />
-              </motion.button>
+              <ThemeSwitcher />
 
               <motion.button
                 onClick={() => scrollTo("#contact")}
                 whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative px-5 lg:px-6 py-2 rounded-full font-medium text-sm overflow-hidden group bg-[#0070F3] shadow-lg shadow-[#0070F3]/20"
+                className="relative px-5 lg:px-6 py-2 rounded-full font-medium text-sm overflow-hidden group bg-doraemon-blue shadow-lg shadow-doraemon-blue/20"
               >
                 <div className="absolute inset-0 bg-[#0050C0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <span className="relative z-10 text-white font-medium">Hire Me</span>
@@ -188,9 +183,12 @@ export default function Navbar() {
               </motion.div>
             </div>
 
-            {/* Mobile menu button */}
+            <div className="flex items-center gap-2 md:hidden">
+              <ThemeSwitcher />
+              
+              {/* Mobile menu button */}
             <motion.button
-              className="md:hidden p-2 rounded-full text-gray-600 hover:text-[#0070F3] hover:bg-white/50 backdrop-blur-sm transition-colors"
+              className="md:hidden p-2 rounded-full text-gray-600 hover:text-doraemon-blue hover:bg-white/50 backdrop-blur-sm transition-colors"
               onClick={() => setIsOpen(!isOpen)}
               whileTap={{ scale: 0.9 }}
             >
@@ -218,6 +216,7 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
             </motion.button>
+            </div>
           </div>
         </div>
 
@@ -244,9 +243,9 @@ export default function Navbar() {
                       onClick={() => scrollTo(link.href)}
                       className={cn(
                         "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300",
-                        "text-gray-700 hover:text-[#0070F3]",
+                        "text-gray-700 hover:text-doraemon-blue",
                         "hover:bg-white/50 backdrop-blur-sm",
-                        activeSection === link.href.replace("#", "") && "bg-white/50 text-[#0070F3]"
+                        activeSection === link.href.replace("#", "") && "bg-white/50 text-doraemon-blue"
                       )}
                     >
                       <Icon className="w-5 h-5" />
@@ -254,7 +253,7 @@ export default function Navbar() {
                       {activeSection === link.href.replace("#", "") && (
                         <motion.div
                           layoutId="mobileActiveIndicator"
-                          className="ml-auto w-1.5 h-1.5 rounded-full bg-[#0070F3]"
+                          className="ml-auto w-1.5 h-1.5 rounded-full bg-doraemon-blue"
                         />
                       )}
                     </motion.button>
@@ -265,7 +264,7 @@ export default function Navbar() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="w-full mt-4 px-4 py-3 rounded-xl font-medium text-white bg-[#0070F3] active:scale-98 transition-transform shadow-lg shadow-[#0070F3]/20"
+                  className="w-full mt-4 px-4 py-3 rounded-xl font-medium text-white bg-doraemon-blue active:scale-98 transition-transform shadow-lg shadow-doraemon-blue/20"
                   onClick={() => scrollTo("#contact")}
                 >
                   Hire Me
@@ -295,7 +294,7 @@ export default function Navbar() {
 
           {/* Liquid glass bottom line */}
           <motion.div
-            className="absolute bottom-[-2px] left-0 h-[2px] bg-gradient-to-r from-[#0070F3]/40 via-[#00A3FF]/60 to-transparent"
+            className="absolute bottom-[-2px] left-0 h-[2px] bg-gradient-to-r from-doraemon-blue/40 via-[#00A3FF]/60 to-transparent"
             style={{ width: `${scrollProgress}%` }}
             initial={{ width: 0 }}
             animate={{ width: `${scrollProgress}%` }}
