@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { cn } from "@/lib/utils"
 import doraemonFly from "@/assets/navImages/Doremon.png"
+import doraemonRun from "@/assets/navImages/Doraemon Running png.png"
 import nobitaSit from "@/assets/navImages/Nobita.png"
 
 const navLinks = [
@@ -20,11 +21,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home")
   const [scrollProgress, setScrollProgress] = useState(0)
 
-  const { scrollY } = useScroll()
-  const doraemonOpacity = useTransform(scrollY, [0, 200], [0, 1])
-  const doraemonX = useTransform(scrollY, [0, 200], [-80, 0])
-  const nobitaOpacity = useTransform(scrollY, [100, 300], [0, 1])
-  const nobitaX = useTransform(scrollY, [100, 300], [80, 0])
+  // Static image setup
 
   useEffect(() => {
     const handleScroll = () => {
@@ -154,8 +151,8 @@ export default function Navbar() {
 
               <motion.button
                 onClick={() => scrollTo("#contact")}
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95 }}
                 className="relative px-5 lg:px-6 py-2 rounded-full font-medium text-sm overflow-hidden group bg-[#0070F3] shadow-lg shadow-[#0070F3]/20"
               >
                 <div className="absolute inset-0 bg-[#0050C0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -167,6 +164,28 @@ export default function Navbar() {
                   transition={{ duration: 0.6 }}
                 />
               </motion.button>
+
+              {/* Floating Doraemon and Nobita */}
+              <motion.div 
+                className="flex items-end -mb-2 pointer-events-none"
+                animate={{ y: [0, -5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <motion.img 
+                  src={doraemonFly} 
+                  alt="Doraemon" 
+                  className="h-10 lg:h-12 w-auto object-contain drop-shadow-md z-10 pointer-events-auto cursor-pointer" 
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.img 
+                  src={nobitaSit} 
+                  alt="Nobita" 
+                  className="h-8 lg:h-10 w-auto object-contain drop-shadow-md -ml-3" 
+                  animate={{ x: [0, -3, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+                />
+              </motion.div>
             </div>
 
             {/* Mobile menu button */}
@@ -259,64 +278,18 @@ export default function Navbar() {
         {/* Scroll Animation Layer - Pure Doraemon & Nobita */}
         <div className="absolute bottom-0 left-0 right-0 h-0 overflow-visible pointer-events-none">
 
-          {/* Doraemon - Slides from left on scroll */}
+          {/* Continuous Running Doraemon (Left to Right) */}
           <motion.div
-            className="absolute bottom-[-8px] sm:bottom-[-12px] z-50"
-            style={{
-              left: "20px",
-              opacity: doraemonOpacity,
-              x: doraemonX,
-            }}
-            transition={{ type: "spring", stiffness: 120, damping: 25 }}
-          >
-            {/* Blue trail effect */}
-            <motion.div
-              className="absolute -top-3 -left-5 w-14 h-14"
-              animate={{
-                opacity: [0, 0.25, 0],
-                scale: [1, 1.2, 1]
-              }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-              <div className="w-full h-full rounded-full bg-[#0070F3]/10 blur-lg" />
-            </motion.div>
-
-            <motion.img
-              src={doraemonFly}
-              alt="Doraemon flying"
-              className="h-10 sm:h-14 w-auto object-contain transform origin-bottom"
-              style={{ filter: "drop-shadow(0 4px 12px rgba(0,112,243,0.2))" }}
-              animate={{
-                y: [0, -6, 0],
-                rotate: [0, -3, 3, 0],
-              }}
-              transition={{
-                y: { repeat: Infinity, duration: 1.5, ease: "easeInOut" },
-                rotate: { repeat: Infinity, duration: 2.5, ease: "easeInOut" },
-              }}
-            />
-          </motion.div>
-
-          {/* Nobita - Slides from right on scroll */}
-          <motion.div
-            className="absolute bottom-[2px] right-6 sm:right-12 z-40"
-            style={{
-              opacity: nobitaOpacity,
-              x: nobitaX,
-            }}
-            transition={{ type: "spring", stiffness: 120, damping: 25 }}
+            className="absolute bottom-[-10px] z-50"
+            animate={{ x: ["-10vw", "110vw"] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
           >
             <motion.img
-              src={nobitaSit}
-              alt="Nobita sitting"
-              className="h-10 sm:h-12 w-auto object-contain transform origin-bottom"
-              style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.08))" }}
-              animate={{
-                y: [0, -2, 0],
-              }}
-              transition={{
-                y: { repeat: Infinity, duration: 2.5, ease: "easeInOut" },
-              }}
+              src={doraemonRun}
+              alt="Running Doraemon"
+              className="h-10 sm:h-12 w-auto object-contain drop-shadow-md"
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
 
