@@ -8,6 +8,8 @@ const gadgets = [
     icon: Code2,
     iconColor: "text-blue-500",
     iconBg: "bg-blue-50",
+    hoverBg: "group-hover:bg-[#00a0e9]",
+    hoverIconColor: "group-hover:text-white",
     textColor: "text-[#005b8f]",
   },
   {
@@ -16,6 +18,8 @@ const gadgets = [
     icon: Terminal,
     iconColor: "text-red-500",
     iconBg: "bg-red-50",
+    hoverBg: "group-hover:bg-[#c00014]",
+    hoverIconColor: "group-hover:text-white",
     textColor: "text-red-600",
   },
   {
@@ -24,6 +28,8 @@ const gadgets = [
     icon: Database,
     iconColor: "text-yellow-700",
     iconBg: "bg-yellow-50",
+    hoverBg: "group-hover:bg-[#fcd400]",
+    hoverIconColor: "group-hover:text-white",
     textColor: "text-yellow-700",
   },
   {
@@ -32,6 +38,8 @@ const gadgets = [
     icon: Cloud,
     iconColor: "text-blue-600",
     iconBg: "bg-blue-50",
+    hoverBg: "group-hover:bg-[#006494]",
+    hoverIconColor: "group-hover:text-white",
     textColor: "text-[#005b8f]",
   },
 ]
@@ -68,10 +76,10 @@ export default function SkillsSection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
               whileHover={{ y: -5, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 transition-all duration-300 h-full"
+              className="group bg-white/60 backdrop-blur-md p-8 rounded-3xl shadow-sm border border-white/50 transition-all duration-300 h-full cursor-pointer"
             >
-              <div className={`w-14 h-14 rounded-full ${gadget.iconBg} flex items-center justify-center mb-6`}>
-                <gadget.icon className={`w-6 h-6 ${gadget.iconColor}`} />
+              <div className={`w-14 h-14 rounded-full ${gadget.iconBg} ${gadget.hoverBg} flex items-center justify-center mb-6 transition-colors duration-300`}>
+                <gadget.icon className={`w-6 h-6 ${gadget.iconColor} ${gadget.hoverIconColor} transition-colors duration-300`} />
               </div>
               <h3 className={`text-2xl font-bold mb-1 ${gadget.textColor}`}>
                 {gadget.name}

@@ -67,7 +67,7 @@ export default function ExperienceSection() {
               {/* Card */}
               <div className="w-5/12">
                 <div className={`animate-float${i % 2 === 0 ? '-slow' : '-delayed'} h-full`}>
-                  <div className="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow h-full">
+                  <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] shadow-sm border border-white/50 hover:shadow-md transition-shadow h-full">
                     <div className="flex justify-between items-start mb-2 gap-4">
                       <h3 className={`text-xl font-bold ${item.alignment === "right" ? "text-[#005b8f]" : "text-[#e60000]"}`}>
                         {item.degree}

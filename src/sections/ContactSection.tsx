@@ -24,7 +24,7 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-[2rem] shadow-xl shadow-blue-900/5 relative overflow-hidden border border-gray-100"
+          className="bg-white/60 backdrop-blur-md rounded-[2rem] shadow-xl shadow-blue-900/5 relative overflow-hidden border border-white/50"
         >
           {/* Top red accent line */}
           <div className="absolute top-0 left-0 right-0 h-2 bg-doraemon-red"></div>
@@ -66,7 +66,7 @@ export default function ContactSection() {
             </div>
 
             {/* Right: Form */}
-            <div className="bg-[#f0f5fa] rounded-3xl p-8">
+            <div className="bg-white/40 backdrop-blur-md rounded-3xl p-8 shadow-inner border border-white/40">
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700">Your Name</label>

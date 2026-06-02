@@ -62,7 +62,7 @@ export default function ProjectsSection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.2, duration: 0.6 }}
               whileHover={{ y: -10 }}
-              className="group block relative bg-white rounded-[2rem] p-4 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl"
+              className="group block relative bg-white/60 backdrop-blur-md rounded-[2rem] p-4 shadow-sm border border-white/50 transition-all duration-300 hover:shadow-xl"
             >
               <div className="relative overflow-hidden rounded-[1.5rem] aspect-[4/3]">
                 <img

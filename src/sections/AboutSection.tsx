@@ -78,7 +78,7 @@ export default function AboutSection() {
             {/* Avatar placeholder */}
             <div className="relative w-80 h-80 mx-auto">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-doraemon-blue to-cyan-400 blur-2xl opacity-30" />
-              <div className="relative w-full h-full rounded-3xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
+              <div className="relative w-full h-full rounded-3xl bg-white/60 backdrop-blur-md border border-white/50 flex items-center justify-center overflow-hidden shadow-sm">
                 {/* Decorative circles */}
                 <div className="absolute top-6 right-6 w-20 h-20 rounded-full border border-doraemon-blue/20" />
                 <div className="absolute bottom-6 left-6 w-14 h-14 rounded-full border border-cyan-400/20" />
@@ -108,7 +108,7 @@ export default function AboutSection() {
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
-              className="absolute -bottom-4 -left-4 bg-white border border-gray-100 rounded-2xl p-4 shadow-xl"
+              className="absolute -bottom-4 -left-4 bg-white/60 backdrop-blur-md border border-white/50 rounded-2xl p-4 shadow-xl"
             >
               <p className="text-doraemon-darkBlue font-bold text-2xl">{personalInfo.projectsCompleted}</p>
               <p className="text-gray-500 text-xs font-medium">Projects</p>
@@ -160,7 +160,7 @@ export default function AboutSection() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
               >
-                <Card className="group h-full bg-white border-gray-100 hover:border-doraemon-blue/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                <Card className="group h-full bg-white/60 backdrop-blur-md border-white/50 hover:border-doraemon-blue/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                   <CardContent className="p-6 space-y-4">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${val.gradient} flex items-center justify-center shadow-md`}>
                       <Icon className="w-6 h-6 text-white" />

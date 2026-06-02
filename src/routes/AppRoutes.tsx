@@ -16,7 +16,7 @@ import { HomePage, NotFoundPage } from "@/pages"
 
 function CommonLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen font-sans antialiased text-gray-900 bg-doraemon-bg relative flex flex-col">
+    <div className="min-h-screen font-sans antialiased text-gray-900 bg-doraemon-bg relative flex flex-col overflow-x-hidden">
       {/* Global Static Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#e6eff5]/80 to-transparent"></div>

@@ -11,7 +11,8 @@ export default function HeroSection() {
   }
 
   return (
-    <section id="home" className="min-h-[90vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
+    <>
+      <section id="home" className="min-h-[90vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full relative z-10">
         {/* Left Content */}
         <motion.div
@@ -31,11 +32,8 @@ export default function HeroSection() {
               with Precision
             </h1>
 
-            <p className="text-lg lg:text-xl font-bold text-doraemon-blue mb-2">
-              Full Stack Developer & Software Architect
-            </p>
-            <p className="text-base lg:text-lg text-gray-600 mb-8 max-w-[32rem] leading-relaxed">
-              I build scalable, delightful tools that feel like magic from a 4D pocket, turning complex problems into simple solutions.
+            <p className="text-base lg:text-lg text-gray-600 mb-8 max-w-[36rem] leading-relaxed">
+              Full Stack Developer & Software Architect. I build scalable, delightful tools that feel like magic from a 4D pocket, turning complex problems into simple solutions.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -68,31 +66,11 @@ export default function HeroSection() {
               <img
                 src={heroImage}
                 alt="Futuristic Developer Setup"
-                className="w-full h-auto rounded-[2.5rem] shadow-2xl border-4 border-white object-cover transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
+                className="w-full h-auto rounded-[2.5rem] shadow-2xl object-cover transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
               />
             </div>
           </div>
         </motion.div>
-      </div>
-
-      {/* Bottom Information Block */}
-      {/* Bottom Information Block */}
-      <div className="animate-float-slow w-full bg-[#f4faff] shadow-sm ring-1 ring-black/5 rounded-[2rem] p-6 lg:p-8 mt-8 mb-4 relative overflow-hidden flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-transparent pointer-events-none"></div>
-        <div className="flex-1 relative z-10">
-          <div className="flex items-start gap-3 mb-3">
-            <Rocket className="w-5 h-5 text-doraemon-red flex-shrink-0 mt-1" />
-            <h2 className="text-2xl lg:text-3xl font-bold text-doraemon-blue leading-tight max-w-[15ch]">
-              From the 22nd Century of Tech
-            </h2>
-          </div>
-          <div className="w-12 h-1.5 bg-doraemon-yellow rounded-full ml-8"></div>
-        </div>
-        <div className="flex-1 relative z-10">
-          <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
-            As a seasoned Software Architect and Full Stack Developer, I approach every codebase as if it were a high-tech gadget meant to change lives. My philosophy is rooted in "Helpful Innovation"—building systems that are not just technically robust, but intuitively useful. With over a decade of experience navigating the ever-evolving tech landscape, I specialize in bridging the gap between futuristic vision and present-day execution.
-          </p>
-        </div>
       </div>
 
       {/* Floating Bell Button */}
@@ -107,5 +85,26 @@ export default function HeroSection() {
         <Bell className="w-6 h-6 text-yellow-900" fill="currentColor" />
       </motion.button>
     </section>
+
+    {/* Full Width Bottom Information Block */}
+    <div className="w-full bg-[#f0f5fa] py-16 sm:py-20 border-t border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
+        <div className="flex-1 relative z-10">
+          <div className="flex items-start gap-3 mb-4">
+            <Rocket className="w-6 h-6 text-doraemon-red shrink-0 mt-1" />
+            <h2 className="text-2xl lg:text-3xl font-bold text-doraemon-blue leading-tight max-w-[15ch]">
+              From the 22nd Century of Tech
+            </h2>
+          </div>
+          <div className="w-12 h-1.5 bg-doraemon-yellow rounded-full ml-9"></div>
+        </div>
+        <div className="flex-1 relative z-10">
+          <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
+            As a seasoned Software Architect and Full Stack Developer, I approach every codebase as if it were a high-tech gadget meant to change lives. My philosophy is rooted in "Helpful Innovation"—building systems that are not just technically robust, but intuitively useful. With over a decade of experience navigating the ever-evolving tech landscape, I specialize in bridging the gap between futuristic vision and present-day execution.
+          </p>
+        </div>
+      </div>
+    </div>
+    </>
   )
 }
