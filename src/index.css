@@ -120,6 +120,14 @@ body {
 .animate-float {
   animation: float-hero 5s ease-in-out infinite;
 }
+.animate-float-delayed {
+  animation: float-hero 5s ease-in-out infinite;
+  animation-delay: 2s;
+}
+.animate-float-slow {
+  animation: float-hero 7s ease-in-out infinite;
+  animation-delay: 1s;
+}
 
 @keyframes shimmer {
   0% { transform: translateX(-100%); }

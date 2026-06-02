@@ -66,19 +66,21 @@ export default function ExperienceSection() {
 
               {/* Card */}
               <div className="w-5/12">
-                <div className="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-2 gap-4">
-                    <h3 className={`text-xl font-bold ${item.alignment === "right" ? "text-[#005b8f]" : "text-[#e60000]"}`}>
-                      {item.degree}
-                    </h3>
-                    <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-md whitespace-nowrap">
-                      {item.year}
-                    </span>
+                <div className={`animate-float${i % 2 === 0 ? '-slow' : '-delayed'} h-full`}>
+                  <div className="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow h-full">
+                    <div className="flex justify-between items-start mb-2 gap-4">
+                      <h3 className={`text-xl font-bold ${item.alignment === "right" ? "text-[#005b8f]" : "text-[#e60000]"}`}>
+                        {item.degree}
+                      </h3>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-md whitespace-nowrap">
+                        {item.year}
+                      </span>
+                    </div>
+                    <h4 className="text-gray-900 font-bold mb-3">{item.institution}</h4>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
-                  <h4 className="text-gray-900 font-bold mb-3">{item.institution}</h4>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {item.description}
-                  </p>
                 </div>
               </div>
             </motion.div>

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Star, Bell } from "lucide-react"
+import { Star, Bell, Rocket } from "lucide-react"
 import heroImage from "@/assets/hero_image.png"
 
 export default function HeroSection() {
@@ -11,8 +11,8 @@ export default function HeroSection() {
   }
 
   return (
-    <section id="home" className="min-h-screen pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full">
-      <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
+    <section id="home" className="min-h-[90vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full relative z-10">
         {/* Left Content */}
         <motion.div
           className="w-full min-w-0"
@@ -20,36 +20,38 @@ export default function HeroSection() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef3c7] border border-[#fde68a] text-[#854d0e] text-sm font-semibold mb-6 shadow-sm">
-            <Star className="w-4 h-4 text-yellow-500" fill="currentColor" />
-            Available for 22nd Century Projects
-          </div>
+          <div className="animate-float">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef3c7] border border-[#fde68a] text-[#854d0e] text-sm font-semibold mb-4 shadow-sm">
+              <Star className="w-4 h-4 text-yellow-500" fill="currentColor" />
+              Available for 22nd Century Projects
+            </div>
 
-          <h1 className="text-5xl lg:text-[3.5rem] font-extrabold text-gray-900 leading-[1.1] mb-6 tracking-tight">
-            Crafting <span className="text-doraemon-blue">Digital Gadgets</span><br />
-            with Precision
-          </h1>
+            <h1 className="text-4xl lg:text-[3rem] font-extrabold text-gray-900 leading-[1.1] mb-4 tracking-tight">
+              Crafting <span className="text-doraemon-blue">Digital Gadgets</span><br />
+              with Precision
+            </h1>
 
-          <p className="text-xl font-bold text-doraemon-blue mb-3">
-            Full Stack Developer & Software Architect
-          </p>
-          <p className="text-lg text-gray-600 mb-10 max-w-[32rem] leading-relaxed">
-            I build scalable, delightful tools that feel like magic from a 4D pocket, turning complex problems into simple solutions.
-          </p>
+            <p className="text-lg lg:text-xl font-bold text-doraemon-blue mb-2">
+              Full Stack Developer & Software Architect
+            </p>
+            <p className="text-base lg:text-lg text-gray-600 mb-8 max-w-[32rem] leading-relaxed">
+              I build scalable, delightful tools that feel like magic from a 4D pocket, turning complex problems into simple solutions.
+            </p>
 
-          <div className="flex flex-wrap gap-4">
-            <button
-              onClick={() => scrollTo("skills")}
-              className="bg-[#005b8f] hover:bg-[#004770] text-white px-8 py-3.5 rounded-full font-bold shadow-lg shadow-blue-900/20 transition-all duration-200 hover:-translate-y-0.5"
-            >
-              Explore Pocket
-            </button>
-            <button
-              onClick={() => scrollTo("experience")}
-              className="border-2 border-[#005b8f] text-[#005b8f] px-8 py-3.5 rounded-full font-bold hover:bg-blue-50 transition-all duration-200"
-            >
-              See My Journey
-            </button>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => scrollTo("skills")}
+                className="bg-[#005b8f] hover:bg-[#004770] text-white px-8 py-3.5 rounded-full font-bold shadow-lg shadow-blue-900/20 transition-all duration-200 hover:-translate-y-0.5"
+              >
+                Explore Pocket
+              </button>
+              <button
+                onClick={() => scrollTo("experience")}
+                className="border-2 border-[#005b8f] text-[#005b8f] px-8 py-3.5 rounded-full font-bold hover:bg-blue-50 transition-all duration-200"
+              >
+                See My Journey
+              </button>
+            </div>
           </div>
         </motion.div>
 
@@ -58,19 +60,40 @@ export default function HeroSection() {
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full min-w-0 relative"
+          className="w-full relative z-10 flex justify-center lg:justify-end"
         >
-          <div className="absolute inset-0 bg-gradient-to-tr from-doraemon-blue/20 to-transparent rounded-[2.5rem] transform translate-x-4 translate-y-4 -z-10 blur-xl"></div>
-          <img
-            src={heroImage}
-            alt="Futuristic Developer Setup"
-            className="w-full h-auto rounded-[2.5rem] shadow-2xl border-4 border-white object-cover"
-          />
+          <div className="w-4/5 sm:w-3/4 lg:w-[85%] relative group cursor-pointer">
+            <div className="animate-float-delayed">
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#00334e]/10 to-transparent rounded-[2.5rem] transform translate-x-4 translate-y-4 lg:translate-x-6 lg:translate-y-6 -z-10 blur-xl transition-transform duration-500 group-hover:translate-x-8 group-hover:translate-y-8"></div>
+              <img
+                src={heroImage}
+                alt="Futuristic Developer Setup"
+                className="w-full h-auto rounded-[2.5rem] shadow-2xl border-4 border-white object-cover transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
+              />
+            </div>
+          </div>
         </motion.div>
       </div>
 
       {/* Bottom Information Block */}
-
+      {/* Bottom Information Block */}
+      <div className="animate-float-slow w-full bg-[#f4faff] shadow-sm ring-1 ring-black/5 rounded-[2rem] p-6 lg:p-8 mt-8 mb-4 relative overflow-hidden flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-transparent pointer-events-none"></div>
+        <div className="flex-1 relative z-10">
+          <div className="flex items-start gap-3 mb-3">
+            <Rocket className="w-5 h-5 text-doraemon-red flex-shrink-0 mt-1" />
+            <h2 className="text-2xl lg:text-3xl font-bold text-doraemon-blue leading-tight max-w-[15ch]">
+              From the 22nd Century of Tech
+            </h2>
+          </div>
+          <div className="w-12 h-1.5 bg-doraemon-yellow rounded-full ml-8"></div>
+        </div>
+        <div className="flex-1 relative z-10">
+          <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
+            As a seasoned Software Architect and Full Stack Developer, I approach every codebase as if it were a high-tech gadget meant to change lives. My philosophy is rooted in "Helpful Innovation"—building systems that are not just technically robust, but intuitively useful. With over a decade of experience navigating the ever-evolving tech landscape, I specialize in bridging the gap between futuristic vision and present-day execution.
+          </p>
+        </div>
+      </div>
 
       {/* Floating Bell Button */}
       <motion.button
