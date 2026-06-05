@@ -1,9 +1,3 @@
-// ================================================
-// HOME PAGE
-// Assembles all portfolio sections on the "/" route.
-// All sections imported via the barrel at @/sections
-// ================================================
-
 import {
   HeroSection,
   SkillsSection,
@@ -14,7 +8,7 @@ import {
 
 export default function HomePage() {
   return (
-    <main>
+    <main className="flex flex-col w-full">
       <HeroSection />
       <SkillsSection />
       <ProjectsSection />

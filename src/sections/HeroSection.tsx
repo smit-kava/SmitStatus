@@ -12,7 +12,7 @@ export default function HeroSection() {
 
   return (
     <>
-      <section id="home" className="min-h-[97vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
+      <section id="home" className="min-h-[100vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full relative z-10">
           {/* Left Content */}
           <motion.div

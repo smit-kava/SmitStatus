@@ -1,230 +1,209 @@
-import { useState, useEffect, useMemo } from "react"
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { Menu, X, Settings, Home, Wrench, Clock, Mail, Star, FileText } from "lucide-react"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Menu, X, Home, Wrench, Clock, Mail, FileText } from "lucide-react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
-import { cn } from "@/lib/utils"
 import ThemeSwitcher from "@/components/ThemeSwitcher"
 import doraemonFly from "@/assets/navImages/Doremon.png"
 import doraemonRun from "@/assets/navImages/Doraemon Running png.png"
 import nobitaSit from "@/assets/navImages/Nobita.png"
 
 const navLinks = [
-  { label: "Pocket", href: "#home", icon: Home },
-  { label: "Gadgets", href: "#skills", icon: Wrench },
-  { label: "Timeline", href: "#experience", icon: Clock },
-  { label: "Contact", href: "#contact", icon: Mail },
+  { label: "Pocket",   href: "home",       icon: Home },
+  { label: "Gadgets",  href: "skills",     icon: Wrench },
+  { label: "Timeline", href: "experience", icon: Clock },
+  { label: "Contact",  href: "contact",    icon: Mail },
 ]
 
+// Page background = #f4faff  (--color-doraemon-bg)
+// Navbar will always match this color — fully merged with the page
+
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [isOpen, setIsOpen]               = useState(false)
   const [activeSection, setActiveSection] = useState("home")
   const [scrollProgress, setScrollProgress] = useState(0)
 
-  // Static image setup
-
   useEffect(() => {
     const handleScroll = () => {
-      const currentScroll = window.scrollY
+      const scrollTop = window.scrollY
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-      const progress = maxScroll > 0 ? (currentScroll / maxScroll) * 100 : 0
-
+      const progress = maxScroll > 0 ? (scrollTop / maxScroll) * 100 : 0
       setScrollProgress(progress)
-      setScrolled(currentScroll > 20)
 
-      const sections = navLinks.map(link => link.href.replace("#", ""))
-      const scrollPos = currentScroll + 100
-
-      for (const section of sections.reverse()) {
-        const el = document.getElementById(section)
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(section)
-          break
+      // Active section detection
+      for (const link of [...navLinks].reverse()) {
+        const section = document.getElementById(link.href)
+        if (section) {
+          const rect = section.getBoundingClientRect()
+          if (rect.top <= 90) {
+            setActiveSection(link.href)
+            break
+          }
         }
       }
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener("scroll", handleScroll)
+    const t = setTimeout(handleScroll, 100)
+    return () => {
+      clearTimeout(t)
+      window.removeEventListener("scroll", handleScroll)
+    }
   }, [])
 
-  const scrollTo = (href: string) => {
+  const scrollTo = (id: string) => {
     setIsOpen(false)
-    const id = href.replace("#", "")
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" })
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
   }
 
   return (
     <>
+      {/* ════════════════════════════════════════════
+          NAVBAR — Same color as page (#f4faff)
+          No border, no shadow, fully merged look
+          ════════════════════════════════════════════ */}
       <motion.nav
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -64, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-          scrolled
-            ? "bg-white/70 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-b border-white/20"
-            : "bg-white/30 backdrop-blur-md"
-        )}
+        transition={{ duration: 0.55, ease: "easeOut" }}
+        className="fixed top-0 left-0 right-0 z-50 w-full"
+        style={{
+          background: "transparent",
+          borderBottom: "none",
+        }}
       >
-        {/* Liquid glass effect overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/40 pointer-events-none" />
+        {/* ── Main bar — full width ── */}
+        <div className="w-full px-6 sm:px-10 lg:px-16">
+          <div className="flex items-center justify-between h-16">
 
-        {/* Scroll progress bar */}
-        <motion.div
-          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-doraemon-blue via-[#00A3FF] to-doraemon-blue"
-          style={{ width: `${scrollProgress}%` }}
-          initial={{ width: 0 }}
-          animate={{ width: `${scrollProgress}%` }}
-          transition={{ duration: 0.1 }}
-        />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative group"
-            >
-              <Link to={ROUTES.HOME} className="flex items-center gap-2">
-                <span className="text-xl lg:text-2xl font-bold text-doraemon-blue">
+            {/* ─── Logo ─── */}
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Link to={ROUTES.HOME} className="flex items-center gap-1">
+                <span
+                  className="text-xl lg:text-2xl font-extrabold tracking-tight"
+                  style={{ color: "#006494" }}
+                >
                   Doraemon
                 </span>
-                <span className="text-xl lg:text-2xl font-bold text-gray-700">
+                <span
+                  className="text-xl lg:text-2xl font-extrabold tracking-tight"
+                  style={{ color: "#1e293b" }}
+                >
                   Dev
                 </span>
               </Link>
-              <div className="absolute inset-0 rounded-full bg-doraemon-blue/0 group-hover:bg-doraemon-blue/5 blur-xl transition-all duration-500 -z-10" />
             </motion.div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1 lg:gap-2">
+            {/* ─── Desktop Nav Links ─── */}
+            <nav className="hidden md:flex items-center gap-0.5">
               {navLinks.map((link) => {
                 const Icon = link.icon
-                const isActive = activeSection === link.href.replace("#", "")
-
+                const isActive = activeSection === link.href
                 return (
                   <motion.button
                     key={link.href}
                     onClick={() => scrollTo(link.href)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={cn(
-                      "relative px-4 lg:px-5 py-2.5 rounded-full transition-all duration-300",
-                      "flex items-center gap-2",
-                      isActive
-                        ? "text-doraemon-blue bg-white/50 backdrop-blur-sm"
-                        : "text-gray-600 hover:text-doraemon-blue hover:bg-white/30 backdrop-blur-sm"
-                    )}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.96 }}
+                    className="relative px-4 py-2 rounded-lg flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200"
+                    style={{
+                      // Active: slightly tinted background, no underline
+                      color: isActive ? "#005b8f" : "#64748b",
+                      background: isActive
+                        ? "rgba(0, 100, 148, 0.08)"
+                        : "transparent",
+                      // No border, no underline — clean merge
+                    }}
                   >
-                    <Icon className="w-4 h-4 lg:w-4 lg:h-4" />
-                    <span className="font-medium text-sm lg:text-sm">
-                      {link.label}
-                    </span>
-
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeNavIndicator"
-                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-5 h-0.5 bg-doraemon-blue rounded-full"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
+                    <Icon className="w-3.5 h-3.5 shrink-0" />
+                    <span>{link.label}</span>
+                    {/* NO underline, NO indicator — removed completely */}
                   </motion.button>
                 )
               })}
-            </div>
+            </nav>
 
-            {/* Right side actions */}
-            <div className="hidden md:flex items-center gap-2 lg:gap-3">
+            {/* ─── Right Actions ─── */}
+            <div className="hidden md:flex items-center gap-3">
               <ThemeSwitcher />
 
-              {/* Resume Button */}
-              {/* <motion.a
-                href="/Smit_Kava_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05, y: -1 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative px-5 lg:px-6 py-2 rounded-full font-medium text-sm overflow-hidden group border-2 border-doraemon-blue text-doraemon-blue hover:bg-doraemon-blue hover:text-white transition-all duration-300 flex items-center gap-1.5"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                Resume
-              </motion.a> */}
-
+              {/* Hire Me */}
               <motion.button
-                onClick={() => scrollTo("#contact")}
+                onClick={() => scrollTo("contact")}
                 whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative px-5 lg:px-6 py-2 rounded-full font-medium text-sm overflow-hidden group bg-doraemon-blue shadow-lg shadow-doraemon-blue/20"
+                className="relative overflow-hidden px-5 py-2 rounded-xl text-sm font-bold text-white"
+                style={{
+                  background: "linear-gradient(135deg, #0080c8 0%, #005b8f 100%)",
+                  boxShadow: "0 3px 12px rgba(0,100,148,0.3)",
+                }}
               >
-                <div className="absolute inset-0 bg-[#0050C0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <span className="relative z-10 text-white font-medium">Hire Me</span>
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-white/20"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "100%" }}
-                  transition={{ duration: 0.6 }}
+                  className="absolute inset-0 rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)",
+                  }}
+                  initial={{ x: "-110%" }}
+                  whileHover={{ x: "110%" }}
+                  transition={{ duration: 0.5 }}
                 />
+                <span className="relative z-10">Hire Me</span>
               </motion.button>
 
-              {/* Floating Doraemon and Nobita */}
+              {/* Floating Doraemon + Nobita mascots */}
               <motion.div
-                className="flex items-end -mb-2 pointer-events-none"
-                animate={{ y: [0, -5, 0] }}
+                className="flex items-end pointer-events-none -mb-1"
+                animate={{ y: [0, -4, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
                 <motion.img
                   src={doraemonFly}
                   alt="Doraemon"
-                  className="h-10 lg:h-12 w-auto object-contain drop-shadow-md z-10 pointer-events-auto cursor-pointer"
-                  animate={{ x: [0, 4, 0] }}
+                  className="h-10 lg:h-12 w-auto object-contain drop-shadow-md"
+                  animate={{ x: [0, 3, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                 />
                 <motion.img
                   src={nobitaSit}
                   alt="Nobita"
-                  className="h-8 lg:h-10 w-auto object-contain drop-shadow-md -ml-3"
-                  animate={{ x: [0, -3, 0] }}
+                  className="h-8 lg:h-10 w-auto object-contain drop-shadow-md -ml-2"
+                  animate={{ x: [0, -2, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
                 />
               </motion.div>
             </div>
 
+            {/* ─── Mobile Hamburger ─── */}
             <div className="flex items-center gap-2 md:hidden">
               <ThemeSwitcher />
-
-              {/* Mobile menu button */}
               <motion.button
-                className="md:hidden p-2 rounded-full text-gray-600 hover:text-doraemon-blue hover:bg-white/50 backdrop-blur-sm transition-colors"
                 onClick={() => setIsOpen(!isOpen)}
                 whileTap={{ scale: 0.9 }}
+                className="p-2 rounded-lg"
+                style={{
+                  color: "#005b8f",
+                  background: "rgba(0,100,148,0.07)",
+                }}
               >
                 <AnimatePresence mode="wait">
                   {isOpen ? (
-                    <motion.div
-                      key="close"
+                    <motion.div key="close"
                       initial={{ rotate: -90, opacity: 0 }}
                       animate={{ rotate: 0, opacity: 1 }}
                       exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.15 }}
                     >
-                      <X className="w-6 h-6" />
+                      <X className="w-5 h-5" />
                     </motion.div>
                   ) : (
-                    <motion.div
-                      key="menu"
+                    <motion.div key="menu"
                       initial={{ rotate: 90, opacity: 0 }}
                       animate={{ rotate: 0, opacity: 1 }}
                       exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.15 }}
                     >
-                      <Menu className="w-6 h-6" />
+                      <Menu className="w-5 h-5" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -232,114 +211,102 @@ export default function Navbar() {
             </div>
           </div>
         </div>
+        {/* ── Scroll progress bar ── */}
+        <div className="absolute bottom-0 left-0 w-full" style={{ height: "2px", background: "transparent" }}>
+          <motion.div
+            className="h-full relative rounded-r-full"
+            style={{
+              width: `${scrollProgress}%`,
+              background: "linear-gradient(90deg, transparent, #00A3FF, #00A3FF)",
+              boxShadow: "0 0 6px rgba(0,163,255,0.4)",
+            }}
+            transition={{ duration: 0.1, ease: "linear" }}
+          />
+        </div>
 
-        {/* Mobile Menu */}
+        {/* ─── Mobile Menu ─── */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="md:hidden bg-white/80 backdrop-blur-xl border-t border-white/20 shadow-lg"
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              className="md:hidden overflow-hidden"
+              style={{
+                // Same page color — no popup effect, feels like an extension
+                background: "var(--color-background)",
+                borderTop: "none",
+              }}
             >
-              <div className="px-4 py-6 space-y-2">
-                {navLinks.map((link, index) => {
+              <div className="px-6 py-4 space-y-1">
+                {navLinks.map((link, i) => {
                   const Icon = link.icon
+                  const isMobileActive = activeSection === link.href
                   return (
                     <motion.button
                       key={link.href}
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, x: -12 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ delay: index * 0.05, duration: 0.3 }}
+                      exit={{ opacity: 0, x: -12 }}
+                      transition={{ delay: i * 0.04 }}
                       onClick={() => scrollTo(link.href)}
-                      className={cn(
-                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300",
-                        "text-gray-700 hover:text-doraemon-blue",
-                        "hover:bg-white/50 backdrop-blur-sm",
-                        activeSection === link.href.replace("#", "") && "bg-white/50 text-doraemon-blue"
-                      )}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors"
+                      style={{
+                        color: isMobileActive ? "#005b8f" : "#64748b",
+                        background: isMobileActive ? "rgba(0,100,148,0.07)" : "transparent",
+                      }}
                     >
-                      <Icon className="w-5 h-5" />
-                      <span className="font-medium">{link.label}</span>
-                      {activeSection === link.href.replace("#", "") && (
-                        <motion.div
-                          layoutId="mobileActiveIndicator"
-                          className="ml-auto w-1.5 h-1.5 rounded-full bg-doraemon-blue"
-                        />
+                      <Icon className="w-4 h-4" />
+                      <span>{link.label}</span>
+                      {isMobileActive && (
+                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#006494]" />
                       )}
                     </motion.button>
                   )
                 })}
 
-                <motion.button
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="w-full mt-4 px-4 py-3 rounded-xl font-medium text-white bg-doraemon-blue active:scale-98 transition-transform shadow-lg shadow-doraemon-blue/20"
-                  onClick={() => scrollTo("#contact")}
-                >
-                  Hire Me
-                </motion.button>
-
-                <motion.a
-                  href="/Smit_Kava_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 }}
-                  className="w-full mt-2 px-4 py-3 rounded-xl font-medium text-doraemon-blue border-2 border-doraemon-blue hover:bg-doraemon-blue hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FileText className="w-4 h-4" />
-                  View Resume
-                </motion.a>
+                <div className="flex flex-col gap-2 pt-3">
+                  <button
+                    onClick={() => scrollTo("contact")}
+                    className="w-full py-3 rounded-xl text-sm font-bold text-white"
+                    style={{ background: "linear-gradient(135deg, #0080c8, #005b8f)" }}
+                  >
+                    Hire Me
+                  </button>
+                  <a
+                    href="/Smit_Kava_Resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2"
+                    style={{ color: "#005b8f", border: "1.5px solid rgba(0,100,148,0.25)" }}
+                  >
+                    <FileText className="w-4 h-4" />
+                    View Resume
+                  </a>
+                </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Scroll Animation Layer - Pure Doraemon & Nobita */}
-        <div className="absolute bottom-0 left-0 right-0 h-0 overflow-visible pointer-events-none">
-
-          {/* Continuous Running Doraemon (Left to Right) */}
-          <motion.div
-            className="absolute bottom-[-10px] z-50"
-            animate={{ x: ["-10vw", "110vw"] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-          >
-            <motion.img
-              src={doraemonRun}
-              alt="Running Doraemon"
-              className="h-10 sm:h-12 w-auto object-contain drop-shadow-md"
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-
-          {/* Liquid glass bottom line */}
-          <motion.div
-            className="absolute bottom-[-2px] left-0 h-[2px] bg-gradient-to-r from-doraemon-blue/40 via-[#00A3FF]/60 to-transparent"
-            style={{ width: `${scrollProgress}%` }}
-            initial={{ width: 0 }}
-            animate={{ width: `${scrollProgress}%` }}
-            transition={{ duration: 0.1 }}
-          />
-        </div>
       </motion.nav>
 
-      {/* Gentle scroll hint */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: scrolled ? 0 : 0.4, y: scrolled ? 20 : 0 }}
-        transition={{ duration: 0.5 }}
-        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 text-xs text-gray-400 bg-white/40 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm pointer-events-none"
-      >
-        ↓ scroll ↓
-      </motion.div>
-
-
+      {/* ── Running Doraemon — floats just below navbar ── */}
+      <div className="fixed top-16 left-0 right-0 z-40 h-0 overflow-visible pointer-events-none">
+        <motion.div
+          className="absolute top-2"
+          animate={{ x: ["-8vw", "108vw"] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+        >
+          <motion.img
+            src={doraemonRun}
+            alt=""
+            className="h-8 sm:h-10 w-auto object-contain drop-shadow"
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 0.38, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+      </div>
     </>
   )
 }
