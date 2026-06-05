@@ -7,7 +7,7 @@
 import { BrowserRouter } from "react-router-dom"
 import { useState, useEffect } from "react"
 import AppRoutes from "@/routes/AppRoutes"
-import { LoadingScreen } from "@/components/ui"
+import { LoadingScreen, CustomCursor } from "@/components/ui"
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -25,6 +25,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <CustomCursor />
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       <AppRoutes />
     </BrowserRouter>

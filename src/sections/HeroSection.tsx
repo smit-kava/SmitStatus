@@ -33,7 +33,7 @@ export default function HeroSection() {
               </h1>
 
               <p className="text-base lg:text-lg text-gray-600 mb-8 max-w-[36rem] leading-relaxed">
-                Full Stack Developer & Software Architect. I build scalable, delightful tools that feel like magic from a 4D pocket, turning complex problems into simple solutions.
+                MCA Student & Aspiring Full-Stack Developer. I build modern web apps using React.js, TypeScript, and .NET Core Web API — turning ideas into clean, functional digital experiences.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -158,7 +158,7 @@ export default function HeroSection() {
           </div>
           <div className="flex-1 relative z-10">
             <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
-              As a seasoned Software Architect and Full Stack Developer, I approach every codebase as if it were a high-tech gadget meant to change lives. My philosophy is rooted in "Helpful Innovation"—building systems that are not just technically robust, but intuitively useful. With over a decade of experience navigating the ever-evolving tech landscape, I specialize in bridging the gap between futuristic vision and present-day execution.
+              Currently pursuing my MCA at ISTAR College, Vallabh Vidyanagar with a CGPA of 8.80 in Semester II. I hold a B.Sc. IT with distinction from Charusat University (CGPA 7.62) and am actively learning and building real-world projects using React.js, TypeScript, .NET Core Web API, and SQL Server. I'm passionate about clean code, intuitive UX, and growing as a developer every single day.
             </p>
           </div>
         </div>

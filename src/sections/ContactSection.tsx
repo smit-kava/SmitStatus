@@ -49,7 +49,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Email</p>
-                    <p className="text-gray-900 font-bold">hello@doraemondev.tech</p>
+                    <p className="text-gray-900 font-bold">smitkava21@gmail.com</p>
                   </div>
                 </div>
 
@@ -59,7 +59,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Base</p>
-                    <p className="text-gray-900 font-bold">Future Tokyo (Digital Nomad)</p>
+                    <p className="text-gray-900 font-bold">Jetpur, Rajkot – Gujarat, India 🇮🇳</p>
                   </div>
                 </div>
               </div>

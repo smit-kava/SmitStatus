@@ -22,7 +22,7 @@ const socialLinks = [
   },
   {
     name: "Resume",
-    url: "#",
+    url: "/Smit_Kava_Resume.pdf",
     icon: FaFileAlt,
     color: "hover:bg-doraemon-blue hover:border-doraemon-blue hover:text-white"
   }

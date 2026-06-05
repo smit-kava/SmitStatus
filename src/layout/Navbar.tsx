@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { Menu, X, Settings, Home, Wrench, Clock, Mail, Star } from "lucide-react"
+import { Menu, X, Settings, Home, Wrench, Clock, Mail, Star, FileText } from "lucide-react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { cn } from "@/lib/utils"
@@ -144,6 +144,19 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-2 lg:gap-3">
               <ThemeSwitcher />
 
+              {/* Resume Button */}
+              {/* <motion.a
+                href="/Smit_Kava_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative px-5 lg:px-6 py-2 rounded-full font-medium text-sm overflow-hidden group border-2 border-doraemon-blue text-doraemon-blue hover:bg-doraemon-blue hover:text-white transition-all duration-300 flex items-center gap-1.5"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                Resume
+              </motion.a> */}
+
               <motion.button
                 onClick={() => scrollTo("#contact")}
                 whileHover={{ scale: 1.05, y: -1 }}
@@ -269,6 +282,19 @@ export default function Navbar() {
                 >
                   Hire Me
                 </motion.button>
+
+                <motion.a
+                  href="/Smit_Kava_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                  className="w-full mt-2 px-4 py-3 rounded-xl font-medium text-doraemon-blue border-2 border-doraemon-blue hover:bg-doraemon-blue hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <FileText className="w-4 h-4" />
+                  View Resume
+                </motion.a>
               </div>
             </motion.div>
           )}
