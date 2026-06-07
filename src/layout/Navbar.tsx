@@ -83,8 +83,11 @@ export default function Navbar() {
         transition={{ duration: 0.55, ease: "easeOut" }}
         className="fixed top-0 left-0 right-0 z-50 w-full"
         style={{
-          background: "transparent",
-          borderBottom: "none",
+          background: isHome
+            ? "transparent"
+            : "rgba(244,250,255,0.92)",
+          backdropFilter: isHome ? "none" : "blur(16px)",
+          borderBottom: isHome ? "none" : "1px solid rgba(0,100,148,0.08)",
         }}
       >
         {/* ── Main bar — full width ── */}
@@ -157,27 +160,29 @@ export default function Navbar() {
                 <span className="relative z-10">Hire Me</span>
               </motion.button>
 
-              {/* Floating Doraemon + Nobita mascots */}
-              <motion.div
-                className="flex items-end pointer-events-none -mb-1"
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <motion.img
-                  src={doraemonFly}
-                  alt="Doraemon"
-                  className="h-10 lg:h-12 w-auto object-contain drop-shadow-md"
-                  animate={{ x: [0, 3, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <motion.img
-                  src={nobitaSit}
-                  alt="Nobita"
-                  className="h-8 lg:h-10 w-auto object-contain drop-shadow-md -ml-2"
-                  animate={{ x: [0, -2, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-                />
-              </motion.div>
+              {/* Floating mascots — home page only */}
+              {isHome && (
+                <motion.div
+                  className="flex items-end pointer-events-none -mb-1"
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <motion.img
+                    src={doraemonFly}
+                    alt="Doraemon"
+                    className="h-10 lg:h-12 w-auto object-contain drop-shadow-md"
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.img
+                    src={nobitaSit}
+                    alt="Nobita"
+                    className="h-8 lg:h-10 w-auto object-contain drop-shadow-md -ml-2"
+                    animate={{ x: [0, -2, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+                  />
+                </motion.div>
+              )}
             </div>
 
             {/* ─── Mobile Hamburger ─── */}
@@ -217,7 +222,8 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-        {/* ── Scroll progress bar ── */}
+        {/* ── Scroll progress bar — home page only ── */}
+        {isHome && (
         <div className="absolute bottom-0 left-0 w-full" style={{ height: "2px", background: "transparent" }}>
           <motion.div
             className="h-full relative rounded-r-full"
@@ -229,6 +235,7 @@ export default function Navbar() {
             transition={{ duration: 0.1, ease: "linear" }}
           />
         </div>
+        )}
 
         {/* ─── Mobile Menu ─── */}
         <AnimatePresence>
