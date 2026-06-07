@@ -19,7 +19,7 @@ const timeline = [
     year: "2024 – 2026",
     institution: "ISTAR College, Vallabh Vidyanagar",
     description: "Currently pursuing MCA. Overall CGPA: 9.00 | Latest SGPA: 8.45. Focused on advanced software engineering, full-stack web development, and backend API design.",
-    nodeColor: "bg-[#005b8f]",
+    nodeColor: "bg-[#006494]",
     nodeIcon: Check,
     alignment: "left",
     website: null,
@@ -31,7 +31,7 @@ const timeline = [
     year: "2022 – 2024",
     institution: "Charusat University, Changa",
     description: "Graduated with distinction. CGPA: 7.62. Built strong foundations in programming, data structures, databases, web technologies, and core computer science principles.",
-    nodeColor: "bg-[#e60000]",
+    nodeColor: "bg-[#c00014]",
     nodeIcon: GraduationCap,
     alignment: "right",
     website: null,
@@ -43,7 +43,7 @@ const timeline = [
     year: "May 2021",
     institution: "Science Stream",
     description: "Completed higher secondary education with a science focus, cultivating analytical thinking and problem-solving skills that form the backbone of technology studies.",
-    nodeColor: "bg-[#f59e0b]",
+    nodeColor: "bg-[#fcd400]",
     nodeIcon: BookOpen,
     alignment: "left",
     website: null,
@@ -127,7 +127,7 @@ export default function ExperienceSection() {
                     )}
 
                     <div className="flex justify-between items-start mb-2 gap-4">
-                      <h3 className={`text-xl font-bold ${item.alignment === "right" ? "text-[#005b8f]" : "text-[#e60000]"}`}>
+                      <h3 className={`text-xl font-bold ${item.alignment === "right" ? "text-[#006494]" : "text-[#c00014]"}`}>
                         {item.degree}
                       </h3>
                       <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-md whitespace-nowrap shrink-0">

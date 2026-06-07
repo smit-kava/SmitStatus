@@ -257,3 +257,69 @@ html, body, * {
 .section-reveal {
   animation: section-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
+/* =============================================
+   BANNER SCROLLER — Infinite Marquee (perf-safe)
+   ============================================= */
+@keyframes banner-scroll {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Root wrapper — contain prevents layout/paint spill to rest of page */
+.banner-scroller-root {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000d1a;
+  contain: layout style paint;
+  --banner-play: running;
+  --banner-duration: 40s;
+}
+
+/* Static image — fills the container, no animation */
+.banner-image-static {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+  display: block;
+}
+
+/* SVG marquee — single GPU-composited layer, no filter, no blend mode */
+.banner-svg-track {
+  position: relative;
+  display: flex;
+  width: max-content;
+  animation: banner-scroll var(--banner-duration) linear infinite;
+  animation-play-state: var(--banner-play);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Edge fade vignette */
+.banner-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    #000d1a 0%,
+    transparent 8%,
+    transparent 92%,
+    #000d1a 100%
+  );
+  z-index: 2;
+}
+
+/* Reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .banner-svg-track {
+    animation: none !important;
+  }
+}

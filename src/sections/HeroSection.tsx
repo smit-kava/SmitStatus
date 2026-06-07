@@ -1,168 +1,387 @@
 import { motion } from "framer-motion"
-import { Star, Bell, Rocket } from "lucide-react"
-import heroImage from "@/assets/smit_hero_image.png"
+import {
+  RocketLaunch,
+  Code,
+  AutoAwesome,
+  Widgets,
+  DataObject,
+  Api,
+  Storage,
+  Palette,
+  Inventory2,
+  Timeline,
+  School,
+  Grade,
+  Work,
+  Layers,
+  Star,
+  LocationOn,
+  LaptopMac,
+  MenuBook,
+  EmojiEvents,
+  LocationCity,
+  Stars,
+  KeyboardDoubleArrowDown,
+  NotificationsActive,
+} from "@/components/ui/HeroIcons"
+import { useEffect, useState } from "react"
+import doremonImg from "@/assets/navImages/Doremon.png"
 
+// ─── Typewriter Hook ─────────────────────────────────────────────────────────
+function useTypewriter(phrases: string[], speed = 82, delSpeed = 48, pause = 1300) {
+  const [text, setText] = useState("")
+  const [pi, setPi] = useState(0)
+  const [ci, setCi] = useState(0)
+  const [del, setDel] = useState(false)
+
+  useEffect(() => {
+    const cur = phrases[pi]
+    const t = setTimeout(() => {
+      if (!del) {
+        setText(cur.slice(0, ci + 1))
+        setCi(c => c + 1)
+        if (ci + 1 === cur.length) { setDel(true); return }
+      } else {
+        setText(cur.slice(0, ci - 1))
+        setCi(c => c - 1)
+        if (ci - 1 === 0) { setDel(false); setPi(i => (i + 1) % phrases.length) }
+      }
+    }, del ? delSpeed : ci === cur.length ? pause : speed)
+    return () => clearTimeout(t)
+  }, [ci, del, pi, phrases, speed, delSpeed, pause])
+
+  return text
+}
+
+// ─── Cloud ────────────────────────────────────────────────────────────────────
+function Cloud({ delay, top }: { delay: number; top: string }) {
+  return (
+    <motion.div
+      className="absolute pointer-events-none"
+      style={{ top, left: -180, zIndex: 1 }}
+      animate={{ x: [0, 900] }}
+      transition={{ duration: 28 + delay * 5, repeat: Infinity, ease: "linear", delay }}
+    >
+      <svg width="130" height="60" viewBox="0 0 130 60" fill="none">
+        <ellipse cx="65" cy="45" rx="60" ry="18" fill="white" opacity="0.7" />
+        <circle cx="40" cy="30" r="20" fill="white" opacity="0.7" />
+        <circle cx="72" cy="22" r="26" fill="white" opacity="0.7" />
+        <circle cx="100" cy="32" r="16" fill="white" opacity="0.7" />
+      </svg>
+    </motion.div>
+  )
+}
+
+// ─── Floating Tag ─────────────────────────────────────────────────────────────
+function FloatTag({
+  children, className, delay = 0,
+}: { children: React.ReactNode; className: string; delay?: number }) {
+  return (
+    <motion.div
+      className={`absolute bg-white rounded-xl px-3 py-1.5 text-[10px] font-bold whitespace-nowrap shadow-md z-20 flex items-center gap-1 ${className}`}
+      animate={{ y: [0, -7, 0], rotate: [-2, 2, -2] }}
+      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+// ─── Skill Pill ───────────────────────────────────────────────────────────────
+function Pill({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <motion.div
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-blue-300 bg-white text-blue-700 text-[11px] font-bold cursor-default select-none"
+      style={{ fontFamily: "'Comic Neue', cursive" }}
+      whileHover={{ scale: 1.06, y: -2, backgroundColor: "#006494", color: "white", borderColor: "#006494" }}
+      transition={{ duration: 0.18 }}
+    >
+      <span className="text-[14px]">{icon}</span>
+      {label}
+    </motion.div>
+  )
+}
+
+// ─── Stat Card ────────────────────────────────────────────────────────────────
+function Stat({ icon, num, label }: { icon: React.ReactNode; num: string; label: string }) {
+  return (
+    <motion.div
+      className="flex flex-col items-center gap-0.5 px-4 py-2.5 rounded-2xl text-center min-w-[70px]"
+      style={{ background: "rgba(255,255,255,0.72)", border: "1.5px solid rgba(0,100,148,0.18)" }}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.18 }}
+    >
+      <span className="text-blue-700 text-[18px]">{icon}</span>
+      <span className="text-[1.2rem] font-extrabold text-blue-900" style={{ fontFamily: "'Baloo 2', cursive" }}>{num}</span>
+      <span className="text-[10px] font-bold text-slate-500" style={{ fontFamily: "'Comic Neue', cursive" }}>{label}</span>
+    </motion.div>
+  )
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 export default function HeroSection() {
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" })
-    }
-  }
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+
+  const phrases = [
+    "Building Web Apps",
+    "React.js Enthusiast",
+    ".NET Core Developer",
+    "MCA @ ISTAR College",
+    "Clean Code Lover",
+    "Future Full-Stack Dev",
+  ]
+  const typeText = useTypewriter(phrases)
+
+  const containerAnim = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } }
+  const itemAnim = { hidden: { opacity: 0, x: -28 }, show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } } }
 
   return (
     <>
-      <section id="home" className="min-h-[100vh] pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative flex flex-col justify-center w-full z-0">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full relative z-10">
-          {/* Left Content */}
-          <motion.div
-            className="w-full min-w-0"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="animate-float">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef3c7] border border-[#fde68a] text-[#854d0e] text-sm font-semibold mb-4 shadow-sm">
-                <Star className="w-4 h-4 text-yellow-500" fill="currentColor" />
-                Available for 22nd Century Projects
-              </div>
-
-              <h1 className="text-4xl lg:text-[3rem] font-extrabold text-gray-900 leading-[1.1] mb-4 tracking-tight">
-                Crafting <span className="text-doraemon-blue">Digital Gadgets</span><br />
-                with Precision
-              </h1>
-
-              <p className="text-base lg:text-lg text-gray-600 mb-8 max-w-[36rem] leading-relaxed">
-                MCA Student & Aspiring Full-Stack Developer. I build modern web apps using React.js, TypeScript, and .NET Core Web API — turning ideas into clean, functional digital experiences.
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                <button
-                  onClick={() => scrollTo("skills")}
-                  className="bg-[#005b8f] hover:bg-[#004770] text-white px-8 py-3.5 rounded-full font-bold shadow-lg shadow-blue-900/20 transition-all duration-200 hover:-translate-y-0.5"
-                >
-                  Explore Pocket
-                </button>
-                <button
-                  onClick={() => scrollTo("experience")}
-                  className="border-2 border-[#005b8f] text-[#005b8f] px-8 py-3.5 rounded-full font-bold hover:bg-blue-50 transition-all duration-200"
-                >
-                  See My Journey
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Image - Custom SVG */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="w-full relative z-10 flex justify-center lg:justify-end"
-          >
-            <div className="w-full sm:w-[90%] lg:w-[95%] relative group cursor-pointer">
-              <div className="animate-float-delayed">
-                <div className="absolute inset-0 bg-linear-to-tr from-[#00334e]/10 to-transparent rounded-[2.5rem] transform translate-x-4 translate-y-4 lg:translate-x-6 lg:translate-y-6 -z-10 blur-xl transition-transform duration-500 group-hover:translate-x-8 group-hover:translate-y-8"></div>
-
-                <div className="w-full aspect-square md:aspect-[4/3] rounded-[2.5rem] bg-white shadow-2xl p-6 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-gray-100">
-                  {/* Background decorative circles */}
-                  <div className="absolute -top-20 -right-20 w-64 h-64 bg-doraemon-blue/10 rounded-full blur-3xl"></div>
-                  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-doraemon-yellow/20 rounded-full blur-3xl"></div>
-
-                  {/* SVG Illustration */}
-                  <svg viewBox="0 0 400 300" className="w-full h-full drop-shadow-md z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* Monitor */}
-                    <rect x="50" y="40" width="300" height="180" rx="12" fill="#1e293b" />
-                    <rect x="60" y="50" width="280" height="150" rx="8" fill="#0f172a" />
-                    {/* Stand */}
-                    <path d="M180 220 L220 220 L230 260 L170 260 Z" fill="#94a3b8" />
-                    <rect x="140" y="260" width="120" height="10" rx="4" fill="#64748b" />
-
-                    {/* Screen Content - Code Lines */}
-                    <rect x="80" y="70" width="140" height="8" rx="4" fill="#3b82f6" opacity="0.8" />
-                    <rect x="80" y="90" width="100" height="8" rx="4" fill="#10b981" opacity="0.8" />
-                    <rect x="100" y="110" width="120" height="8" rx="4" fill="#eab308" opacity="0.8" />
-                    <rect x="100" y="130" width="80" height="8" rx="4" fill="#ef4444" opacity="0.8" />
-                    <rect x="80" y="150" width="160" height="8" rx="4" fill="#8b5cf6" opacity="0.8" />
-
-                    {/* Smit Kava Text Logo on Screen */}
-                    <text x="270" y="125" fontFamily="monospace" fontSize="32" fontWeight="bold" fill="var(--color-primary)" textAnchor="middle">My</text>
-                    <text x="270" y="145" fontFamily="sans-serif" fontSize="12" fontWeight="bold" fill="#ffffff" textAnchor="middle">Portfolio</text>
-
-                    {/* Floating elements */}
-                    <circle cx="340" cy="70" r="15" fill="var(--color-doraemon-yellow)" opacity="0.2" />
-                    <path d="M335 65 L345 75 M345 65 L335 75" stroke="var(--color-doraemon-yellow)" strokeWidth="2" strokeLinecap="round" />
-
-                    <rect x="30" y="180" width="30" height="30" rx="8" fill="var(--color-primary)" opacity="0.2" />
-                    <text x="45" y="200" fontFamily="monospace" fontSize="16" fontWeight="bold" fill="var(--color-primary)" textAnchor="middle">{"{}"}</text>
-                  </svg>
-
-
-                </div>
-              </div>
-            </div>
-          </motion.div>
+      {/* ── Hero Section ─────────────────────────────────────────────────── */}
+      <section
+        id="home"
+        className="relative min-h-screen overflow-hidden"
+        style={{
+          background: "linear-gradient(165deg,#e6eff5 0%,#cae6ff 35%,#f4faff 60%,#fefce8 100%)",
+          fontFamily: "'Baloo 2', cursive",
+        }}
+      >
+        {/* Clouds */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[{ delay: 0, top: "6%" }, { delay: 8, top: "18%" }, { delay: 14, top: "4%" }].map((c, i) => (
+            <Cloud key={i} delay={c.delay} top={c.top} />
+          ))}
         </div>
 
-        {/* Floating Bell Button with Vibration */}
-        <motion.button
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => scrollTo("contact")}
-          className="fixed bottom-8 right-8 w-14 h-14 bg-doraemon-yellow rounded-full shadow-lg shadow-yellow-500/30 flex items-center justify-center z-50 cursor-pointer overflow-visible"
-        >
-          {/* Ringing Bell Icon */}
+        {/* Twinkling stars */}
+        {[
+          { top: "9%", left: "14%", color: "#fcd400", size: 7, delay: 0.3 },
+          { top: "7%", left: "38%", color: "#c00014", size: 9, delay: 1 },
+          { top: "16%", left: "62%", color: "#fcd400", size: 6, delay: 0.7 },
+          { top: "5%", left: "80%", color: "#00a0e9", size: 5, delay: 1.6 },
+          { top: "22%", left: "52%", color: "#006494", size: 7, delay: 2.1 },
+        ].map((s, i) => (
           <motion.div
-            animate={{
-              rotate: [0, -20, 20, -15, 15, -10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            style={{ originX: 0.5, originY: 0.2 }}
+            key={i}
+            className="absolute rounded-full"
+            style={{ top: s.top, left: s.left, width: s.size, height: s.size, background: s.color, zIndex: 2 }}
+            animate={{ opacity: [1, 0.15, 1], scale: [1, 0.45, 1] }}
+            transition={{ duration: 2.2, repeat: Infinity, delay: s.delay }}
+          />
+        ))}
+
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10 grid lg:grid-cols-[1fr_300px] gap-6 items-center min-h-screen">
+
+          {/* ── Left ─────────────────────────────────────────────────────── */}
+          <motion.div
+            className="flex flex-col"
+            variants={containerAnim}
+            initial="hidden"
+            animate="show"
           >
-            <Bell className="w-6 h-6 text-yellow-900" fill="currentColor" />
+            {/* Badge */}
+            <motion.div
+              variants={itemAnim}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5 w-fit border-2"
+              style={{ background: "rgba(252,212,0,0.3)", borderColor: "#fcd400", color: "#00334e", fontFamily: "'Comic Neue',cursive", fontWeight: 700, fontSize: "0.78rem" }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 16 }}
+            >
+              <motion.div className="w-2 h-2 rounded-full bg-red-500" animate={{ scale: [1, 1.6, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 1.6, repeat: Infinity }} />
+              <RocketLaunch sx={{ fontSize: 16, color: "#d97706" }} />
+              Available for Projects
+            </motion.div>
+
+            {/* Title */}
+            <motion.h1
+              variants={itemAnim}
+              className="text-4xl lg:text-5xl font-extrabold leading-tight mb-2 tracking-tight"
+              style={{ color: "#00334e" }}
+            >
+              Hi! I'm{" "}
+              <motion.span
+                style={{ color: "#c00014", display: "inline-block" }}
+                animate={{ rotate: [0, 0, -4, 4, -2, 0] }}
+                transition={{ duration: 3, repeat: Infinity, repeatDelay: 3 }}
+              >
+                Smit Kava
+              </motion.span>
+              <span className="flex items-center gap-1 text-2xl lg:text-3xl font-bold mt-1" style={{ color: "#006494" }}>
+                <Code sx={{ fontSize: "1.1rem" }} />
+                Full-Stack Developer
+              </span>
+            </motion.h1>
+
+            {/* Typewriter */}
+            <motion.div
+              variants={itemAnim}
+              className="flex items-center gap-2 mb-3 min-h-[26px]"
+              style={{ fontFamily: "'Comic Neue',cursive", fontWeight: 700, fontSize: "0.95rem", color: "#006494" }}
+            >
+              <AutoAwesome sx={{ fontSize: 18, color: "#fcd400" }} />
+              <span style={{ borderRight: "2.5px solid #006494", paddingRight: 3 }}>{typeText}</span>
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              variants={itemAnim}
+              className="text-[0.87rem] leading-relaxed max-w-[380px] mb-5"
+              style={{ fontFamily: "'Comic Neue',cursive", color: "#141d21" }}
+            >
+              MCA Student at ISTAR College &bull; CGPA 8.80<br />
+              Building modern web apps with React.js, TypeScript &amp; .NET Core — turning ideas into clean, functional digital experiences.
+            </motion.p>
+
+            {/* Pills */}
+            <motion.div variants={itemAnim} className="flex flex-wrap gap-2 mb-5">
+              <Pill icon={<Widgets sx={{ fontSize: 14 }} />} label="React.js" />
+              <Pill icon={<DataObject sx={{ fontSize: 14 }} />} label="TypeScript" />
+              <Pill icon={<Api sx={{ fontSize: 14 }} />} label=".NET Core" />
+              <Pill icon={<Storage sx={{ fontSize: 14 }} />} label="SQL Server" />
+              <Pill icon={<Palette sx={{ fontSize: 14 }} />} label="Tailwind CSS" />
+            </motion.div>
+
+            {/* Buttons */}
+            <motion.div variants={itemAnim} className="flex gap-3 flex-wrap mb-5">
+              <motion.button
+                onClick={() => scrollTo("skills")}
+                className="flex items-center gap-2 px-7 py-3 rounded-full text-white font-bold text-sm"
+                style={{ background: "#006494", fontFamily: "'Baloo 2',cursive", boxShadow: "0 4px 16px rgba(0,100,148,.35)" }}
+                whileHover={{ y: -3, boxShadow: "0 8px 24px rgba(0,100,148,.45)" }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Inventory2 sx={{ fontSize: 18 }} />
+                Explore Pocket
+              </motion.button>
+              <motion.button
+                onClick={() => scrollTo("experience")}
+                className="flex items-center gap-2 px-7 py-3 rounded-full font-bold text-sm"
+                style={{ border: "2.5px solid #006494", background: "transparent", color: "#006494", fontFamily: "'Baloo 2',cursive" }}
+                whileHover={{ y: -3, background: "#006494", color: "white" }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Timeline sx={{ fontSize: 18 }} />
+                See Journey
+              </motion.button>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div variants={itemAnim} className="flex gap-2.5 flex-wrap">
+              <Stat icon={<School sx={{ fontSize: 18 }} />} num="8.80" label="MCA CGPA" />
+              <Stat icon={<Grade sx={{ fontSize: 18 }} />} num="7.62" label="B.Sc CGPA" />
+              <Stat icon={<Work sx={{ fontSize: 18 }} />} num="5+" label="Projects" />
+              <Stat icon={<Layers sx={{ fontSize: 18 }} />} num="3+" label="Tech Stack" />
+            </motion.div>
           </motion.div>
 
-          {/* Pulsing Ripple Effect */}
+          {/* ── Right ────────────────────────────────────────────────────── */}
           <motion.div
-            className="absolute inset-0 rounded-full border-2 border-yellow-400"
-            animate={{
-              scale: [1, 1.6, 1.6],
-              opacity: [0.8, 0, 0]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeOut"
-            }}
-          />
-        </motion.button>
+            className="flex flex-col items-center relative"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+          >
+            {/* Character card */}
+            <motion.div
+              className="relative flex flex-col items-center rounded-[28px] p-5 w-[268px]"
+              style={{ background: "rgba(255,255,255,0.6)", border: "2px solid rgba(0,100,148,0.15)", boxShadow: "0 12px 40px rgba(0,100,148,0.14)" }}
+              animate={{ y: [0, -13, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <img
+                src={doremonImg}
+                alt="Doraemon on broom"
+                className="w-[200px] h-[210px] object-contain"
+                style={{ filter: "drop-shadow(0 8px 20px rgba(0,100,148,0.25))" }}
+              />
+              <div className="flex items-center gap-1 text-blue-700 font-bold text-[0.74rem] mt-2" style={{ fontFamily: "'Baloo 2',cursive" }}>
+                <Star sx={{ fontSize: 14, color: "#fcd400" }} />
+                Doraemon Mode : ON
+              </div>
+            </motion.div>
+
+            {/* Floating tags */}
+            <FloatTag className="border-2 border-yellow-300 text-amber-900 top-3 -right-4" delay={0}>
+              <LocationOn sx={{ fontSize: 14, color: "#d97706" }} />
+              ISTAR College
+            </FloatTag>
+            <FloatTag className="border-2 border-blue-300 text-blue-900 top-[100px] -right-6" delay={1}>
+              <LaptopMac sx={{ fontSize: 14, color: "#006494" }} />
+              React + .NET
+            </FloatTag>
+            <FloatTag className="border-2 border-green-300 text-green-900 bottom-[72px] -right-5" delay={0.5}>
+              <MenuBook sx={{ fontSize: 14, color: "#15803d" }} />
+              MCA Student
+            </FloatTag>
+          </motion.div>
+        </div>
       </section>
 
-      {/* Full Width Bottom Information Block */}
-      <div className="w-full bg-[#f0f5fa] py-16 sm:py-20 border-t border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
-          <div className="flex-1 relative z-10">
-            <div className="flex items-start gap-2 mb-4">
-              <Rocket className="w-10 h-10 text-doraemon-red shrink-0 mt-3" />
-              <h1 className="text-2xl lg:text-4xl font-bold text-doraemon-blue leading-tight">
-                From the 22nd Century of <br /> Tech
-              </h1>
+      {/* ── Info Band ────────────────────────────────────────────────────── */}
+      <div
+        className="w-full py-4 border-t-2 border-dashed"
+        style={{ background: "rgba(255,255,255,0.6)", borderColor: "rgba(0,100,148,0.2)" }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-5 items-center">
+          {[
+            { icon: <RocketLaunch sx={{ fontSize: 18 }} />, bg: "#006494", title: "22nd Century Tech", sub: "From the future" },
+            { icon: <Code sx={{ fontSize: 18 }} />, bg: "#c00014", title: "Full-Stack Builder", sub: "React · TypeScript · .NET Core" },
+            { icon: <EmojiEvents sx={{ fontSize: 18 }} />, bg: "#15803d", title: "Distinction Holder", sub: "B.Sc IT · Charusat University" },
+            { icon: <LocationCity sx={{ fontSize: 18 }} />, bg: "#7c3aed", title: "Vallabh Vidyanagar", sub: "Gujarat, India" },
+          ].map(item => (
+            <div key={item.title} className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white" style={{ background: item.bg }}>
+                {item.icon}
+              </div>
+              <div>
+                <div className="text-[0.78rem] font-bold text-blue-900" style={{ fontFamily: "'Baloo 2',cursive" }}>{item.title}</div>
+                <div className="text-[10px] text-slate-500" style={{ fontFamily: "'Comic Neue',cursive" }}>{item.sub}</div>
+              </div>
             </div>
-            <div className="w-12 h-1.5 bg-doraemon-yellow rounded-full ml-14"></div>
-          </div>
-          <div className="flex-1 relative z-10">
-            <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
-              Currently pursuing my MCA at ISTAR College, Vallabh Vidyanagar with a CGPA of 8.80 in Semester II. I hold a B.Sc. IT with distinction from Charusat University (CGPA 7.62) and am actively learning and building real-world projects using React.js, TypeScript, .NET Core Web API, and SQL Server. I'm passionate about clean code, intuitive UX, and growing as a developer every single day.
-            </p>
+          ))}
+          <div className="ml-auto flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-blue-900 text-[0.78rem] font-bold" style={{ fontFamily: "'Baloo 2',cursive" }}>
+            <Stars sx={{ fontSize: 15, color: "#fcd400" }} />
+            CGPA 8.80
           </div>
         </div>
       </div>
+
+      {/* ── Scroll hint ───────────────────────────────────────────────────── */}
+      <motion.div
+        className="flex items-center justify-center gap-1.5 py-3 text-slate-400 text-[11px]"
+        style={{ fontFamily: "'Comic Neue',cursive" }}
+        animate={{ y: [0, 4, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <KeyboardDoubleArrowDown sx={{ fontSize: 16 }} />
+        Scroll to explore the 4D pocket
+        <KeyboardDoubleArrowDown sx={{ fontSize: 16 }} />
+      </motion.div>
+
+      {/* ── Bell FAB ──────────────────────────────────────────────────────── */}
+      <motion.button
+        onClick={() => scrollTo("contact")}
+        className="fixed bottom-8 right-8 w-14 h-14 rounded-full flex items-center justify-center z-50 overflow-visible"
+        style={{ background: "rgba(252,212,0,0.3)", border: "3px solid #fcd400", boxShadow: "0 4px 18px rgba(252,212,0,.5)" }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <motion.div
+          animate={{ rotate: [0, 0, -18, 18, -9, 9, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity }}
+        >
+          <NotificationsActive sx={{ fontSize: 24, color: "#00334e" }} />
+        </motion.div>
+        <motion.div
+          className="absolute inset-0 rounded-full border-2 border-yellow-300"
+          animate={{ scale: [1, 2.1, 2.1], opacity: [0.8, 0, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity }}
+        />
+      </motion.button>
     </>
   )
 }

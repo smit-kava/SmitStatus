@@ -22,3 +22,4 @@ export type { BadgeProps } from "./badge"
 export { LoadingScreen } from "./LoadingScreen"
 
 export { default as CustomCursor } from "./CustomCursor"
+export { default as BannerScroller } from "./BannerScroller"

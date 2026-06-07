@@ -45,7 +45,7 @@ export default function ContactSection() {
               <div className="space-y-8">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-[#005b8f]" />
+                    <Mail className="w-5 h-5 text-[#006494]" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Email</p>
@@ -107,7 +107,7 @@ export default function ContactSection() {
                 <button
                   type="submit"
                   disabled={status !== "idle"}
-                  className="w-full bg-[#005b8f] hover:bg-[#004770] text-white font-bold py-3.5 rounded-full shadow-lg shadow-blue-900/20 transition-all duration-200 flex items-center justify-center gap-2 mt-2"
+                  className="w-full bg-[#006494] hover:bg-[#004d72] text-white font-bold py-3.5 rounded-full shadow-lg shadow-blue-900/20 transition-all duration-200 flex items-center justify-center gap-2 mt-2"
                 >
                   {status === "idle" && (
                     <>

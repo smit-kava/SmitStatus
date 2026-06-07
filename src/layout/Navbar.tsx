@@ -7,6 +7,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher"
 import doraemonFly from "@/assets/navImages/Doremon.png"
 import doraemonRun from "@/assets/navImages/Doraemon Running png.png"
 import nobitaSit from "@/assets/navImages/Nobita.png"
+import logoSmit from "@/assets/logo_smit.svg"
 
 const navLinks = [
   { label: "Pocket",   href: "home",       icon: Home },
@@ -77,20 +78,14 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
 
             {/* ─── Logo ─── */}
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Link to={ROUTES.HOME} className="flex items-center gap-1">
-                <span
-                  className="text-xl lg:text-2xl font-extrabold tracking-tight"
-                  style={{ color: "#006494" }}
-                >
-                  Doraemon
-                </span>
-                <span
-                  className="text-xl lg:text-2xl font-extrabold tracking-tight"
-                  style={{ color: "#1e293b" }}
-                >
-                  Dev
-                </span>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+              <Link to={ROUTES.HOME} className="flex items-center">
+                <img
+                  src={logoSmit}
+                  alt="Smit Kava — SK Code Bracket Logo"
+                  className="h-9 lg:h-10 w-auto object-contain"
+                  style={{ filter: "drop-shadow(0 2px 6px rgba(0,100,148,0.18))" }}
+                />
               </Link>
             </motion.div>
 

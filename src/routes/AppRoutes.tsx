@@ -11,7 +11,7 @@
 
 import { Routes, Route } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
-import { Navbar } from "@/layout"
+import { Navbar, Footer } from "@/layout"
 import { HomePage, NotFoundPage } from "@/pages"
 
 function CommonLayout({ children }: { children: React.ReactNode }) {
@@ -34,6 +34,8 @@ function CommonLayout({ children }: { children: React.ReactNode }) {
       <div className="relative z-10 w-full">
         {children}
       </div>
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

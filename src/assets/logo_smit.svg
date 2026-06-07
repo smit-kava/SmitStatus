@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 95" width="300" height="95" role="img">
+  <title>Smit Kava — SK Code Bracket Logo</title>
+  <desc>Portfolio logo for Smit Kava, Full-Stack Developer</desc>
+  <text x="30"  y="62" font-family="'Segoe UI',Arial,sans-serif" font-size="56" font-weight="900" fill="#378ADD" text-anchor="middle">&lt;</text>
+  <text x="112" y="62" font-family="'Segoe UI',Arial,sans-serif" font-size="50" font-weight="900" fill="#1E3A8A" text-anchor="middle">SK</text>
+  <text x="176" y="62" font-family="'Segoe UI',Arial,sans-serif" font-size="50" font-weight="900" fill="#D97706" text-anchor="middle">/</text>
+  <text x="230" y="62" font-family="'Segoe UI',Arial,sans-serif" font-size="56" font-weight="900" fill="#378ADD" text-anchor="middle">&gt;</text>
+  <text x="152" y="85" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="700" fill="#94A3B8" text-anchor="middle" letter-spacing="3.5">SMIT KAVA · DEV</text>
+</svg>
