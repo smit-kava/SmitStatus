@@ -1,29 +1,10 @@
 import { motion } from "framer-motion"
 import {
-  RocketLaunch,
-  Code,
-  AutoAwesome,
-  Widgets,
-  DataObject,
-  Api,
-  Storage,
-  Palette,
-  Inventory2,
-  Timeline,
-  School,
-  Grade,
-  Work,
-  Layers,
-  Star,
-  LocationOn,
-  LaptopMac,
-  MenuBook,
-  EmojiEvents,
-  LocationCity,
-  Stars,
-  KeyboardDoubleArrowDown,
+  RocketLaunch, Code, AutoAwesome, Widgets, DataObject, Api, Storage, Palette,
+  Inventory2, Timeline, School, Grade, Work, MuiLayers as Layers, Star, LocationOn,
+  LaptopMac, MenuBook, EmojiEvents, LocationCity, Stars, KeyboardDoubleArrowDown,
   NotificationsActive,
-} from "@/components/ui/HeroIcons"
+} from "@/components/ui/GlobalIcons"
 import { useEffect, useState } from "react"
 import doremonImg from "@/assets/navImages/Doremon.png"
 

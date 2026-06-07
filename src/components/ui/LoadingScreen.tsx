@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Radio } from "lucide-react";
+import { Radio } from "@/components/ui/GlobalIcons";
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -92,14 +92,15 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   const isFinished = progress >= 100;
 
-  const handleEnterClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsExiting(true);
-    // Wait for the animation to finish before unmounting
-    setTimeout(() => {
-      onComplete();
-    }, 2000); // 0.5s fade out + 1.5s curtain open
-  };
+  // Auto-complete 1.5s after loading finishes — no button needed
+  useEffect(() => {
+    if (!isFinished) return
+    const t = setTimeout(() => {
+      setIsExiting(true)
+      setTimeout(onComplete, 2000)
+    }, 1500)
+    return () => clearTimeout(t)
+  }, [isFinished])
 
   return (
     <div
@@ -253,25 +254,17 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
             </AnimatePresence>
           </div>
 
-          {/* Enter Cockpit Action trigger when 100% is compiled */}
-          <div className="mt-8 min-h-[64px]">
+          {/* Auto-completes after 100% — no button shown */}
+          <div className="mt-8 min-h-[40px]">
             <AnimatePresence>
               {isFinished && (
-                <motion.button
-                  id="enter-cockpit-button"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: [1, 1.03, 1] }}
-                  transition={{
-                    opacity: { duration: 0.5 },
-                    scale: { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
-                  }}
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={handleEnterClick}
-                  className="px-8 py-3.5 bg-[#006494] hover:bg-[#004b70] text-white text-base font-bold rounded-2xl shadow-lg ring-4 ring-[#cae6ff]/50 transition-colors flex items-center gap-2 cursor-pointer"
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-[#006494] text-sm font-bold tracking-wide"
                 >
-                  Open 4D Developer Pocket
-                </motion.button>
+                  ✦ Launching...
+                </motion.p>
               )}
             </AnimatePresence>
           </div>

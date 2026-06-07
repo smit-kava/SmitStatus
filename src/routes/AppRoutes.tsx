@@ -12,7 +12,7 @@
 import { Routes, Route } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { Navbar, Footer } from "@/layout"
-import { HomePage, NotFoundPage } from "@/pages"
+import { HomePage, NotFoundPage, AllProjectsPage } from "@/pages"
 
 function CommonLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -50,6 +50,16 @@ export default function AppRoutes() {
         element={
           <CommonLayout>
             <HomePage />
+          </CommonLayout>
+        }
+      />
+
+      {/* ── All Projects Page (opens in new tab) ── */}
+      <Route
+        path={ROUTES.PROJECTS}
+        element={
+          <CommonLayout>
+            <AllProjectsPage />
           </CommonLayout>
         }
       />

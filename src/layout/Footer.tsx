@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { FaGithub, FaLinkedin, FaInstagram, FaFileAlt } from "react-icons/fa"
+import { FaGithub, FaLinkedin, FaInstagram, FaFileAlt } from "@/components/ui/GlobalIcons"
 import logoSmit from "@/assets/logo_smit.svg"
 
 const socialLinks = [

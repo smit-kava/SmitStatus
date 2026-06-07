@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Code2, Terminal, Database, Server, Cpu, Layout, FileCode2, Zap, GitBranch, Globe } from "lucide-react"
+import { Code2, Terminal, Database, Server, Cpu, Layout, FileCode2, Zap, GitBranch, Globe } from "@/components/ui/GlobalIcons"
 
 const gadgets = [
   {

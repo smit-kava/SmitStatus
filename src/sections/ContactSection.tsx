@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Mail, MapPin, Send } from "lucide-react"
+import { Mail, MapPin, Send } from "@/components/ui/GlobalIcons"
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" })

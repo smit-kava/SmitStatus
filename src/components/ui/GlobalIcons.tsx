@@ -1,0 +1,97 @@
+// ================================================
+// GLOBAL ICONS — Single source of truth
+// All icons used across the project live here.
+// Usage:
+//   import { RocketLaunch, ArrowRight, FaGithub } from "@/components/ui/GlobalIcons"
+// ================================================
+
+import React from "react"
+
+// ── MUI-style SVG icon factory ───────────────────────────────────────────────
+interface MuiIconProps {
+  sx?: { fontSize?: number | string; color?: string }
+  className?: string
+  style?: React.CSSProperties
+}
+const mk = (...ds: string[]) =>
+  function Icon({ sx, className, style }: MuiIconProps) {
+    const size = sx?.fontSize ?? 24
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill={sx?.color ?? "currentColor"}
+        className={className}
+        style={{
+          width: typeof size === "number" ? `${size}px` : size,
+          height: typeof size === "number" ? `${size}px` : size,
+          display: "inline-block",
+          flexShrink: 0,
+          verticalAlign: "middle",
+          ...style,
+        }}
+        aria-hidden="true"
+      >
+        {ds.map((d, i) => <path key={i} d={d} />)}
+      </svg>
+    )
+  }
+
+// ── MUI-style Icons ──────────────────────────────────────────────────────────
+export const RocketLaunch = mk(
+  "M9.19 6.35c-2.04 2.29-3.44 5.58-3.19 9.65 3.94.31 7.17-1.06 9.46-3.1L9.19 6.35z",
+  "M17.65 1.79c-2.75-.5-5.89.03-8.25 1.8l5.16 5.6c1.19-2.69 2.79-5.4 3.09-7.4z",
+  "M20.41 17.19l-4.26-4.27-1.42 1.42 4.26 4.26c.39.39 1.02.39 1.42 0s.39-1.02 0-1.41z",
+  "M3.83 10.52C3.19 12 2.76 13.59 2.6 15.4l4.53-1.31c-.54-1.27-.99-2.4-3.3-3.57z"
+)
+export const Code = mk("M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z")
+export const AutoAwesome = mk("M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z")
+export const Widgets = mk("M13 13v8h8v-8h-8zM3 21h8v-8H3v8zM3 3v8h8V3H3zm13.66-1.31L11 7.34 16.66 13l5.66-5.66-5.66-5.65z")
+export const DataObject = mk("M4 18v-2.46c0-.76-.43-1.42-1-1.73v-.62c.57-.31 1-.97 1-1.73V9c0-1.1.9-2 2-2h1V5H6C4.34 5 3 6.34 3 8v1.46c0 .53-.43.96-.96.96H1v2.16h1.04c.53 0 .96.43.96.96V15c0 1.66 1.34 3 3 3h1v-2H6c-.55 0-1-.45-1-1zm19-5.58h-1.04c-.53 0-.96-.43-.96-.96V10c0-1.66-1.34-3-3-3h-1V5h1c.55 0 1 .45 1 1v2.54c0 .76.43 1.42 1 1.73v.62c-.57.31-1 .97-1 1.73V15c0 1.1-.9 2-2 2h-1v2h1c1.66 0 3-1.34 3-3v-1.46c0-.53.43-.96.96-.96H23v-2.16z")
+export const Api = mk("M4 17h4v-3H4v3zm0-4h4v-3H4v3zm0-4h4V6H4v3zm5 8h4v-3H9v3zm0-4h4v-3H9v3zm0-4h4V6H9v3zm5 8h4v-3h-4v3zm0-4h4v-3h-4v3zm0-4h4V6h-4v3z")
+export const Storage = mk("M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z")
+export const Palette = mk("M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z")
+export const Inventory2 = mk("M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.72V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.72c.57-.38 1-1 1-1.72V4c0-1.1-1-2-2-2zm-9 12H9v-2h2v2zm0-4H7V8h2v2zm0-4H5V4h6v2zm4 4h-2V8h2v2zm4 8H5v-2h14v2zm0-4h-2v-2h2v2zm0-4h-6V4h6v2z")
+export const Timeline = mk("M23 8c0 1.1-.9 2-2 2-.18 0-.35-.02-.51-.07l-3.56 3.55c.05.16.07.34.07.52 0 1.1-.9 2-2 2s-2-.9-2-2c0-.18.02-.36.07-.52l-2.55-2.55c-.16.05-.34.07-.52.07s-.36-.02-.52-.07l-4.55 4.56c.05.16.07.33.07.51 0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2c.18 0 .35.02.51.07l4.56-4.55C8.02 9.36 8 9.18 8 9c0-1.1.9-2 2-2s2 .9 2 2c0 .18-.02.36-.07.52l2.55 2.55c.16-.05.34-.07.52-.07s.36.02.52.07l3.55-3.56C19.02 8.35 19 8.18 19 8c0-1.1.9-2 2-2s2 .9 2 2z")
+export const School = mk("M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z")
+export const Grade = mk("M12 7.13l.97 2.29.47 1.11 1.2.1 2.47.21-1.88 1.63-.91.79.27 1.18.56 2.41-2.12-1.28L12 14.48l-1.03.62-2.12 1.28.56-2.41.27-1.18-.91-.79L6.89 10.63l2.47-.21 1.2-.1.47-1.11L12 7.13M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z")
+export const Work = mk("M20 6h-2.18c.07-.44.18-.88.18-1.36C18 3.15 16.85 2 15.5 2h-7C7.15 2 6 3.15 6 4.64c0 .48.11.92.18 1.36H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8.5-2h1c.28 0 .5.22.5.5s-.22.5-.5.5h-1c-.28 0-.5-.22-.5-.5s.22-.5.5-.5zM20 19H4V8h16v11z")
+export const MuiLayers = mk("M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z")
+export const Star = mk("M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z")
+export const LocationOn = mk("M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z")
+export const LaptopMac = mk("M20 18c1.1 0 1.99-.9 1.99-2L22 5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2h-4zM4 5h16v11H4V5zm8 14c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z")
+export const MenuBook = mk("M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-4 8l-2-2 1.41-1.41L9 14.17l3.59-3.59L14 12l-5 5zM6 20V4h5v7h7v9H6z")
+export const EmojiEvents = mk("M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z")
+export const LocationCity = mk("M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5v-2h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z")
+export const Stars = mk("M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z")
+export const KeyboardDoubleArrowDown = mk("M18 9l-6 6-6-6-1.41 1.41L12 17.83l7.41-7.42L18 9zm0-5.59L12 9.83 6 4.41 4.59 5.83 12 13.24l7.41-7.41L18 3.41z")
+export const NotificationsActive = mk(
+  "M18 16v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.93 6 11v5l-2 2v1h16v-1l-2-2zm-6 6c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2z",
+  "M19.71 6.93l-1.43-1.43C19.99 7.07 21 9.39 21 12h2c0-3.28-1.33-6.25-3.29-8.07z",
+  "M3 12h2c0-2.61 1.01-4.93 2.71-6.57L6.29 4C4.34 5.82 3 8.79 3 12z"
+)
+// ── Platform / UI Icons (MUI-style SVG) ─────────────────────────────────────
+export const WebIcon = mk("M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z")
+export const DesktopIcon = mk("M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z")
+export const MobileIcon = mk("M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z")
+export const AndroidIcon = mk("M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z")
+
+// ── Re-exports from lucide-react ─────────────────────────────────────────────
+export {
+  Menu, X, Home, Wrench, Clock, Mail, FileText, FolderOpen,
+  ArrowRight, Calendar, Layers, ExternalLink, Eye,
+  GraduationCap, BookOpen, Check, Briefcase,
+  Star as LucideStar,
+  MapPin, Send,
+  Zap, Target, Heart, Rocket,
+  Code2, Terminal, Database, Server, Cpu, Layout, FileCode2, GitBranch, Globe,
+  Monitor, Smartphone,
+  ArrowLeft,
+  Radio,
+} from "lucide-react"
+
+// ── Re-exports from react-icons/fa ───────────────────────────────────────────
+export {
+  FaGithub, FaLinkedin, FaInstagram, FaFileAlt,
+  FaGlobe, FaDesktop, FaMobileAlt, FaAndroid,
+} from "react-icons/fa"

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
-import { Zap, Target, Heart, Rocket } from "lucide-react"
+import { Zap, Target, Heart, Rocket } from "@/components/ui/GlobalIcons"
 import { Card, CardContent } from "@/components/ui/card"
 import { personalInfo } from "@/data/portfolioData"
 

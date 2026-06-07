@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { GraduationCap, BookOpen, Check, Star, Briefcase, ExternalLink } from "lucide-react"
+import { GraduationCap, BookOpen, Check, LucideStar as Star, Briefcase, ExternalLink } from "@/components/ui/GlobalIcons"
 
 const timeline = [
   {

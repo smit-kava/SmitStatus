@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Home, Wrench, Clock, Mail, FileText } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Menu, X, Home, Wrench, Clock, Mail, FileText, FolderOpen } from "@/components/ui/GlobalIcons"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import ThemeSwitcher from "@/components/ThemeSwitcher"
 import doraemonFly from "@/assets/navImages/Doremon.png"
@@ -12,6 +12,7 @@ import logoSmit from "@/assets/logo_smit.svg"
 const navLinks = [
   { label: "Pocket",   href: "home",       icon: Home },
   { label: "Gadgets",  href: "skills",     icon: Wrench },
+  { label: "Projects", href: "projects",   icon: FolderOpen },
   { label: "Timeline", href: "experience", icon: Clock },
   { label: "Contact",  href: "contact",    icon: Mail },
 ]
@@ -23,6 +24,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen]               = useState(false)
   const [activeSection, setActiveSection] = useState("home")
   const [scrollProgress, setScrollProgress] = useState(0)
+  const navigate  = useNavigate()
+  const location  = useLocation()
+  const isHome    = location.pathname === ROUTES.HOME
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +35,8 @@ export default function Navbar() {
       const progress = maxScroll > 0 ? (scrollTop / maxScroll) * 100 : 0
       setScrollProgress(progress)
 
-      // Active section detection
+      // Active section detection (only meaningful on home page)
+      if (!isHome) return
       for (const link of [...navLinks].reverse()) {
         const section = document.getElementById(link.href)
         if (section) {
@@ -50,11 +55,20 @@ export default function Navbar() {
       clearTimeout(t)
       window.removeEventListener("scroll", handleScroll)
     }
-  }, [])
+  }, [isHome])
 
   const scrollTo = (id: string) => {
     setIsOpen(false)
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+    if (isHome) {
+      // Already on home — just scroll to section
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+    } else {
+      // On another page — navigate home then scroll after a tick
+      navigate(ROUTES.HOME)
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 400)
+    }
   }
 
   return (
@@ -102,17 +116,14 @@ export default function Navbar() {
                     whileTap={{ scale: 0.96 }}
                     className="relative px-4 py-2 rounded-lg flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200"
                     style={{
-                      // Active: slightly tinted background, no underline
                       color: isActive ? "#005b8f" : "#64748b",
                       background: isActive
                         ? "rgba(0, 100, 148, 0.08)"
                         : "transparent",
-                      // No border, no underline — clean merge
                     }}
                   >
                     <Icon className="w-3.5 h-3.5 shrink-0" />
                     <span>{link.label}</span>
-                    {/* NO underline, NO indicator — removed completely */}
                   </motion.button>
                 )
               })}
