@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Home, ArrowLeft } from "lucide-react"
+import { Home, ArrowLeft } from "@/components/ui/GlobalIcons"
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { ROUTES } from "@/routes/routes"
@@ -18,7 +18,7 @@ export default function NotFoundPage() {
         className="text-center space-y-6 relative z-10"
       >
         <motion.h1
-          className="text-[10rem] font-black leading-none bg-gradient-to-r from-doraemon-blue to-doraemon-darkBlue bg-clip-text text-transparent"
+          className="text-[10rem] font-black leading-none bg-linear-to-r from-doraemon-blue to-doraemon-darkBlue bg-clip-text text-transparent"
           animate={{ scale: [1, 1.02, 1] }}
           transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
         >

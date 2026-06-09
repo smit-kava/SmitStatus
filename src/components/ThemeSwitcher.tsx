@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Settings, Check } from 'lucide-react';
+import { SettingIcons, Check } from '@/components/ui/GlobalIcons';
 
 const themes = [
   {
@@ -79,13 +79,14 @@ export default function ThemeSwitcher() {
   return (
     <div className="relative">
       <motion.button
-        whileHover={{ rotate: 90 }}
+        whileHover={{ rotate: 90, scale: 1.08 }}
+        whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.3 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-10 h-10 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-sm border border-gray-100 text-doraemon-blue transition-colors focus:outline-none"
+        className="w-8 h-8 flex items-center justify-center text-doraemon-blue hover:text-doraemon-darkBlue transition-colors focus:outline-none"
         aria-label="Theme Settings"
       >
-        <Settings className="w-5 h-5" />
+        <SettingIcons className="w-6.5 h-6.5" />
       </motion.button>
 
       <AnimatePresence>
