@@ -1,368 +1,592 @@
-import { motion } from "framer-motion"
+import { useState, useEffect } from "react";
 import {
-  RocketLaunch, Code, AutoAwesome, Widgets, DataObject, Api, Storage, Palette,
-  Inventory2, Timeline, School, Grade, Work, MuiLayers as Layers, Star, LocationOn,
-  LaptopMac, MenuBook, EmojiEvents, LocationCity, Stars, KeyboardDoubleArrowDown,
-  NotificationsActive,
-} from "@/components/ui/GlobalIcons"
-import { useEffect, useState } from "react"
-import doremonImg from "@/assets/navImages/Doremon.png"
+  RocketLaunch,
+  LaptopMac,
+  AutoAwesome,
+  Code2,
+  Code,
+  Api,
+  Storage,
+  Palette,
+  Widgets,
+  Timeline,
+  School,
+  Grade,
+  Wrench,
+  EmojiEvents,
+  LocationOn,
+  KeyboardDoubleArrowDown,
+  NotificationsActive
+} from "@/components/ui/GlobalIcons";
 
-// ─── Typewriter Hook ─────────────────────────────────────────────────────────
-function useTypewriter(phrases: string[], speed = 82, delSpeed = 48, pause = 1300) {
-  const [text, setText] = useState("")
-  const [pi, setPi] = useState(0)
-  const [ci, setCi] = useState(0)
-  const [del, setDel] = useState(false)
-
+function useTypewriter(phrases: string[], speed = 80, delSpeed = 45, pause = 1400) {
+  const [text, setText] = useState("");
+  const [pi, setPi] = useState(0);
+  const [ci, setCi] = useState(0);
+  const [del, setDel] = useState(false);
   useEffect(() => {
-    const cur = phrases[pi]
+    const cur = phrases[pi];
     const t = setTimeout(() => {
       if (!del) {
-        setText(cur.slice(0, ci + 1))
-        setCi(c => c + 1)
-        if (ci + 1 === cur.length) { setDel(true); return }
+        setText(cur.slice(0, ci + 1));
+        setCi((c) => c + 1);
+        if (ci + 1 === cur.length) setDel(true);
       } else {
-        setText(cur.slice(0, ci - 1))
-        setCi(c => c - 1)
-        if (ci - 1 === 0) { setDel(false); setPi(i => (i + 1) % phrases.length) }
+        setText(cur.slice(0, ci - 1));
+        setCi((c) => c - 1);
+        if (ci - 1 === 0) {
+          setDel(false);
+          setPi((i) => (i + 1) % phrases.length);
+        }
       }
-    }, del ? delSpeed : ci === cur.length ? pause : speed)
-    return () => clearTimeout(t)
-  }, [ci, del, pi, phrases, speed, delSpeed, pause])
-
-  return text
+    }, del ? delSpeed : ci === cur.length ? pause : speed);
+    return () => clearTimeout(t);
+  }, [ci, del, pi, phrases, speed, delSpeed, pause]);
+  return text;
 }
 
-// ─── Cloud ────────────────────────────────────────────────────────────────────
-function Cloud({ delay, top }: { delay: number; top: string }) {
+// ── Developer Illustration SVG ────────────────────────────────────────────────
+function DevIllustration() {
   return (
-    <motion.div
-      className="absolute pointer-events-none"
-      style={{ top, left: -180, zIndex: 1 }}
-      animate={{ x: [0, 900] }}
-      transition={{ duration: 28 + delay * 5, repeat: Infinity, ease: "linear", delay }}
+    <svg
+      width="100%"
+      viewBox="0 0 680 560"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: "100%", height: "auto", maxWidth: 420 }}
     >
-      <svg width="130" height="60" viewBox="0 0 130 60" fill="none">
-        <ellipse cx="65" cy="45" rx="60" ry="18" fill="white" opacity="0.7" />
-        <circle cx="40" cy="30" r="20" fill="white" opacity="0.7" />
-        <circle cx="72" cy="22" r="26" fill="white" opacity="0.7" />
-        <circle cx="100" cy="32" r="16" fill="white" opacity="0.7" />
-      </svg>
-    </motion.div>
-  )
+      <title>Smit Kava – developer hero illustration</title>
+      <desc>A Doraemon-themed developer workspace scene with animated floating gadget cards, code editor, and skill orbits for a portfolio hero section.</desc>
+      <defs>
+        <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#e8f6ff" />
+          <stop offset="100%" stopColor="#f4faff" />
+        </linearGradient>
+        <linearGradient id="screenGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0d1117" />
+          <stop offset="100%" stopColor="#161b22" />
+        </linearGradient>
+        <linearGradient id="deskGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#c8a96e" />
+          <stop offset="100%" stopColor="#a07840" />
+        </linearGradient>
+        <style>{`
+          @keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+          @keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+          @keyframes floatC{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+          @keyframes orbit1{from{transform:rotate(0deg) translateX(118px) rotate(0deg)}to{transform:rotate(360deg) translateX(118px) rotate(-360deg)}}
+          @keyframes orbit2{from{transform:rotate(180deg) translateX(118px) rotate(-180deg)}to{transform:rotate(540deg) translateX(118px) rotate(-540deg)}}
+          @keyframes orbit3{from{transform:rotate(60deg) translateX(88px) rotate(-60deg)}to{transform:rotate(420deg) translateX(88px) rotate(-420deg)}}
+          @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+          .fa{animation:floatA 3.6s ease-in-out infinite}
+          .fb{animation:floatB 4.4s ease-in-out 0.9s infinite}
+          .fc{animation:floatC 3s ease-in-out 1.5s infinite}
+          .o1{transform-origin:340px 280px;animation:orbit1 8s linear infinite}
+          .o2{transform-origin:340px 280px;animation:orbit2 11s linear infinite}
+          .o3{transform-origin:340px 280px;animation:orbit3 14s linear infinite 1s}
+          .cur{animation:blink 1s step-end infinite}
+        `}</style>
+      </defs>
+
+      {/* ── Background card ── */}
+      <rect x="100" y="60" width="480" height="440" rx="28" fill="url(#cardGrad)" stroke="#b8dff5" strokeWidth="1.5" />
+
+      {/* ── Desk surface ── */}
+      <rect x="130" y="365" width="420" height="22" rx="4" fill="url(#deskGrad)" />
+      <rect x="130" y="383" width="420" height="6" rx="3" fill="#8a6430" opacity={0.5} />
+
+      {/* ── Laptop body ── */}
+      <rect x="190" y="348" width="300" height="20" rx="6" fill="#c8cdd4" />
+      <rect x="200" y="350" width="280" height="16" rx="5" fill="#b0b5bc" />
+      <rect x="195" y="142" width="290" height="210" rx="10" fill="#2a2f38" />
+      <rect x="198" y="148" width="284" height="178" rx="4" fill="url(#screenGrad)" />
+
+      {/* ── Code editor content ── */}
+      <rect x="198" y="148" width="284" height="22" rx="0" fill="#21262d" />
+      <circle cx={214} cy={159} r={4.5} fill="#ff5f57" />
+      <circle cx={228} cy={159} r={4.5} fill="#ffbd2e" />
+      <circle cx={242} cy={159} r={4.5} fill="#28c840" />
+      <text x={270} y={163} fontFamily="monospace" fontSize={9} fill="#8b949e">HeroSection.tsx</text>
+
+      {/* Line numbers col */}
+      <rect x={198} y={170} width={22} height={156} fill="#161b22" />
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n, i) => (
+        <text key={n} x={204} y={183 + i * 14} fontFamily="monospace" fontSize={8.5} fill="#3a424e">{n}</text>
+      ))}
+
+      {/* Code text */}
+      <text x={226} y={183} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">import</text>
+      <text x={258} y={183} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> React </text>
+      <text x={285} y={183} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">from</text>
+      <text x={307} y={183} fontFamily="monospace" fontSize={8.5} fill="#a5d6ff"> 'react'</text>
+
+      <text x={226} y={197} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">const</text>
+      <text x={254} y={197} fontFamily="monospace" fontSize={8.5} fill="#79c0ff"> Hero</text>
+      <text x={276} y={197} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> = () </text>
+      <text x={307} y={197} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">=&gt;</text>
+      <text x={323} y={197} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> {"{"}  </text>
+
+      <text x={226} y={211} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">  return</text>
+      <text x={266} y={211} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> (</text>
+
+      <text x={226} y={225} fontFamily="monospace" fontSize={8.5} fill="#7ee787">  &lt;section</text>
+      <text x={286} y={225} fontFamily="monospace" fontSize={8.5} fill="#79c0ff"> id</text>
+      <text x={300} y={225} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">=</text>
+      <text x={306} y={225} fontFamily="monospace" fontSize={8.5} fill="#a5d6ff">"home"</text>
+      <text x={344} y={225} fontFamily="monospace" fontSize={8.5} fill="#7ee787">&gt;</text>
+
+      <text x={226} y={239} fontFamily="monospace" fontSize={8.5} fill="#7ee787">    &lt;h1</text>
+      <text x={260} y={239} fontFamily="monospace" fontSize={8.5} fill="#79c0ff"> className</text>
+      <text x={320} y={239} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">=</text>
+      <text x={326} y={239} fontFamily="monospace" fontSize={8.5} fill="#a5d6ff">"title"</text>
+      <text x={368} y={239} fontFamily="monospace" fontSize={8.5} fill="#7ee787">&gt;</text>
+
+      <text x={226} y={253} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">      Hi, I'm </text>
+      <text x={285} y={253} fontFamily="monospace" fontSize={8.5} fill="#ffa657">Smit</text>
+
+      <text x={226} y={267} fontFamily="monospace" fontSize={8.5} fill="#7ee787">    &lt;/h1&gt;</text>
+      <text x={226} y={281} fontFamily="monospace" fontSize={8.5} fill="#7ee787">  &lt;/section&gt;</text>
+      <text x={226} y={295} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">{"}"}</text>
+      <rect x={237} y={286} width={5} height={9} fill="#58a6ff" className="cur" />
+
+      {/* Status bar */}
+      <rect x={198} y={319} width={284} height={7} fill="#21262d" />
+      <text x={204} y={325} fontFamily="monospace" fontSize={6} fill="#3fb950">● TypeScript</text>
+      <text x={280} y={325} fontFamily="monospace" fontSize={6} fill="#8b949e">Ln 9, Col 2</text>
+      <text x={380} y={325} fontFamily="monospace" fontSize={6} fill="#8b949e">UTF-8</text>
+
+      {/* Laptop hinge line */}
+      <line x1={195} y1={346} x2={485} y2={346} stroke="#888" strokeWidth={1} />
+
+      {/* ── Orbit ring ── */}
+      <circle cx={340} cy={280} r={118} fill="none" stroke="#b8dff5" strokeWidth={1} strokeDasharray="6 5" opacity={0.6} />
+      <circle cx={340} cy={280} r={88} fill="none" stroke="#c8e8f8" strokeWidth={0.8} strokeDasharray="4 6" opacity={0.4} />
+
+      {/* ── Orbiting skill bubbles ── */}
+      <g className="o1">
+        <circle cx={340} cy={280} r={24} fill="#00a8e0" stroke="#007aaa" strokeWidth={1.5} />
+        <text x={340} y={276} fontFamily="monospace" fontSize={9} fill="white" textAnchor="middle" fontWeight="bold">⚛</text>
+        <text x={340} y={288} fontFamily="sans-serif" fontSize={7.5} fill="white" textAnchor="middle">React</text>
+      </g>
+      <g className="o2">
+        <circle cx={340} cy={280} r={21} fill="#512bd4" stroke="#3a1fa0" strokeWidth={1.5} />
+        <text x={340} y={276} fontFamily="sans-serif" fontSize={7} fill="white" textAnchor="middle" fontWeight="bold">.NET</text>
+        <text x={340} y={287} fontFamily="sans-serif" fontSize={6.5} fill="#c8b8ff" textAnchor="middle">Core</text>
+      </g>
+      <g className="o3">
+        <circle cx={340} cy={280} r={21} fill="#3178c6" stroke="#1a5fa8" strokeWidth={1.5} />
+        <text x={340} y={276} fontFamily="monospace" fontSize={7.5} fill="white" textAnchor="middle" fontWeight="bold">TS</text>
+        <text x={340} y={287} fontFamily="sans-serif" fontSize={6} fill="#b8d8ff" textAnchor="middle">TypeScript</text>
+      </g>
+
+      {/* ── Floating info cards ── */}
+      {/* Card 1: CGPA */}
+      <g style={{ transformOrigin: "155px 170px" }} className="fa">
+        <rect x={115} y={148} width={112} height={46} rx={12} fill="white" stroke="#b8dff5" strokeWidth={1.5} />
+        <circle cx={138} cy={171} r={12} fill="#e8f6ff" />
+        <text x={138} y={176} fontFamily="sans-serif" fontSize={12} fill="#006494" textAnchor="middle">🏆</text>
+        <text x={156} y={166} fontFamily="sans-serif" fontSize={10} fill="#00334e" fontWeight="bold">CGPA 8.80</text>
+        <text x={156} y={179} fontFamily="sans-serif" fontSize={8} fill="#6b8ca0">MCA · Etech</text>
+      </g>
+
+      {/* Card 2: Projects */}
+      <g style={{ transformOrigin: "530px 200px" }} className="fb">
+        <rect x={478} y={177} width={112} height={46} rx={12} fill="white" stroke="#c8b8ff" strokeWidth={1.5} />
+        <circle cx={500} cy={200} r={12} fill="#f0ecff" />
+        <text x={500} y={205} fontFamily="sans-serif" fontSize={12} fill="#512bd4" textAnchor="middle">🚀</text>
+        <text x={518} y={195} fontFamily="sans-serif" fontSize={10} fill="#00334e" fontWeight="bold">5+ Projects</text>
+        <text x={518} y={208} fontFamily="sans-serif" fontSize={8} fill="#6b8ca0">Full‑Stack</text>
+      </g>
+
+      {/* Card 3: Location */}
+      <g style={{ transformOrigin: "530px 430px" }} className="fb">
+        <rect x={478} y={408} width={112} height={46} rx={12} fill="white" stroke="#c8e8c8" strokeWidth={1.5} />
+        <circle cx={500} cy={431} r={12} fill="#eaf6ea" />
+        <text x={500} y={436} fontFamily="sans-serif" fontSize={12} fill="#2e7d32" textAnchor="middle">📍</text>
+        <text x={518} y={426} fontFamily="sans-serif" fontSize={9.5} fill="#00334e" fontWeight="bold">Gujarat, India</text>
+        <text x={518} y={439} fontFamily="sans-serif" fontSize={8} fill="#6b8ca0">Vallabh Vidya.</text>
+      </g>
+
+      {/* Card 4: Available */}
+      <g style={{ transformOrigin: "155px 430px" }} className="fc">
+        <rect x={113} y={408} width={118} height={46} rx={12} fill="white" stroke="#ffd6b0" strokeWidth={1.5} />
+        <circle cx={136} cy={431} r={12} fill="#fff5e8" />
+        <circle cx={136} cy={431} r={5} fill="#f57c00">
+          <animate attributeName="r" values="5;3;5" dur="1.6s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="1;0.4;1" dur="1.6s" repeatCount="indefinite" />
+        </circle>
+        <text x={156} y={426} fontFamily="sans-serif" fontSize={9.5} fill="#00334e" fontWeight="bold">Available</text>
+        <text x={156} y={439} fontFamily="sans-serif" fontSize={8} fill="#6b8ca0">For Projects</text>
+      </g>
+
+      {/* ── Bottom tag strip ── */}
+      <rect x={160} y={490} width={360} height={28} rx={14} fill="white" stroke="#b8dff5" strokeWidth={1.5} />
+      <text x={228} y={509} fontFamily="sans-serif" fontSize={10} fill="#006494" fontWeight="bold" textAnchor="middle">React.js</text>
+      <line x1={255} y1={498} x2={255} y2={510} stroke="#b8dff5" strokeWidth={1} />
+      <text x={303} y={509} fontFamily="sans-serif" fontSize={10} fill="#512bd4" fontWeight="bold" textAnchor="middle">TypeScript</text>
+      <line x1={349} y1={498} x2={349} y2={510} stroke="#b8dff5" strokeWidth={1} />
+      <text x={391} y={509} fontFamily="sans-serif" fontSize={10} fill="#e53935" fontWeight="bold" textAnchor="middle">.NET Core</text>
+      <line x1={431} y1={498} x2={431} y2={510} stroke="#b8dff5" strokeWidth={1} />
+      <text x={465} y={509} fontFamily="sans-serif" fontSize={10} fill="#0ea5e9" fontWeight="bold" textAnchor="middle">SQL</text>
+
+      {/* ── Doraemon bell accent ── */}
+      <circle cx={340} cy={430} r={18} fill="#ffd600" stroke="#c8a800" strokeWidth={2} />
+      <circle cx={340} cy={430} r={11} fill="#f0c000" stroke="#c8a800" strokeWidth={1} />
+      <circle cx={340} cy={434} r={4} fill="#7a5800" />
+      <circle cx={335} cy={425} r={3.5} fill="white" opacity={0.55} />
+    </svg>
+  );
 }
 
-// ─── Floating Tag ─────────────────────────────────────────────────────────────
-function FloatTag({
-  children, className, delay = 0,
-}: { children: React.ReactNode; className: string; delay?: number }) {
+// ── Stat Card ─────────────────────────────────────────────────────────────────
+interface StatCardProps {
+  icon: React.ReactNode;
+  value: string;
+  label: string;
+}
+
+function StatCard({ icon, value, label }: StatCardProps) {
   return (
-    <motion.div
-      className={`absolute bg-white rounded-xl px-3 py-1.5 text-[10px] font-bold whitespace-nowrap shadow-md z-20 flex items-center gap-1 ${className}`}
-      animate={{ y: [0, -7, 0], rotate: [-2, 2, -2] }}
-      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay }}
-    >
-      {children}
-    </motion.div>
-  )
+    <div style={{
+      background: "rgba(255,255,255,0.75)",
+      border: "1.5px solid rgba(0,153,213,0.18)",
+      borderRadius: 16,
+      padding: "10px 16px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      minWidth: 76,
+      gap: 2,
+    }}>
+      <span style={{ display: "inline-flex", fontSize: 20 }}>{icon}</span>
+      <span style={{ fontSize: 20, fontWeight: 800, color: "#00334e", fontFamily: "'Nunito',sans-serif" }}>{value}</span>
+      <span style={{ fontSize: 10, fontWeight: 700, color: "#6b8ca0", fontFamily: "'Nunito',sans-serif" }}>{label}</span>
+    </div>
+  );
 }
 
-// ─── Skill Pill ───────────────────────────────────────────────────────────────
-function Pill({ icon, label }: { icon: React.ReactNode; label: string }) {
+// ── Pill ──────────────────────────────────────────────────────────────────────
+interface PillProps {
+  children: React.ReactNode;
+}
+
+function Pill({ children }: PillProps) {
+  const [hov, setHov] = useState(false);
   return (
-    <motion.div
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-blue-300 bg-white text-blue-700 text-[11px] font-bold cursor-default select-none"
-      style={{ fontFamily: "'Comic Neue', cursive" }}
-      whileHover={{ scale: 1.06, y: -2, backgroundColor: "#006494", color: "white", borderColor: "#006494" }}
-      transition={{ duration: 0.18 }}
-    >
-      <span className="text-[14px]">{icon}</span>
-      {label}
-    </motion.div>
-  )
+    <span
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 5,
+        padding: "5px 14px", borderRadius: 999,
+        border: `2px solid ${hov ? "#0099d5" : "#b3dff2"}`,
+        background: hov ? "#0099d5" : "rgba(255,255,255,0.82)",
+        color: hov ? "#fff" : "#006494",
+        fontSize: 11, fontWeight: 700,
+        fontFamily: "'Nunito',sans-serif",
+        cursor: "default", transition: "all 0.18s",
+        transform: hov ? "translateY(-2px)" : "none",
+        userSelect: "none",
+      }}
+    >{children}</span>
+  );
 }
 
-// ─── Stat Card ────────────────────────────────────────────────────────────────
-function Stat({ icon, num, label }: { icon: React.ReactNode; num: string; label: string }) {
+// ── Cloud ─────────────────────────────────────────────────────────────────────
+function Cloud() {
   return (
-    <motion.div
-      className="flex flex-col items-center gap-0.5 px-4 py-2.5 rounded-2xl text-center min-w-[70px]"
-      style={{ background: "rgba(255,255,255,0.72)", border: "1.5px solid rgba(0,100,148,0.18)" }}
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.18 }}
-    >
-      <span className="text-blue-700 text-[18px]">{icon}</span>
-      <span className="text-[1.2rem] font-extrabold text-blue-900" style={{ fontFamily: "'Baloo 2', cursive" }}>{num}</span>
-      <span className="text-[10px] font-bold text-slate-500" style={{ fontFamily: "'Comic Neue', cursive" }}>{label}</span>
-    </motion.div>
-  )
+    <svg width="120" height="52" viewBox="0 0 120 52" fill="none">
+      <ellipse cx="60" cy="40" rx="54" ry="15" fill="white" opacity="0.65" />
+      <circle cx="36" cy="27" r="18" fill="white" opacity="0.65" />
+      <circle cx="66" cy="19" r="23" fill="white" opacity="0.65" />
+      <circle cx="92" cy="28" r="15" fill="white" opacity="0.65" />
+    </svg>
+  );
 }
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+// ── Main Hero ─────────────────────────────────────────────────────────────────
 export default function HeroSection() {
-  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
-
-  const phrases = [
-    "Building Web Apps",
+  const typeText = useTypewriter([
+    "Full‑Stack Developer",
     "React.js Enthusiast",
-    ".NET Core Developer",
-    "MCA @ ISTAR College",
-    "Clean Code Lover",
-    "Future Full-Stack Dev",
-  ]
-  const typeText = useTypewriter(phrases)
+    ".NET Core Engineer",
+    "Clean Code Advocate",
+    "Future Tech Builder",
+  ]);
 
-  const containerAnim = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } }
-  const itemAnim = { hidden: { opacity: 0, x: -28 }, show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } } }
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <>
-      {/* ── Hero Section ─────────────────────────────────────────────────── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800;900&display=swap');
+
+        @keyframes cloudDrift { from{transform:translateX(-160px)} to{transform:translateX(calc(100vw + 160px))} }
+        @keyframes twinkle    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.15;transform:scale(0.4)} }
+        @keyframes fadeUp     { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideIn    { from{opacity:0;transform:translateX(36px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes floatHero  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+        @keyframes bellRing   { 0%,100%{transform:rotate(0)} 15%{transform:rotate(-18deg)} 30%{transform:rotate(18deg)} 55%{transform:rotate(-9deg)} 70%{transform:rotate(9deg)} 85%{transform:rotate(0)} }
+        @keyframes pulseRing  { 0%{transform:scale(1);opacity:0.7} 100%{transform:scale(2.2);opacity:0} }
+        @keyframes bounce     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+
+        .h1{animation:fadeUp .65s ease forwards;opacity:0;animation-delay:.1s}
+        .h2{animation:fadeUp .65s ease forwards;opacity:0;animation-delay:.22s}
+        .h3{animation:fadeUp .65s ease forwards;opacity:0;animation-delay:.36s}
+        .h4{animation:fadeUp .65s ease forwards;opacity:0;animation-delay:.5s}
+        .h5{animation:fadeUp .65s ease forwards;opacity:0;animation-delay:.64s}
+        .h6{animation:fadeUp .65s ease forwards;opacity:0;animation-delay:.78s}
+        .hr{animation:slideIn .9s ease forwards;opacity:0;animation-delay:.28s}
+
+        .btn-p{
+          display:inline-flex;align-items:center;gap:8px;
+          padding:13px 30px;border-radius:999px;border:none;cursor:pointer;
+          background:#006494;color:white;font-weight:800;font-size:13px;
+          font-family:'Baloo 2',cursive;transition:all .2s;
+          box-shadow:0 4px 20px rgba(0,100,148,.32);
+        }
+        .btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,100,148,.44)}
+        .btn-o{
+          display:inline-flex;align-items:center;gap:8px;
+          padding:11px 28px;border-radius:999px;cursor:pointer;
+          background:transparent;color:#006494;font-weight:800;font-size:13px;
+          font-family:'Baloo 2',cursive;transition:all .2s;
+          border:2.5px solid #006494;
+        }
+        .btn-o:hover{background:#006494;color:white;transform:translateY(-3px)}
+
+        @media(max-width:820px){
+          .hgrid{flex-direction:column !important}
+          .hright{margin-top:24px}
+          .hstats,.hpills,.hbtns{justify-content:center !important}
+          .hleft{align-items:center !important;text-align:center}
+          .hdesc{text-align:center}
+        }
+        @media(max-width:480px){
+          .htitle{font-size:1.9rem !important}
+          .iband{flex-direction:column;gap:14px !important}
+        }
+      `}</style>
+
+      {/* ── Hero Section ── */}
       <section
         id="home"
-        className="relative min-h-screen overflow-hidden"
         style={{
-          background: "linear-gradient(165deg,#e6eff5 0%,#cae6ff 35%,#f4faff 60%,#fefce8 100%)",
-          fontFamily: "'Baloo 2', cursive",
+          position: "relative", minHeight: "100vh", overflow: "hidden",
+          background: "linear-gradient(160deg,#e3f2fb 0%,#c8e9ff 28%,#f0faff 58%,#fffef0 100%)",
+          fontFamily: "'Nunito',sans-serif",
         }}
       >
         {/* Clouds */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[{ delay: 0, top: "6%" }, { delay: 8, top: "18%" }, { delay: 14, top: "4%" }].map((c, i) => (
-            <Cloud key={i} delay={c.delay} top={c.top} />
-          ))}
-        </div>
-
-        {/* Twinkling stars */}
-        {[
-          { top: "9%", left: "14%", color: "#fcd400", size: 7, delay: 0.3 },
-          { top: "7%", left: "38%", color: "#c00014", size: 9, delay: 1 },
-          { top: "16%", left: "62%", color: "#fcd400", size: 6, delay: 0.7 },
-          { top: "5%", left: "80%", color: "#00a0e9", size: 5, delay: 1.6 },
-          { top: "22%", left: "52%", color: "#006494", size: 7, delay: 2.1 },
-        ].map((s, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{ top: s.top, left: s.left, width: s.size, height: s.size, background: s.color, zIndex: 2 }}
-            animate={{ opacity: [1, 0.15, 1], scale: [1, 0.45, 1] }}
-            transition={{ duration: 2.2, repeat: Infinity, delay: s.delay }}
-          />
+        {[{ d: "0s", dur: "30s", top: "7%" }, { d: "10s", dur: "38s", top: "19%" }, { d: "20s", dur: "26s", top: "3%" }].map((c, i) => (
+          <div key={i} style={{ position: "absolute", top: c.top, left: -160, zIndex: 1, pointerEvents: "none", animation: `cloudDrift ${c.dur} linear ${c.d} infinite` }}>
+            <Cloud />
+          </div>
         ))}
 
-        {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10 grid lg:grid-cols-[1fr_300px] gap-6 items-center min-h-screen">
+        {/* Twinkle stars */}
+        {[
+          { top: "8%", left: "11%", color: "#fcd400", size: 7, d: "0.3s" },
+          { top: "6%", left: "35%", color: "#e53935", size: 9, d: "1s" },
+          { top: "14%", left: "60%", color: "#fcd400", size: 6, d: "0.7s" },
+          { top: "4%", left: "78%", color: "#0099d5", size: 5, d: "1.6s" },
+          { top: "20%", left: "50%", color: "#006494", size: 7, d: "2.1s" },
+        ].map((s, i) => (
+          <div key={i} style={{
+            position: "absolute", top: s.top, left: s.left,
+            width: s.size, height: s.size, borderRadius: "50%",
+            background: s.color, zIndex: 2, pointerEvents: "none",
+            animation: `twinkle 2.2s ease-in-out ${s.d} infinite`,
+          }} />
 
-          {/* ── Left ─────────────────────────────────────────────────────── */}
-          <motion.div
-            className="flex flex-col"
-            variants={containerAnim}
-            initial="hidden"
-            animate="show"
-          >
+        ))}
+
+        {/* Grid */}
+        <div className="hgrid" style={{
+          position: "relative", zIndex: 10, maxWidth: 1120, margin: "0 auto",
+          padding: "clamp(80px,10vh,100px) 24px 40px",
+          display: "flex", alignItems: "center", gap: 40,
+          minHeight: "100vh", boxSizing: "border-box",
+        }}>
+
+          {/* ── Left ── */}
+          <div className="hleft" style={{ flex: "1 1 0", display: "flex", flexDirection: "column", gap: 0 }}>
+
             {/* Badge */}
-            <motion.div
-              variants={itemAnim}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5 w-fit border-2"
-              style={{ background: "rgba(252,212,0,0.3)", borderColor: "#fcd400", color: "#00334e", fontFamily: "'Comic Neue',cursive", fontWeight: 700, fontSize: "0.78rem" }}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 16 }}
-            >
-              <motion.div className="w-2 h-2 rounded-full bg-red-500" animate={{ scale: [1, 1.6, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 1.6, repeat: Infinity }} />
-              <RocketLaunch sx={{ fontSize: 16, color: "#d97706" }} />
-              Available for Projects
-            </motion.div>
+            <div className="h1" style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "6px 16px", borderRadius: 999,
+              border: "2px solid #fcd400", background: "rgba(252,212,0,0.16)",
+              color: "#00334e", fontWeight: 700, fontSize: 12,
+              marginBottom: 18, width: "fit-content",
+            }}>
+              <span style={{
+                width: 8, height: 8, borderRadius: "50%", background: "#e53935", flexShrink: 0,
+                animation: "twinkle 1.6s ease-in-out infinite",
+              }} />
+              <RocketLaunch sx={{ fontSize: 14 }} /> Available for Projects
+            </div>
 
-            {/* Title */}
-            <motion.h1
-              variants={itemAnim}
-              className="text-4xl lg:text-5xl font-extrabold leading-tight mb-2 tracking-tight"
-              style={{ color: "#00334e" }}
-            >
-              Hi! I'm{" "}
-              <motion.span
-                style={{ color: "#c00014", display: "inline-block" }}
-                animate={{ rotate: [0, 0, -4, 4, -2, 0] }}
-                transition={{ duration: 3, repeat: Infinity, repeatDelay: 3 }}
-              >
-                Smit Kava
-              </motion.span>
-              <span className="flex items-center gap-1 text-2xl lg:text-3xl font-bold mt-1" style={{ color: "#006494" }}>
-                <Code sx={{ fontSize: "1.1rem" }} />
-                Full-Stack Developer
-              </span>
-            </motion.h1>
+            {/* Name + title */}
+            <div className="h2" style={{ marginBottom: 10 }}>
+              <h1 className="htitle" style={{
+                fontSize: "clamp(2rem,4.5vw,3rem)", fontWeight: 900,
+                color: "#00334e", fontFamily: "'Baloo 2',cursive",
+                lineHeight: 1.12, margin: 0,
+              }}>
+                Hi, I'm{" "}
+                <span style={{ color: "#e53935", display: "inline-block", animation: "floatHero 3s ease-in-out infinite" }}>
+                  Smit Kava
+                </span>
+              </h1>
+              <div style={{
+                display: "flex", alignItems: "center", gap: 6,
+                fontSize: "clamp(1rem,2.4vw,1.25rem)", fontWeight: 700,
+                color: "#006494", fontFamily: "'Baloo 2',cursive", marginTop: 6,
+              }}>
+                <LaptopMac sx={{ fontSize: 18, mr: 0.5 }} /> Full‑Stack Developer
+              </div>
+            </div>
 
             {/* Typewriter */}
-            <motion.div
-              variants={itemAnim}
-              className="flex items-center gap-2 mb-3 min-h-[26px]"
-              style={{ fontFamily: "'Comic Neue',cursive", fontWeight: 700, fontSize: "0.95rem", color: "#006494" }}
-            >
-              <AutoAwesome sx={{ fontSize: 18, color: "#fcd400" }} />
-              <span style={{ borderRight: "2.5px solid #006494", paddingRight: 3 }}>{typeText}</span>
-            </motion.div>
+            <div className="h3" style={{
+              display: "flex", alignItems: "center", gap: 8,
+              fontSize: 14, fontWeight: 700, color: "#006494",
+              minHeight: 28, marginBottom: 16,
+            }}>
+              <AutoAwesome sx={{ fontSize: 16 }} />{" "}
+              <span style={{ borderRight: "2.5px solid #006494", paddingRight: 3, minWidth: 200 }}>
+                {typeText}
+              </span>
+            </div>
 
             {/* Description */}
-            <motion.p
-              variants={itemAnim}
-              className="text-[0.87rem] leading-relaxed max-w-[380px] mb-5"
-              style={{ fontFamily: "'Comic Neue',cursive", color: "#141d21" }}
-            >
-              MCA Student at ISTAR College &bull; CGPA 8.80<br />
-              Building modern web apps with React.js, TypeScript &amp; .NET Core — turning ideas into clean, functional digital experiences.
-            </motion.p>
+            <p className="h3 hdesc" style={{
+              fontSize: 13.5, lineHeight: 1.75, color: "#2a3f4a",
+              maxWidth: 400, marginBottom: 20, fontWeight: 600,
+            }}>
+              MCA Student at Etech Consultancy &bull; CGPA 8.80<br />
+              Building modern web apps with React.js, TypeScript &amp; .NET Core —
+              turning ideas into clean, fast digital experiences.
+            </p>
 
             {/* Pills */}
-            <motion.div variants={itemAnim} className="flex flex-wrap gap-2 mb-5">
-              <Pill icon={<Widgets sx={{ fontSize: 14 }} />} label="React.js" />
-              <Pill icon={<DataObject sx={{ fontSize: 14 }} />} label="TypeScript" />
-              <Pill icon={<Api sx={{ fontSize: 14 }} />} label=".NET Core" />
-              <Pill icon={<Storage sx={{ fontSize: 14 }} />} label="SQL Server" />
-              <Pill icon={<Palette sx={{ fontSize: 14 }} />} label="Tailwind CSS" />
-            </motion.div>
+            <div className="h4 hpills" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 22 }}>
+              {[
+                { icon: <Code2 sx={{ fontSize: 14 }} />, label: "React.js" },
+                { icon: <Code sx={{ fontSize: 14 }} />, label: "TypeScript" },
+                { icon: <Api sx={{ fontSize: 14 }} />, label: ".NET Core" },
+                { icon: <Storage sx={{ fontSize: 14 }} />, label: "SQL Server" },
+                { icon: <Palette sx={{ fontSize: 14 }} />, label: "Tailwind CSS" }
+              ].map(({ icon, label }) => (
+                <Pill key={label}>{icon} {label}</Pill>
+              ))}
+            </div>
 
             {/* Buttons */}
-            <motion.div variants={itemAnim} className="flex gap-3 flex-wrap mb-5">
-              <motion.button
-                onClick={() => scrollTo("skills")}
-                className="flex items-center gap-2 px-7 py-3 rounded-full text-white font-bold text-sm"
-                style={{ background: "#006494", fontFamily: "'Baloo 2',cursive", boxShadow: "0 4px 16px rgba(0,100,148,.35)" }}
-                whileHover={{ y: -3, boxShadow: "0 8px 24px rgba(0,100,148,.45)" }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Inventory2 sx={{ fontSize: 18 }} />
-                Explore Pocket
-              </motion.button>
-              <motion.button
-                onClick={() => scrollTo("experience")}
-                className="flex items-center gap-2 px-7 py-3 rounded-full font-bold text-sm"
-                style={{ border: "2.5px solid #006494", background: "transparent", color: "#006494", fontFamily: "'Baloo 2',cursive" }}
-                whileHover={{ y: -3, background: "#006494", color: "white" }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Timeline sx={{ fontSize: 18 }} />
-                See Journey
-              </motion.button>
-            </motion.div>
+            <div className="h5 hbtns" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 26 }}>
+              <button className="btn-p" onClick={() => scrollTo("skills")}>
+                <Widgets sx={{ fontSize: 16 }} /> Explore Pocket
+              </button>
+              <button className="btn-o" onClick={() => scrollTo("experience")}>
+                <Timeline sx={{ fontSize: 16 }} /> See Journey
+              </button>
+            </div>
 
             {/* Stats */}
-            <motion.div variants={itemAnim} className="flex gap-2.5 flex-wrap">
-              <Stat icon={<School sx={{ fontSize: 18 }} />} num="8.80" label="MCA CGPA" />
-              <Stat icon={<Grade sx={{ fontSize: 18 }} />} num="7.62" label="B.Sc CGPA" />
-              <Stat icon={<Work sx={{ fontSize: 18 }} />} num="5+" label="Projects" />
-              <Stat icon={<Layers sx={{ fontSize: 18 }} />} num="3+" label="Tech Stack" />
-            </motion.div>
-          </motion.div>
+            <div className="h6 hstats" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <StatCard icon={<School sx={{ fontSize: 20 }} />} value="8.80" label="MCA CGPA" />
+              <StatCard icon={<Grade sx={{ fontSize: 20 }} />} value="7.62" label="B.Sc CGPA" />
+              <StatCard icon={<RocketLaunch sx={{ fontSize: 20 }} />} value="5+" label="Projects" />
+              <StatCard icon={<Wrench sx={{ fontSize: 20 }} />} value="3+" label="Tech Stack" />
+            </div>
+          </div>
 
-          {/* ── Right ────────────────────────────────────────────────────── */}
-          <motion.div
-            className="flex flex-col items-center relative"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-          >
-            {/* Character card */}
-            <motion.div
-              className="relative flex flex-col items-center rounded-[28px] p-5 w-[268px]"
-              style={{ background: "rgba(255,255,255,0.6)", border: "2px solid rgba(0,100,148,0.15)", boxShadow: "0 12px 40px rgba(0,100,148,0.14)" }}
-              animate={{ y: [0, -13, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <img
-                src={doremonImg}
-                alt="Doraemon on broom"
-                className="w-[200px] h-[210px] object-contain"
-                style={{ filter: "drop-shadow(0 8px 20px rgba(0,100,148,0.25))" }}
-              />
-              <div className="flex items-center gap-1 text-blue-700 font-bold text-[0.74rem] mt-2" style={{ fontFamily: "'Baloo 2',cursive" }}>
-                <Star sx={{ fontSize: 14, color: "#fcd400" }} />
-                Doraemon Mode : ON
-              </div>
-            </motion.div>
-
-            {/* Floating tags */}
-            <FloatTag className="border-2 border-yellow-300 text-amber-900 top-3 -right-4" delay={0}>
-              <LocationOn sx={{ fontSize: 14, color: "#d97706" }} />
-              ISTAR College
-            </FloatTag>
-            <FloatTag className="border-2 border-blue-300 text-blue-900 top-[100px] -right-6" delay={1}>
-              <LaptopMac sx={{ fontSize: 14, color: "#006494" }} />
-              React + .NET
-            </FloatTag>
-            <FloatTag className="border-2 border-green-300 text-green-900 bottom-[72px] -right-5" delay={0.5}>
-              <MenuBook sx={{ fontSize: 14, color: "#15803d" }} />
-              MCA Student
-            </FloatTag>
-          </motion.div>
+          {/* ── Right: Illustration ── */}
+          <div className="hright" style={{
+            flex: "0 0 auto",
+            width: "clamp(260px,36vw,420px)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            animation: "slideIn 0.9s ease forwards, floatHero 4.5s ease-in-out infinite 0.9s",
+            opacity: 0,
+          }}>
+            <DevIllustration />
+          </div>
         </div>
       </section>
 
-      {/* ── Info Band ────────────────────────────────────────────────────── */}
-      <div
-        className="w-full py-4 border-t-2 border-dashed"
-        style={{ background: "rgba(255,255,255,0.6)", borderColor: "rgba(0,100,148,0.2)" }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-5 items-center">
+      {/* ── Info Band ── */}
+      <div style={{
+        background: "rgba(255,255,255,0.68)",
+        borderTop: "2px dashed rgba(0,100,148,0.18)",
+        padding: "16px 0", backdropFilter: "blur(8px)",
+      }}>
+        <div className="iband" style={{
+          maxWidth: 1120, margin: "0 auto", padding: "0 24px",
+          display: "flex", flexWrap: "wrap", alignItems: "center", gap: 22,
+        }}>
           {[
-            { icon: <RocketLaunch sx={{ fontSize: 18 }} />, bg: "#006494", title: "22nd Century Tech", sub: "From the future" },
-            { icon: <Code sx={{ fontSize: 18 }} />, bg: "#c00014", title: "Full-Stack Builder", sub: "React · TypeScript · .NET Core" },
-            { icon: <EmojiEvents sx={{ fontSize: 18 }} />, bg: "#15803d", title: "Distinction Holder", sub: "B.Sc IT · Charusat University" },
-            { icon: <LocationCity sx={{ fontSize: 18 }} />, bg: "#7c3aed", title: "Vallabh Vidyanagar", sub: "Gujarat, India" },
+            { icon: <RocketLaunch sx={{ fontSize: 20, color: "white" }} />, bg: "#006494", title: "22nd Century Tech", sub: "From the future" },
+            { icon: <LaptopMac sx={{ fontSize: 20, color: "white" }} />, bg: "#e53935", title: "Full‑Stack Builder", sub: "React · TypeScript · .NET" },
+            { icon: <EmojiEvents sx={{ fontSize: 20, color: "white" }} />, bg: "#2e7d32", title: "Distinction Holder", sub: "B.Sc IT · Charusat Univ." },
+            { icon: <LocationOn sx={{ fontSize: 20, color: "white" }} />, bg: "#6a1b9a", title: "Vallabh Vidyanagar", sub: "Gujarat, India" },
           ].map(item => (
-            <div key={item.title} className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white" style={{ background: item.bg }}>
-                {item.icon}
-              </div>
+            <div key={item.title} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{
+                width: 38, height: 38, borderRadius: 10, background: item.bg,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>{item.icon}</div>
               <div>
-                <div className="text-[0.78rem] font-bold text-blue-900" style={{ fontFamily: "'Baloo 2',cursive" }}>{item.title}</div>
-                <div className="text-[10px] text-slate-500" style={{ fontFamily: "'Comic Neue',cursive" }}>{item.sub}</div>
+                <div style={{ fontSize: 12.5, fontWeight: 800, color: "#00334e", fontFamily: "'Baloo 2',cursive" }}>{item.title}</div>
+                <div style={{ fontSize: 10.5, color: "#6b8ca0", fontWeight: 600 }}>{item.sub}</div>
               </div>
             </div>
           ))}
-          <div className="ml-auto flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-blue-900 text-[0.78rem] font-bold" style={{ fontFamily: "'Baloo 2',cursive" }}>
-            <Stars sx={{ fontSize: 15, color: "#fcd400" }} />
-            CGPA 8.80
+          <div style={{
+            marginLeft: "auto", display: "flex", alignItems: "center", gap: 6,
+            padding: "6px 16px", borderRadius: 999,
+            background: "#e8f4fb", border: "1.5px solid #b3dff2",
+            fontSize: 12, fontWeight: 800, color: "#00334e",
+            fontFamily: "'Baloo 2',cursive", whiteSpace: "nowrap",
+          }}>
+            <Grade sx={{ fontSize: 16, mr: 0.5 }} /> CGPA 8.80
           </div>
         </div>
       </div>
 
-      {/* ── Scroll hint ───────────────────────────────────────────────────── */}
-      <motion.div
-        className="flex items-center justify-center gap-1.5 py-3 text-slate-400 text-[11px]"
-        style={{ fontFamily: "'Comic Neue',cursive" }}
-        animate={{ y: [0, 4, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        <KeyboardDoubleArrowDown sx={{ fontSize: 16 }} />
-        Scroll to explore the 4D pocket
-        <KeyboardDoubleArrowDown sx={{ fontSize: 16 }} />
-      </motion.div>
+      {/* ── Scroll hint ── */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "center",
+        gap: 6, padding: "10px 0", fontSize: 11, color: "#9ab0bc", fontWeight: 700,
+        animation: "bounce 2s ease-in-out infinite",
+      }}>
+        <KeyboardDoubleArrowDown sx={{ fontSize: 14 }} /> Scroll to explore the 4D pocket <KeyboardDoubleArrowDown sx={{ fontSize: 14 }} />
+      </div>
 
-      {/* ── Bell FAB ──────────────────────────────────────────────────────── */}
-      <motion.button
-        onClick={() => scrollTo("contact")}
-        className="fixed bottom-8 right-8 w-14 h-14 rounded-full flex items-center justify-center z-50 overflow-visible"
-        style={{ background: "rgba(252,212,0,0.3)", border: "3px solid #fcd400", boxShadow: "0 4px 18px rgba(252,212,0,.5)" }}
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.15 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <motion.div
-          animate={{ rotate: [0, 0, -18, 18, -9, 9, 0] }}
-          transition={{ duration: 3.5, repeat: Infinity }}
+      {/* ── Bell FAB ── */}
+      <div style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100 }}>
+        <div style={{
+          position: "absolute", inset: 0, borderRadius: "50%",
+          border: "2px solid #fcd400",
+          animation: "pulseRing 2.2s ease-out infinite",
+        }} />
+        <button
+          onClick={() => scrollTo("contact")}
+          style={{
+            width: 54, height: 54, borderRadius: "50%",
+            background: "rgba(252,212,0,0.22)", border: "2.5px solid #fcd400",
+            boxShadow: "0 4px 20px rgba(252,212,0,.48)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", position: "relative",
+            animation: "bellRing 3.5s ease-in-out infinite",
+            color: "#7a5800",
+          }}
+          title="Contact me"
         >
-          <NotificationsActive sx={{ fontSize: 24, color: "#00334e" }} />
-        </motion.div>
-        <motion.div
-          className="absolute inset-0 rounded-full border-2 border-yellow-300"
-          animate={{ scale: [1, 2.1, 2.1], opacity: [0.8, 0, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity }}
-        />
-      </motion.button>
+          <NotificationsActive sx={{ fontSize: 24 }} />
+        </button>
+      </div>
     </>
-  )
+  );
 }

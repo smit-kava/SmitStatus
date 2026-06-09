@@ -10,23 +10,23 @@ import nobitaSit from "@/assets/navImages/Nobita.png"
 import logoSmit from "@/assets/logo_smit.svg"
 
 const navLinks = [
-  { label: "Pocket",   href: "home",       icon: Home },
-  { label: "Gadgets",  href: "skills",     icon: Wrench },
-  { label: "Projects", href: "projects",   icon: FolderOpen },
+  { label: "Pocket", href: "home", icon: Home },
+  { label: "Gadgets", href: "skills", icon: Wrench },
+  { label: "Projects", href: "projects", icon: FolderOpen },
   { label: "Timeline", href: "experience", icon: Clock },
-  { label: "Contact",  href: "contact",    icon: Mail },
+  { label: "Contact", href: "contact", icon: Mail },
 ]
 
 // Page background = #f4faff  (--color-doraemon-bg)
 // Navbar will always match this color — fully merged with the page
 
 export default function Navbar() {
-  const [isOpen, setIsOpen]               = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
   const [scrollProgress, setScrollProgress] = useState(0)
-  const navigate  = useNavigate()
-  const location  = useLocation()
-  const isHome    = location.pathname === ROUTES.HOME
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isHome = location.pathname === ROUTES.HOME
 
   useEffect(() => {
     const handleScroll = () => {
@@ -224,17 +224,17 @@ export default function Navbar() {
         </div>
         {/* ── Scroll progress bar — home page only ── */}
         {isHome && (
-        <div className="absolute bottom-0 left-0 w-full" style={{ height: "2px", background: "transparent" }}>
-          <motion.div
-            className="h-full relative rounded-r-full"
-            style={{
-              width: `${scrollProgress}%`,
-              background: "linear-gradient(90deg, transparent, #00A3FF, #00A3FF)",
-              boxShadow: "0 0 6px rgba(0,163,255,0.4)",
-            }}
-            transition={{ duration: 0.1, ease: "linear" }}
-          />
-        </div>
+          <div className="absolute bottom-0 left-0 w-full" style={{ height: "2px", background: "transparent" }}>
+            <motion.div
+              className="h-full relative rounded-r-full"
+              style={{
+                width: `${scrollProgress}%`,
+                background: "linear-gradient(90deg, transparent, #00A3FF, #00A3FF)",
+                boxShadow: "0 0 6px rgba(0,163,255,0.4)",
+              }}
+              transition={{ duration: 0.1, ease: "linear" }}
+            />
+          </div>
         )}
 
         {/* ─── Mobile Menu ─── */}
