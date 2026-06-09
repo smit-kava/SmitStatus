@@ -23,3 +23,4 @@ export { LoadingScreen } from "./LoadingScreen"
 
 export { default as CustomCursor } from "./CustomCursor"
 export { default as BannerScroller } from "./BannerScroller"
+export { default as DevIllustration } from "./DevIllustration"
