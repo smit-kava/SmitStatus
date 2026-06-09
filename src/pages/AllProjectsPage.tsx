@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion"
-import { Calendar, Layers, ExternalLink } from "@/components/ui/GlobalIcons"
+import { Calendar, Layers, ExternalLink, RocketLaunch, Search } from "@/components/ui/GlobalIcons"
 import { FaGithub, WebIcon, DesktopIcon, MobileIcon, AndroidIcon } from "@/components/ui/GlobalIcons"
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
@@ -8,11 +8,11 @@ import { useState } from "react"
 
 // ── Filter config ────────────────────────────────────────────────────────────
 const FILTERS = [
-  { label: "All", value: "All", emoji: "🚀", color: "#006494" },
-  { label: "Web", value: "Web", emoji: "🌐", color: "#0284c7" },
-  { label: "Android", value: "Android", emoji: "🤖", color: "#16a34a" },
-  { label: "Mobile", value: "Mobile", emoji: "📱", color: "#7c3aed" },
-  { label: "Desktop", value: "Desktop", emoji: "🖥️", color: "#b45309" },
+  { label: "All", value: "All", icon: RocketLaunch, color: "#006494" },
+  { label: "Web", value: "Web", icon: WebIcon, color: "#0284c7" },
+  { label: "Android", value: "Android", icon: AndroidIcon, color: "#16a34a" },
+  { label: "Mobile", value: "Mobile", icon: MobileIcon, color: "#7c3aed" },
+  { label: "Desktop", value: "Desktop", icon: DesktopIcon, color: "#b45309" },
 ] as const
 type FilterValue = (typeof FILTERS)[number]["value"]
 
@@ -135,6 +135,7 @@ export default function AllProjectsPage() {
       : ALL_PROJECTS.filter((p) => p.platform === activeFilter)
 
   const activeConf = FILTERS.find((f) => f.value === activeFilter)!
+  const ActiveIcon = activeConf.icon
 
   return (
     <div
@@ -179,6 +180,7 @@ export default function AllProjectsPage() {
                 : ALL_PROJECTS.filter((p) => p.platform === f.value).length
             if (count === 0) return null
             const isActive = activeFilter === f.value
+            const IconComp = f.icon
             return (
               <motion.button
                 key={f.value}
@@ -195,7 +197,7 @@ export default function AllProjectsPage() {
                     : "0 1px 4px rgba(0,0,0,0.06)",
                 }}
               >
-                <span className="text-base leading-none">{f.emoji}</span>
+                <IconComp sx={{ fontSize: 16 }} />
                 <span>{f.label}</span>
                 <span
                   className="px-1.5 py-0.5 rounded-full text-[10px] font-extrabold"
@@ -216,10 +218,10 @@ export default function AllProjectsPage() {
           key={activeFilter}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4 text-xs font-semibold"
+          className="mt-4 text-xs font-semibold flex items-center gap-1"
           style={{ color: activeConf.color, fontFamily: "'Comic Neue', cursive" }}
         >
-          {activeConf.emoji} Showing {filtered.length} {activeFilter === "All" ? "total" : activeFilter} project{filtered.length !== 1 ? "s" : ""}
+          <ActiveIcon sx={{ fontSize: 14 }} /> Showing {filtered.length} {activeFilter === "All" ? "total" : activeFilter} project{filtered.length !== 1 ? "s" : ""}
         </motion.p>
       </div>
 
@@ -232,7 +234,7 @@ export default function AllProjectsPage() {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-24 text-slate-400 gap-3"
             >
-              <span className="text-5xl">🔍</span>
+              <Search sx={{ fontSize: 48, color: "#64748b" }} />
               <p className="font-semibold">No projects found for this filter.</p>
             </motion.div>
           ) : (

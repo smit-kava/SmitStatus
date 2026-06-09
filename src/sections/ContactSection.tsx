@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Mail, MapPin, Send } from "@/components/ui/GlobalIcons"
+import { Mail, MapPin, Send, Check } from "@/components/ui/GlobalIcons"
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" })
@@ -24,7 +24,7 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-white/60 backdrop-blur-md rounded-[2rem] shadow-xl shadow-blue-900/5 relative overflow-hidden border border-white/50"
+          className="bg-white/60 backdrop-blur-md rounded-4xl shadow-xl shadow-blue-900/5 relative overflow-hidden border border-white/50"
         >
           {/* Top red accent line */}
           <div className="absolute top-0 left-0 right-0 h-2 bg-doraemon-red"></div>
@@ -44,7 +44,7 @@ export default function ContactSection() {
 
               <div className="space-y-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
                     <Mail className="w-5 h-5 text-[#006494]" />
                   </div>
                   <div>
@@ -54,12 +54,12 @@ export default function ContactSection() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
                     <MapPin className="w-5 h-5 text-yellow-600" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Base</p>
-                    <p className="text-gray-900 font-bold">Jetpur, Rajkot – Gujarat, India 🇮🇳</p>
+                    <p className="text-gray-900 font-bold">Jetpur, Rajkot – Gujarat, India</p>
                   </div>
                 </div>
               </div>
@@ -115,7 +115,11 @@ export default function ContactSection() {
                     </>
                   )}
                   {status === "sending" && "Teleporting..."}
-                  {status === "sent" && "Delivered! ✅"}
+                  {status === "sent" && (
+                    <span className="flex items-center gap-1">
+                      Delivered! <Check className="w-4 h-4" />
+                    </span>
+                  )}
                 </button>
               </form>
             </div>

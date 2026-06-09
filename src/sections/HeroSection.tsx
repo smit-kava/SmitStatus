@@ -53,7 +53,7 @@ function DevIllustration() {
       viewBox="0 0 680 560"
       role="img"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ width: "100%", height: "auto", maxWidth: 420 }}
+      style={{ width: "100%", height: "auto" }}
     >
       <title>Smit Kava – developer hero illustration</title>
       <desc>A Doraemon-themed developer workspace scene with animated floating gadget cards, code editor, and skill orbits for a portfolio hero section.</desc>
@@ -115,38 +115,41 @@ function DevIllustration() {
       ))}
 
       {/* Code text */}
-      <text x={226} y={183} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">import</text>
-      <text x={258} y={183} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> React </text>
-      <text x={285} y={183} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">from</text>
-      <text x={307} y={183} fontFamily="monospace" fontSize={8.5} fill="#a5d6ff"> 'react'</text>
+      <text x={226} y={183} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">
+        <tspan fill="#ff7b72">import</tspan> React <tspan fill="#ff7b72">from</tspan> <tspan fill="#a5d6ff">'react'</tspan>
+      </text>
 
-      <text x={226} y={197} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">const</text>
-      <text x={254} y={197} fontFamily="monospace" fontSize={8.5} fill="#79c0ff"> Hero</text>
-      <text x={276} y={197} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> = () </text>
-      <text x={307} y={197} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">=&gt;</text>
-      <text x={323} y={197} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> {"{"}  </text>
+      <text x={226} y={197} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">
+        <tspan fill="#ff7b72">const</tspan> <tspan fill="#79c0ff">Hero</tspan> = () <tspan fill="#ff7b72">=&gt;</tspan> {"{"}
+      </text>
 
-      <text x={226} y={211} fontFamily="monospace" fontSize={8.5} fill="#ff7b72">  return</text>
-      <text x={266} y={211} fontFamily="monospace" fontSize={8.5} fill="#e6edf3"> (</text>
+      <text x={226} y={211} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">
+        <tspan fill="#ff7b72">  return</tspan> (
+      </text>
 
-      <text x={226} y={225} fontFamily="monospace" fontSize={8.5} fill="#7ee787">  &lt;section</text>
-      <text x={286} y={225} fontFamily="monospace" fontSize={8.5} fill="#79c0ff"> id</text>
-      <text x={300} y={225} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">=</text>
-      <text x={306} y={225} fontFamily="monospace" fontSize={8.5} fill="#a5d6ff">"home"</text>
-      <text x={344} y={225} fontFamily="monospace" fontSize={8.5} fill="#7ee787">&gt;</text>
+      <text x={226} y={225} fontFamily="monospace" fontSize={8.5} fill="#7ee787">
+        {"  "}&lt;<tspan fill="#7ee787">section</tspan> <tspan fill="#79c0ff">id</tspan>=<tspan fill="#a5d6ff">"home"</tspan>&gt;
+      </text>
 
-      <text x={226} y={239} fontFamily="monospace" fontSize={8.5} fill="#7ee787">    &lt;h1</text>
-      <text x={260} y={239} fontFamily="monospace" fontSize={8.5} fill="#79c0ff"> className</text>
-      <text x={320} y={239} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">=</text>
-      <text x={326} y={239} fontFamily="monospace" fontSize={8.5} fill="#a5d6ff">"title"</text>
-      <text x={368} y={239} fontFamily="monospace" fontSize={8.5} fill="#7ee787">&gt;</text>
+      <text x={226} y={239} fontFamily="monospace" fontSize={8.5} fill="#7ee787">
+        {"    "}&lt;<tspan fill="#7ee787">h1</tspan> <tspan fill="#79c0ff">className</tspan>=<tspan fill="#a5d6ff">"title"</tspan>&gt;
+      </text>
 
-      <text x={226} y={253} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">      Hi, I'm </text>
-      <text x={285} y={253} fontFamily="monospace" fontSize={8.5} fill="#ffa657">Smit</text>
+      <text x={226} y={253} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">
+        {"      "}Hi, I'm <tspan fill="#ffa657">Smit</tspan>
+      </text>
 
-      <text x={226} y={267} fontFamily="monospace" fontSize={8.5} fill="#7ee787">    &lt;/h1&gt;</text>
-      <text x={226} y={281} fontFamily="monospace" fontSize={8.5} fill="#7ee787">  &lt;/section&gt;</text>
-      <text x={226} y={295} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">{"}"}</text>
+      <text x={226} y={267} fontFamily="monospace" fontSize={8.5} fill="#7ee787">
+        {"    "}&lt;/<tspan fill="#7ee787">h1</tspan>&gt;
+      </text>
+
+      <text x={226} y={281} fontFamily="monospace" fontSize={8.5} fill="#7ee787">
+        {"  "}&lt;/<tspan fill="#7ee787">section</tspan>&gt;
+      </text>
+
+      <text x={226} y={295} fontFamily="monospace" fontSize={8.5} fill="#e6edf3">
+        {"}"}
+      </text>
       <rect x={237} y={286} width={5} height={9} fill="#58a6ff" className="cur" />
 
       {/* Status bar */}
@@ -184,7 +187,7 @@ function DevIllustration() {
       <g style={{ transformOrigin: "155px 170px" }} className="fa">
         <rect x={115} y={148} width={112} height={46} rx={12} fill="white" stroke="#b8dff5" strokeWidth={1.5} />
         <circle cx={138} cy={171} r={12} fill="#e8f6ff" />
-        <text x={138} y={176} fontFamily="sans-serif" fontSize={12} fill="#006494" textAnchor="middle">🏆</text>
+        <EmojiEvents x={138 - 8} y={171 - 8} width={16} height={16} IconColor="#006494" />
         <text x={156} y={166} fontFamily="sans-serif" fontSize={10} fill="#00334e" fontWeight="bold">CGPA 8.80</text>
         <text x={156} y={179} fontFamily="sans-serif" fontSize={8} fill="#6b8ca0">MCA · Etech</text>
       </g>
@@ -193,7 +196,7 @@ function DevIllustration() {
       <g style={{ transformOrigin: "530px 200px" }} className="fb">
         <rect x={478} y={177} width={112} height={46} rx={12} fill="white" stroke="#c8b8ff" strokeWidth={1.5} />
         <circle cx={500} cy={200} r={12} fill="#f0ecff" />
-        <text x={500} y={205} fontFamily="sans-serif" fontSize={12} fill="#512bd4" textAnchor="middle">🚀</text>
+        <RocketLaunch x={500 - 8} y={200 - 8} width={16} height={16} IconColor="#512bd4" />
         <text x={518} y={195} fontFamily="sans-serif" fontSize={10} fill="#00334e" fontWeight="bold">5+ Projects</text>
         <text x={518} y={208} fontFamily="sans-serif" fontSize={8} fill="#6b8ca0">Full‑Stack</text>
       </g>
@@ -202,7 +205,7 @@ function DevIllustration() {
       <g style={{ transformOrigin: "530px 430px" }} className="fb">
         <rect x={478} y={408} width={112} height={46} rx={12} fill="white" stroke="#c8e8c8" strokeWidth={1.5} />
         <circle cx={500} cy={431} r={12} fill="#eaf6ea" />
-        <text x={500} y={436} fontFamily="sans-serif" fontSize={12} fill="#2e7d32" textAnchor="middle">📍</text>
+        <LocationOn x={500 - 8} y={431 - 8} width={16} height={16} IconColor="#2e7d32" />
         <text x={518} y={426} fontFamily="sans-serif" fontSize={9.5} fill="#00334e" fontWeight="bold">Gujarat, India</text>
         <text x={518} y={439} fontFamily="sans-serif" fontSize={8} fill="#6b8ca0">Vallabh Vidya.</text>
       </g>
@@ -247,17 +250,7 @@ interface StatCardProps {
 
 function StatCard({ icon, value, label }: StatCardProps) {
   return (
-    <div style={{
-      background: "rgba(255,255,255,0.75)",
-      border: "1.5px solid rgba(0,153,213,0.18)",
-      borderRadius: 16,
-      padding: "10px 16px",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      minWidth: 76,
-      gap: 2,
-    }}>
+    <div className="hstat-card">
       <span style={{ display: "inline-flex", fontSize: 20 }}>{icon}</span>
       <span style={{ fontSize: 20, fontWeight: 800, color: "#00334e", fontFamily: "'Nunito',sans-serif" }}>{value}</span>
       <span style={{ fontSize: 10, fontWeight: 700, color: "#6b8ca0", fontFamily: "'Nunito',sans-serif" }}>{label}</span>
@@ -274,6 +267,7 @@ function Pill({ children }: PillProps) {
   const [hov, setHov] = useState(false);
   return (
     <span
+      className="hpill"
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
@@ -354,6 +348,100 @@ export default function HeroSection() {
           border:2.5px solid #006494;
         }
         .btn-o:hover{background:#006494;color:white;transform:translateY(-3px)}
+
+        /* Stat Card styling with hover */
+        .hstat-card {
+          background: rgba(255,255,255,0.75);
+          border: 1.5px solid rgba(0,153,213,0.18);
+          border-radius: 16px;
+          padding: 10px 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-width: 80px;
+          gap: 2px;
+          transition: all 0.2s;
+        }
+        .hstat-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 6px 20px rgba(0, 153, 213, 0.15);
+          background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Big Screens Responsiveness */
+        @media(min-width:1400px){
+          .hgrid {
+            max-width: 1320px !important;
+            gap: 80px !important;
+          }
+          .iband {
+            max-width: 1320px !important;
+          }
+          .htitle {
+            font-size: clamp(3rem, 4vw, 4rem) !important;
+          }
+          .hdesc {
+            font-size: 16px !important;
+            max-width: 500px !important;
+          }
+          .hright {
+            width: clamp(420px, 32vw, 560px) !important;
+          }
+          .hstat-card {
+            min-width: 100px !important;
+            padding: 14px 22px !important;
+          }
+          .hstat-card span:nth-of-type(2) {
+            font-size: 24px !important;
+          }
+          .hpill {
+            padding: 7px 18px !important;
+            font-size: 13px !important;
+          }
+          .btn-p {
+            padding: 16px 36px !important;
+            font-size: 15px !important;
+          }
+          .btn-o {
+            padding: 14px 34px !important;
+            font-size: 15px !important;
+          }
+          .htypewriter {
+            font-size: 18px !important;
+            margin-bottom: 22px !important;
+          }
+        }
+
+        @media(min-width:1800px){
+          .hgrid {
+            max-width: 1560px !important;
+            gap: 120px !important;
+          }
+          .iband {
+            max-width: 1560px !important;
+          }
+          .htitle {
+            font-size: clamp(3.6rem, 4.5vw, 4.8rem) !important;
+          }
+          .hdesc {
+            font-size: 17.5px !important;
+            max-width: 600px !important;
+          }
+          .hright {
+            width: clamp(520px, 35vw, 680px) !important;
+          }
+          .hstat-card {
+            min-width: 120px !important;
+            padding: 16px 26px !important;
+          }
+          .hstat-card span:nth-of-type(2) {
+            font-size: 28px !important;
+          }
+          .hpill {
+            padding: 9px 22px !important;
+            font-size: 14.5px !important;
+          }
+        }
 
         @media(max-width:820px){
           .hgrid{flex-direction:column !important}
@@ -449,11 +537,7 @@ export default function HeroSection() {
             </div>
 
             {/* Typewriter */}
-            <div className="h3" style={{
-              display: "flex", alignItems: "center", gap: 8,
-              fontSize: 14, fontWeight: 700, color: "#006494",
-              minHeight: 28, marginBottom: 16,
-            }}>
+            <div className="h3 htypewriter">
               <AutoAwesome sx={{ fontSize: 16 }} />{" "}
               <span style={{ borderRight: "2.5px solid #006494", paddingRight: 3, minWidth: 200 }}>
                 {typeText}

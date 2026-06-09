@@ -68,6 +68,7 @@ import SmartphoneMui          from '@mui/icons-material/Smartphone';
 import ArrowBackMui           from '@mui/icons-material/ArrowBack';
 import RadioMui               from '@mui/icons-material/Radio';
 import BriefcaseMui           from '@mui/icons-material/BusinessCenter';
+import SearchMui              from '@mui/icons-material/Search';
 
 // ── Icon Props ───────────────────────────────────────────────────────────────
 interface Props extends SvgIconProps {
@@ -148,6 +149,7 @@ export const Monitor                  = mkMui(MonitorMui);
 export const Smartphone               = mkMui(SmartphoneMui);
 export const ArrowLeft                = mkMui(ArrowBackMui);
 export const Radio                    = mkMui(RadioMui);
+export const Search                   = mkMui(SearchMui);
 
 // ── FA brand icons (no MUI equivalent — keep react-icons) ───────────────────
 export { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';

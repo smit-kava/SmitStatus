@@ -1,15 +1,15 @@
 import { motion } from "framer-motion"
-import { ArrowRight, Calendar, Layers, ExternalLink, Eye, FaGithub } from "@/components/ui/GlobalIcons"
+import { ArrowRight, Calendar, Layers, ExternalLink, Eye, FaGithub, WebIcon, DesktopIcon, MobileIcon, AndroidIcon } from "@/components/ui/GlobalIcons"
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { FEATURED_PROJECTS } from "@/data/projects"
 
 // ── Platform badge icon map ──────────────────────────────────────────────────
-const platformIcon: Record<string, string> = {
-  Android: "🤖",
-  Mobile: "📱",
-  Web: "🌐",
-  Desktop: "🖥️",
+const platformIcon: Record<string, React.ComponentType<any>> = {
+  Android: AndroidIcon,
+  Mobile: MobileIcon,
+  Web: WebIcon,
+  Desktop: DesktopIcon,
 }
 
 export default function ProjectsSection() {
@@ -88,8 +88,12 @@ export default function ProjectsSection() {
                     {project.category}
                   </span>
                   {project.platform && (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/85 backdrop-blur-sm text-gray-700 shadow-sm">
-                      {platformIcon[project.platform] ?? "💡"} {project.platform}
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/85 backdrop-blur-sm text-gray-700 shadow-sm flex items-center gap-1">
+                      {(() => {
+                        const Icon = platformIcon[project.platform];
+                        return Icon ? <Icon sx={{ fontSize: 13 }} /> : null;
+                      })()}
+                      {project.platform}
                     </span>
                   )}
                 </div>
