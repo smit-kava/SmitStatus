@@ -29,7 +29,11 @@ const socialLinks = [
   }
 ]
 
-export default function Footer() {
+interface FooterProps {
+  onViewResume?: () => void
+}
+
+export default function Footer({ onViewResume }: FooterProps) {
   return (
     <footer className="bg-surface-container-lowest full-width py-lg mt-xl border-t border-outline-variant/30">
       <div className="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto space-y-md md:space-y-0">
@@ -45,12 +49,22 @@ export default function Footer() {
         <div className="flex space-x-4">
           {socialLinks.map((link) => {
             const Icon = link.icon
+            const isResume = link.name === "Resume"
+
+            const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+              if (isResume) {
+                e.preventDefault()
+                onViewResume?.()
+              }
+            }
+
             return (
               <motion.a
                 key={link.name}
                 href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={isResume ? undefined : "_blank"}
+                rel={isResume ? undefined : "noopener noreferrer"}
+                onClick={handleClick}
                 whileHover={{ y: -4 }}
                 className={`group relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-gray-200 text-gray-600 transition-all duration-300 ${link.color}`}
               >

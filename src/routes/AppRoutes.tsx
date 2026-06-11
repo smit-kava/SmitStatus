@@ -9,12 +9,16 @@
 //   - "*" catches all unknown paths → 404
 // ================================================
 
+import { useState } from "react"
 import { Routes, Route } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { Navbar, Footer } from "@/layout"
 import { HomePage, NotFoundPage, AllProjectsPage } from "@/pages"
+import { ResumeModal } from "@/components/ui"
 
 function CommonLayout({ children }: { children: React.ReactNode }) {
+  const [isResumeOpen, setIsResumeOpen] = useState(false)
+
   return (
     <div className="min-h-screen font-sans antialiased text-gray-900 bg-doraemon-bg relative overflow-x-hidden">
       {/* Global Static Background Effects — fixed, always visible */}
@@ -35,7 +39,10 @@ function CommonLayout({ children }: { children: React.ReactNode }) {
         {children}
       </div>
       {/* Footer */}
-      <Footer />
+      <Footer onViewResume={() => setIsResumeOpen(true)} />
+
+      {/* Resume modal overlay */}
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
     </div>
   )
 }
