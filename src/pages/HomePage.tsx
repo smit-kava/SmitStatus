@@ -10,6 +10,7 @@ import {
 } from "@/sections";
 import { BannerScroller, LoadingScreen } from "@/components/ui";
 import SvgIntroTransition from "@/components/ui/Svgintrotransition";
+import SectionReveal from "@/layout/SectionReveal";
 export default function HomePage() {
   const [loadingDone, setLoadingDone] = useState(false);
 
@@ -24,12 +25,14 @@ export default function HomePage() {
       {loadingDone && (
         <SvgIntroTransition introDuration={3400} slideDuration={900}>
           <main className="flex flex-col w-full">
-            <HeroSection />
-            <BannerScroller height={260} duration={40} showImageLayer={true} />
-            <SkillsSection />
-            <ProjectsSection />
-            <ExperienceSection />
-            <ContactSection />
+            <SectionReveal>
+              <HeroSection />
+              <SkillsSection />
+              <ProjectsSection />
+              <BannerScroller height={260} duration={40} showImageLayer={true} />
+              <ExperienceSection />
+              <ContactSection />
+            </SectionReveal>
           </main>
         </SvgIntroTransition>
       )}

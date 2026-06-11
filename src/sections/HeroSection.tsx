@@ -410,30 +410,6 @@ export default function HeroSection() {
         Scroll to explore the 4D pocket
         <KeyboardDoubleArrowDown sx={{ fontSize: 14 }} />
       </div>
-
-      {/* ══ Bell FAB ═══════════════════════════════════════════════════════════ */}
-      <div style={{ position: "fixed", bottom: 28, right: 28, zIndex: 100 }}>
-        <div style={{
-          position: "absolute", inset: 0, borderRadius: "50%",
-          border: "2px solid #fcd400",
-          animation: "pulseRing 2.2s ease-out infinite",
-        }} />
-        <button
-          onClick={() => scrollTo("contact")}
-          style={{
-            width: 54, height: 54, borderRadius: "50%",
-            background: "rgba(252,212,0,0.22)", border: "2.5px solid #fcd400",
-            boxShadow: "0 4px 20px rgba(252,212,0,.48)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", position: "relative",
-            animation: "bellRing 3.5s ease-in-out infinite",
-            color: "#7a5800",
-          }}
-          title="Contact me"
-        >
-          <NotificationsActive sx={{ fontSize: 24 }} />
-        </button>
-      </div>
     </>
   );
 }

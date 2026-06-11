@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { GraduationCap, BookOpen, Check, LucideStar as Star, Briefcase, ExternalLink } from "@/components/ui/GlobalIcons"
+import { GraduationCap, BookOpen, Briefcase, ExternalLink } from "@/components/ui/GlobalIcons"
 
 const timeline = [
   {
@@ -20,7 +20,7 @@ const timeline = [
     institution: "ISTAR College, Vallabh Vidyanagar",
     description: "Currently pursuing MCA. Overall CGPA: 9.00 | Latest SGPA: 8.45. Focused on advanced software engineering, full-stack web development, and backend API design.",
     nodeColor: "bg-[#006494]",
-    nodeIcon: Check,
+    nodeIcon: GraduationCap,
     alignment: "left",
     website: null,
     isCurrent: true,
@@ -56,7 +56,7 @@ const timeline = [
     institution: "General Education",
     description: "Completed secondary school, building a strong academic foundation with a focus on mathematics, science, and logical reasoning.",
     nodeColor: "bg-[#10b981]",
-    nodeIcon: Star,
+    nodeIcon: BookOpen,
     alignment: "right",
     website: null,
     isCurrent: false,
@@ -90,10 +90,10 @@ export default function ExperienceSection() {
           {timeline.map((item, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.6 }}
+              transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
               className={`flex items-center justify-between w-full ${item.alignment === "right" ? "flex-row-reverse" : "flex-row"}`}
             >
               {/* Empty half */}
@@ -108,7 +108,7 @@ export default function ExperienceSection() {
 
               {/* Card */}
               <div className="w-5/12">
-                <div className={`animate-float${i % 2 === 0 ? '-slow' : '-delayed'} h-full`}>
+                <div className="h-full">
                   <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/50 hover:shadow-md transition-shadow h-full">
 
                     {/* Active badge */}
