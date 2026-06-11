@@ -29,7 +29,7 @@ export default function HomePage() {
               <HeroSection />
               <SkillsSection />
               <ProjectsSection />
-              <BannerScroller height={260} duration={40} showImageLayer={true} />
+              <BannerScroller showImageLayer={true} />
               <ExperienceSection />
               <ContactSection />
             </SectionReveal>
