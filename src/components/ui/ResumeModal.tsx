@@ -55,7 +55,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               {/* Actions */}
               <div className="flex items-center gap-3">
                 {/* Download Button */}
-                <a
+                {/* <a
                   href="/Smit_Kava_Resume.pdf"
                   download="Smit_Kava_Resume.pdf"
                   className="px-4 py-2 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 transition-all"
@@ -66,7 +66,7 @@ export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                   title="Download Resume PDF"
                 >
                   Download
-                </a>
+                </a> */}
 
                 {/* Close Button */}
                 <button
