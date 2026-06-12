@@ -962,11 +962,21 @@ export default function Navbar() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [pendingScroll, setPendingScroll] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const isHome = location.pathname === ROUTES.HOME
 
   const sidebarRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   const updateScrollFromMouse = (clientY: number) => {
     if (!sidebarRef.current) return
@@ -1085,6 +1095,14 @@ export default function Navbar() {
     borderRadius: isScrolled ? (isOpen ? "24px" : "9999px") : isOpen ? "24px" : "0px",
     transition: "top 0.35s cubic-bezier(0.4,0,0.2,1), width 0.35s cubic-bezier(0.4,0,0.2,1), border-radius 0.35s cubic-bezier(0.4,0,0.2,1), background 0.4s ease, box-shadow 0.4s ease",
     ...glassStyle,
+    ...(isMobile ? {
+      background: "linear-gradient(135deg, #ffffff 0%, var(--color-background, #f4faff) 100%)",
+      backdropFilter: "none",
+      WebkitBackdropFilter: "none",
+      border: "1px solid color-mix(in srgb, var(--color-primary, #0080c8) 12%, transparent)",
+      outline: "none",
+      boxShadow: "0 4px 20px color-mix(in srgb, var(--color-primary, #0080c8) 8%, transparent)",
+    } : {}),
   }
 
   return (
@@ -1266,7 +1284,7 @@ export default function Navbar() {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.28, ease: "easeOut" }}
               className="md:hidden overflow-hidden rounded-b-[24px]"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.25)" }}
+              style={{ borderTop: "1px solid color-mix(in srgb, var(--color-primary, #0080c8) 12%, transparent)" }}
             >
               <div className="px-6 py-4 space-y-1">
                 {navLinks.map((link, i) => {

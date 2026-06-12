@@ -62,7 +62,6 @@ export default function SvgIntroTransition({
                 transition={{ duration: slideDuration / 1000, ease: "easeOut" }}
                 style={{
                     pointerEvents: phase === "intro" ? "none" : "auto",
-                    visibility: phase === "intro" ? "hidden" : "visible",
                 }}
             >
                 {children}

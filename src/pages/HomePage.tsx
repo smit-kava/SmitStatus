@@ -27,10 +27,20 @@ export default function HomePage() {
           <main className="flex flex-col w-full">
             <SectionReveal>
               <HeroSection />
+            </SectionReveal>
+            <SectionReveal>
               <SkillsSection />
+            </SectionReveal>
+            <SectionReveal>
               <ProjectsSection />
+            </SectionReveal>
+            <SectionReveal>
               <BannerScroller showImageLayer={true} />
+            </SectionReveal>
+            <SectionReveal>
               <ExperienceSection />
+            </SectionReveal>
+            <SectionReveal>
               <ContactSection />
             </SectionReveal>
           </main>

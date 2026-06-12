@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { GraduationCap, BookOpen, Briefcase, ExternalLink } from "@/components/ui/GlobalIcons"
 
@@ -65,6 +66,15 @@ const timeline = [
 ]
 
 export default function ExperienceSection() {
+  const [expandedItems, setExpandedItems] = useState<{ [key: number]: boolean }>({})
+
+  const toggleExpand = (index: number) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }))
+  }
+
   return (
     <section id="experience" className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative">
       <div className="text-center mb-20 flex flex-col items-center">
@@ -75,89 +85,124 @@ export default function ExperienceSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl font-bold text-gray-900 tracking-tight"
+          className="text-4xl font-bold text-gray-900 tracking-tight font-display"
         >
           Journey & Experience
         </motion.h2>
-        <p className="text-gray-500 text-base mt-2 font-medium">Internship · Education · Milestones</p>
+        <p className="text-gray-500 text-base mt-2 font-medium font-body">Internship · Education · Milestones</p>
       </div>
 
       <div className="relative">
         {/* Timeline central line */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gray-200"></div>
+        <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 h-full w-px bg-gray-200"></div>
 
         <div className="space-y-12">
-          {timeline.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.95, y: 30 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
-              className={`flex items-center justify-between w-full ${item.alignment === "right" ? "flex-row-reverse" : "flex-row"}`}
-            >
-              {/* Empty half */}
-              <div className="w-5/12"></div>
+          {timeline.map((item, i) => {
+            const isExpanded = !!expandedItems[i]
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
+                className={`flex items-start md:items-center justify-between w-full relative ${
+                  item.alignment === "right" ? "md:flex-row-reverse" : "md:flex-row"
+                } flex-row`}
+              >
+                {/* Empty half */}
+                <div className="hidden md:block w-5/12"></div>
 
-              {/* Node */}
-              <div className="z-10 w-8 h-8 flex items-center justify-center rounded-full border-4 border-[#f4f7fb] shadow-sm bg-white">
-                <div className={`w-full h-full rounded-full flex items-center justify-center ${item.nodeColor}`}>
-                  <item.nodeIcon className="w-3.5 h-3.5 text-white" />
-                </div>
-              </div>
-
-              {/* Card */}
-              <div className="w-5/12">
-                <div className="h-full">
-                  <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/50 hover:shadow-md transition-shadow h-full">
-
-                    {/* Active badge */}
-                    {item.badgeLabel && (
-                      <div className="mb-3">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${item.isCurrent && item.nodeColor === "bg-green-500" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}>
-                          {item.isCurrent && item.nodeColor === "bg-green-500" && (
-                            <span className="relative flex h-1.5 w-1.5">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
-                            </span>
-                          )}
-                          {item.badgeLabel}
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="flex justify-between items-start mb-2 gap-4">
-                      <h3 className={`text-xl font-bold ${item.alignment === "right" ? "text-[#006494]" : "text-[#c00014]"}`}>
-                        {item.degree}
-                      </h3>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-md whitespace-nowrap shrink-0">
-                        {item.year}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 mb-3">
-                      <h4 className="text-gray-900 font-bold">{item.institution}</h4>
-                      {item.website && (
-                        <a
-                          href={item.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-doraemon-blue hover:text-doraemon-blue/70 transition-colors"
-                          title="Visit company website"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      )}
-                    </div>
-
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {item.description}
-                    </p>
+                {/* Node */}
+                <div className="z-10 w-8 h-8 flex items-center justify-center rounded-full border-4 border-[#f4f7fb] shadow-sm bg-white absolute left-0 top-5 md:relative md:top-auto md:left-auto shrink-0">
+                  <div className={`w-full h-full rounded-full flex items-center justify-center ${item.nodeColor}`}>
+                    <item.nodeIcon className="w-3.5 h-3.5 text-white" />
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Card */}
+                <div className="w-full md:w-5/12 ml-10 md:ml-0">
+                  <div className="h-full">
+                    <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/50 hover:shadow-md transition-shadow h-full">
+                      {/* Active badge */}
+                      {item.badgeLabel && (
+                        <div className="mb-3">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                              item.isCurrent && item.nodeColor === "bg-green-500"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-blue-100 text-blue-700"
+                            }`}
+                          >
+                            {item.isCurrent && item.nodeColor === "bg-green-500" && (
+                              <span className="relative flex h-1.5 w-1.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                              </span>
+                            )}
+                            {item.badgeLabel}
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2 sm:gap-4">
+                        <h3
+                          className={`text-xl font-bold font-display ${
+                            item.alignment === "right" ? "text-[#006494]" : "text-[#c00014]"
+                          }`}
+                        >
+                          {item.degree}
+                        </h3>
+                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-md whitespace-nowrap shrink-0 self-start sm:self-auto font-mono">
+                          {item.year}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 mb-3">
+                        <h4 className="text-gray-900 font-bold font-display">{item.institution}</h4>
+                        {item.website && (
+                          <a
+                            href={item.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-doraemon-blue hover:text-doraemon-blue/70 transition-colors"
+                            title="Visit company website"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
+
+                      {/* Description - Desktop only */}
+                      <p className="hidden md:block text-gray-600 text-sm leading-relaxed font-body">
+                        {item.description}
+                      </p>
+
+                      {/* Collapsible description - Mobile only */}
+                      <div className="block md:hidden">
+                        <motion.div
+                          initial={false}
+                          animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-gray-600 text-sm leading-relaxed font-body pt-2 pb-1">
+                            {item.description}
+                          </p>
+                        </motion.div>
+                        <button
+                          onClick={() => toggleExpand(i)}
+                          className="text-xs font-bold text-doraemon-blue hover:text-doraemon-darkBlue transition-colors focus:outline-none cursor-pointer mt-1"
+                        >
+                          {isExpanded ? "Show Less ↑" : "Show Details →"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>
