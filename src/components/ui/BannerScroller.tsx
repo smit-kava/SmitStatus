@@ -309,13 +309,21 @@ export default function BannerScroller({ showImageLayer = true }: BannerScroller
           <img src={bannerBg} alt="" draggable={false} className="banner-image-static" />
         )}
 
-        {/* Scrolling SVG track */}
+        {/* Scrolling SVG track — width explicitly set to max-content to prevent flexing collapse and loop gaps */}
         <div
           ref={trackRef}
           className={`bs-track ${isScrollingPaused ? "" : "scrolling"}`}
           style={{ 
             "--dur": `${scrollDuration}s`,
-            animationPlayState: isScrollingPaused ? "paused" : "var(--banner-play, running)"
+            animationPlayState: isScrollingPaused ? "paused" : "var(--banner-play, running)",
+            width: "max-content",
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            height: "100%",
+            display: "flex",
+            alignItems: "center"
           } as React.CSSProperties}
         >
           <svg
