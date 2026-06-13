@@ -5,28 +5,25 @@
 // ================================================
 
 import { BrowserRouter } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import AppRoutes from "@/routes/AppRoutes"
-import { LoadingScreen, CustomCursor } from "@/components/ui"
+import { CustomCursor } from "@/components/ui"
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
+  // Only show custom cursor on non-touch / pointer-capable devices (no overhead on mobile)
+  const [isPointerDevice, setIsPointerDevice] = useState(false)
 
   useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
-    return () => {
-      document.body.style.overflow = ""
-    }
-  }, [isLoading])
+    const mq = window.matchMedia("(pointer: fine)")
+    setIsPointerDevice(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsPointerDevice(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
 
   return (
     <BrowserRouter>
-      <CustomCursor />
-      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      {isPointerDevice && <CustomCursor />}
       <AppRoutes />
     </BrowserRouter>
   )

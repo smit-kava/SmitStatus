@@ -62,16 +62,16 @@ export default function SectionReveal({
         <motion.div
             ref={ref}
             className={className}
-            initial={{ opacity: 0, y, filter: `blur(${blur}px)` }}
+            initial={{ opacity: 0, y }}
             animate={
                 isVisible
-                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
-                    : { opacity: 0, y, filter: `blur(${blur}px)` }
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y }
             }
             transition={{
-                duration: 0.7,
+                duration: 0.65,
                 delay,
-                ease: [0.22, 1, 0.36, 1] as [number, number, number, number],   // custom spring-like ease
+                ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
             }}
         >
             {children}
@@ -100,12 +100,11 @@ const staggerContainer: Variants = {
 }
 
 const staggerItem: Variants = {
-    hidden: { opacity: 0, y: 36, filter: "blur(4px)" },
+    hidden: { opacity: 0, y: 36 },
     visible: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+        transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
     },
 }
 

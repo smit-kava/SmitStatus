@@ -45,8 +45,8 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
       // Cap delta time to avoid large jumps if tab is inactive
       if (deltaTime > 100) lastTime = time;
 
-      // Slower, smoother increment (approx 4-5 seconds total)
-      const increment = 0.25 + Math.random() * 0.4;
+      // Smooth increment — approx 3 seconds total
+      const increment = 0.38 + Math.random() * 0.5;
       currentProgress = Math.min(100, currentProgress + increment);
       setProgress(Math.floor(currentProgress));
 
@@ -92,13 +92,13 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   const isFinished = progress >= 100;
 
-  // Auto-complete 1.5s after loading finishes — no button needed
+  // Auto-complete 0.8s after loading finishes, then smooth exit
   useEffect(() => {
     if (!isFinished) return
     const t = setTimeout(() => {
       setIsExiting(true)
-      setTimeout(onComplete, 2000)
-    }, 1500)
+      setTimeout(onComplete, 800)
+    }, 800)
     return () => clearTimeout(t)
   }, [isFinished])
 
@@ -112,7 +112,7 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
       <motion.div
         className="absolute top-0 left-0 w-full h-full bg-[#f4faff] z-[-1]"
         animate={isExiting ? { y: "-100%" } : { y: 0 }}
-        transition={{ duration: 1.5, ease: [0.65, 0, 0.15, 1], delay: 0.4 }}
+        transition={{ duration: 0.8, ease: [0.65, 0, 0.15, 1], delay: 0.1 }}
       />
 
       {/* Main Content (Fades out first) */}

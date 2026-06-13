@@ -263,8 +263,8 @@ export default function BannerScroller({ showImageLayer = true }: BannerScroller
               borderRadius: 9,
               padding: "10px 12px",
               boxSizing: "border-box",
-              backdropFilter: "blur(6px)",
-              WebkitBackdropFilter: "blur(6px)",
+              backdropFilter: "none",
+              WebkitBackdropFilter: "none",
               fontFamily: "'Space Grotesk', system-ui, sans-serif",
             }}
           >
@@ -300,8 +300,6 @@ export default function BannerScroller({ showImageLayer = true }: BannerScroller
 
   return (
     <>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" />
-
       {/* ── Banner Scroller container (visible on both Desktop and Mobile) ── */}
       <div ref={wrapRef} className="bs-root w-full relative" aria-hidden="true">
         {/* bg image */}

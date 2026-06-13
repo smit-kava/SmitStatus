@@ -3,73 +3,82 @@
  *
  * Orchestrates the full post-loading intro sequence:
  *
- *  Phase 0 — "intro"   : DevIllustration enters full-screen center, scales up,
- *                         types for ~3.2 s so user sees the code animation.
- *  Phase 1 — "slide"   : Editor slides left into its hero column position
- *                         while the hero section fades in behind it.
- *  Phase 2 — "done"    : Normal HeroSection is fully visible, intro wrapper gone.
+ *  Phase 0 — "waiting" : Pre-mounted but frozen (loading screen covers us)
+ *  Phase 1 — "intro"   : DevIllustration enters full-screen center, code types
+ *  Phase 2 — "slide"   : Editor slides right into hero column position
+ *  Phase 3 — "done"    : Overlay gone, HeroSection fully visible
  *
- * Usage in App.tsx / page root:
- *
- *   <SvgIntroTransition>
- *     <HeroSection />
- *     {... rest of page ...}
- *   </SvgIntroTransition>
+ * Props:
+ *   ready         — fires when loading screen is done; starts the timer
+ *   introDuration — ms to stay in intro phase (default 1800)
+ *   slideDuration — ms for the slide animation (default 650)
  */
 
-import { useState, useEffect, useRef, type ReactNode } from "react";
-import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { useState, useEffect, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import DevIllustration from "./DevIllustration";
 
-type Phase = "intro" | "slide" | "done";
+type Phase = "waiting" | "intro" | "slide" | "done";
 
 interface Props {
     children: ReactNode;
-    /** ms to stay in intro (full-screen code typing) before sliding. Default 3400 */
+    /** Set to true when loading screen finishes — starts the intro timer */
+    ready?: boolean;
+    /** ms to stay in intro (full-screen code typing) before sliding. Default 1800 */
     introDuration?: number;
-    /** ms for the slide animation itself. Default 900 */
+    /** ms for the slide animation itself. Default 650 */
     slideDuration?: number;
 }
 
 export default function SvgIntroTransition({
     children,
-    introDuration = 3400,
-    slideDuration = 900,
+    ready = false,
+    introDuration = 1800,
+    slideDuration = 650,
 }: Props) {
-    const [phase, setPhase] = useState<Phase>("intro");
-    const overlayControls = useAnimation();
+    const [phase, setPhase] = useState<Phase>("waiting");
 
     useEffect(() => {
-        // After introDuration → start slide
+        if (!ready) return;
+        // Start intro and hide navbar during the entire animation sequence
+        setPhase("intro");
+        document.documentElement.classList.add("app-intro");
+
         const t1 = setTimeout(() => setPhase("slide"), introDuration);
-        // After slide completes → hide overlay entirely
-        const t2 = setTimeout(() => setPhase("done"), introDuration + slideDuration + 200);
+        const t2 = setTimeout(() => {
+            setPhase("done");
+            document.documentElement.classList.remove("app-intro"); // navbar appears now
+        }, introDuration + slideDuration + 200);
+
         return () => {
             clearTimeout(t1);
             clearTimeout(t2);
+            document.documentElement.classList.remove("app-intro");
         };
-    }, [introDuration, slideDuration]);
+    }, [ready, introDuration, slideDuration]);
 
     // Easing curve: cubic-bezier for a snappy, elastic-ish slide
     const EASE = [0.55, 0, 0.15, 1] as const;
 
+    // Page content fades in only during "slide" → "done"
+    const pageVisible = phase === "slide" || phase === "done";
+    const showOverlay  = phase === "intro" || phase === "slide";
+
     return (
         <>
-            {/* ── Underlying page (always mounted, fades in during slide) ── */}
+            {/* ── Underlying page — fades in during slide phase ── */}
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: phase === "intro" ? 0 : 1 }}
+                animate={{ opacity: pageVisible ? 1 : 0 }}
                 transition={{ duration: slideDuration / 1000, ease: "easeOut" }}
-                style={{
-                    pointerEvents: phase === "intro" ? "none" : "auto",
-                }}
+                style={{ pointerEvents: pageVisible ? "auto" : "none" }}
             >
                 {children}
             </motion.div>
 
             {/* ── Intro overlay ── */}
             <AnimatePresence>
-                {phase !== "done" && (
+                {showOverlay && (
                     <motion.div
                         key="intro-overlay"
                         exit={{ opacity: 0 }}
@@ -79,7 +88,7 @@ export default function SvgIntroTransition({
                             inset: 0,
                             zIndex: 50,
                             pointerEvents: "none",
-                            // Light background matching hero gradient during intro
+                            // Hero gradient background — seamlessly matches the section beneath
                             background:
                                 phase === "intro"
                                     ? "linear-gradient(160deg,#e3f2fb 0%,#c8e9ff 28%,#f0faff 58%,#fffef0 100%)"
@@ -87,10 +96,9 @@ export default function SvgIntroTransition({
                             transition: `background ${slideDuration}ms ease`,
                         }}
                     >
-                        {/* ── SVG wrapper — animated from center to left column ── */}
+                        {/* ── Code editor — animates from center → hero right column ── */}
                         <motion.div
                             initial={{
-                                // Start: centered in viewport, large
                                 position: "fixed",
                                 top: "50%",
                                 left: "50%",
@@ -102,41 +110,34 @@ export default function SvgIntroTransition({
                             }}
                             animate={
                                 phase === "intro"
-                                    ? {
-                                        opacity: 1,
-                                        scale: 1,
-                                        x: "-50%",
-                                        y: "-50%",
-                                    }
+                                    ? { opacity: 1, scale: 1, x: "-50%", y: "-50%" }
                                     : {
-                                        // Slide phase: move to right-column position of hero
-                                        // mirrors `.hright` in HeroSection — right half, vertically centered
-                                        top: "50%",
-                                        left: "auto",
-                                        right: "calc((100vw - min(1120px, 100vw)) / 2 + 24px)",
-                                        x: "0%",
-                                        y: "-50%",
-                                        width: "clamp(280px, 36vw, 460px)",
-                                        scale: 1,
-                                        opacity: 1,
-                                    }
+                                          // Slide to right column of HeroSection
+                                          top: "50%",
+                                          left: "auto",
+                                          right: "calc((100vw - min(1120px, 100vw)) / 2 + 24px)",
+                                          x: "0%",
+                                          y: "-50%",
+                                          width: "clamp(280px, 36vw, 460px)",
+                                          scale: 1,
+                                          opacity: 1,
+                                      }
                             }
                             transition={
                                 phase === "intro"
                                     ? { duration: 0.55, ease: "easeOut" }
                                     : {
-                                        duration: slideDuration / 1000,
-                                        ease: EASE,
-                                        // Stagger sub-properties for a fluid feel
-                                        left: { duration: slideDuration / 1000, ease: EASE },
-                                        right: { duration: slideDuration / 1000, ease: EASE },
-                                        width: { duration: slideDuration / 1000, ease: EASE },
-                                        top: { duration: slideDuration / 1000, ease: EASE },
-                                    }
+                                          duration: slideDuration / 1000,
+                                          ease: EASE,
+                                          left:  { duration: slideDuration / 1000, ease: EASE },
+                                          right: { duration: slideDuration / 1000, ease: EASE },
+                                          width: { duration: slideDuration / 1000, ease: EASE },
+                                          top:   { duration: slideDuration / 1000, ease: EASE },
+                                      }
                             }
                             style={{ position: "fixed" }}
                         >
-                            {/* Drop shadow ring behind the editor during intro phase */}
+                            {/* Glow ring behind editor during intro */}
                             {phase === "intro" && (
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.9 }}
@@ -151,11 +152,10 @@ export default function SvgIntroTransition({
                                     }}
                                 />
                             )}
-
                             <DevIllustration />
                         </motion.div>
 
-                        {/* ── "Intro" phase: animated tagline below the editor ── */}
+                        {/* ── Tagline + dots beneath editor during intro ── */}
                         <AnimatePresence>
                             {phase === "intro" && (
                                 <motion.div
@@ -183,8 +183,6 @@ export default function SvgIntroTransition({
                                     }}>
                                         Loading Smit's Universe…
                                     </p>
-
-                                    {/* Animated dots */}
                                     <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
                                         {[0, 1, 2].map((i) => (
                                             <motion.span
@@ -193,8 +191,7 @@ export default function SvgIntroTransition({
                                                 transition={{ duration: 1, repeat: Infinity, delay: i * 0.2, ease: "easeInOut" }}
                                                 style={{
                                                     display: "inline-block",
-                                                    width: 7,
-                                                    height: 7,
+                                                    width: 7, height: 7,
                                                     borderRadius: "50%",
                                                     background: "#006494",
                                                 }}

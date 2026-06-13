@@ -963,11 +963,24 @@ export default function Navbar() {
   const [pendingScroll, setPendingScroll] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  // Hide navbar while loading screen is active (app-loading class set by HomePage)
+  const [isAppLoading, setIsAppLoading] = useState(
+    () => document.documentElement.classList.contains("app-loading")
+  )
   const navigate = useNavigate()
   const location = useLocation()
   const isHome = location.pathname === ROUTES.HOME
 
   const sidebarRef = useRef<HTMLDivElement>(null)
+
+  // Watch for app-loading class changes on <html>
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsAppLoading(document.documentElement.classList.contains("app-loading"))
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const handleResize = () => {
@@ -1105,8 +1118,12 @@ export default function Navbar() {
     } : {}),
   }
 
+  // Don't render navbar while loading screen is active
+  if (isAppLoading) return null
+
   return (
     <>
+
       {/* ── Top progress bar ── */}
       {isHome && (
         <div className="fixed top-0 left-0 w-full z-[60]" style={{ height: "3px" }}>
@@ -1121,17 +1138,6 @@ export default function Navbar() {
           />
         </div>
       )}
-
-      {/* ── Right scroll sidebar ── */}
-      <DoraemonScrollSidebar
-        sections={navLinks}
-        activeSection={activeSection}
-        scrollTo={scrollTo}
-        scrollProgress={scrollProgress}
-        isHome={isHome}
-        sidebarRef={sidebarRef}
-        onMouseDown={handleSidebarMouseDown}
-      />
 
       {/* ── Navbar ── */}
       <motion.nav
