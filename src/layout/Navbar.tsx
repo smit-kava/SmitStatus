@@ -1217,13 +1217,13 @@ export default function Navbar() {
             </nav>
 
             {/* Right actions */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-4 lg:gap-5">
               {/* Search Bar */}
-              <div className="w-48 lg:w-60 transition-all duration-300">
+              <div className="w-40 lg:w-56 transition-all duration-300">
                 <SearchTab />
               </div>
 
-              <div style={{ position: "relative" }}>
+              <div className="flex-shrink-0" style={{ position: "relative" }}>
                 <ThemeSwitcher />
               </div>
 
@@ -1232,7 +1232,7 @@ export default function Navbar() {
                 onClick={() => scrollTo("contact")}
                 whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative overflow-hidden px-4 py-1.5 rounded-lg text-[13px] font-bold text-white tracking-wide"
+                className="relative overflow-hidden px-5 py-2 rounded-xl text-sm font-bold text-white tracking-wide whitespace-nowrap flex-shrink-0"
                 style={{
                   background: "linear-gradient(135deg, #0080c8 0%, #005b8f 100%)",
                   boxShadow: "0 3px 10px rgba(0,100,148,0.25)",
