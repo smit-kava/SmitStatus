@@ -5,15 +5,44 @@ import { Mail, MapPin, Send, Check } from "@/components/ui/GlobalIcons"
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" })
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setError("Please fill in all the fields.")
+      return
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setError("Please enter a valid email address.")
+      return
+    }
+
     setStatus("sending")
-    setTimeout(() => {
-      setStatus("sent")
-      setFormData({ name: "", email: "", message: "" })
-      setTimeout(() => setStatus("idle"), 3000)
-    }, 1500)
+
+    try {
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus("sent")
+        setFormData({ name: "", email: "", message: "" })
+        setTimeout(() => setStatus("idle"), 4000)
+      } else {
+        throw new Error(data.error || "Failed to send message.")
+      }
+    } catch (err: any) {
+      setError(err.message || "Could not connect to the server. Please try again.")
+      setStatus("idle")
+    }
   }
 
   return (
@@ -68,6 +97,16 @@ export default function ContactSection() {
             {/* Right: Form */}
             <div className="bg-white/40 backdrop-blur-md rounded-3xl p-8 shadow-inner border border-white/40">
               <form onSubmit={handleSubmit} className="space-y-5">
+                {error && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }} 
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-50 text-doraemon-red px-4 py-3 rounded-xl text-sm font-bold border border-red-200"
+                  >
+                    {error}
+                  </motion.div>
+                )}
+
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700">Your Name</label>
                   <input

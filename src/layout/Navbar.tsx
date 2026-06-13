@@ -1232,14 +1232,14 @@ export default function Navbar() {
                 onClick={() => scrollTo("contact")}
                 whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative overflow-hidden px-5 py-2 rounded-xl text-sm font-bold text-white"
+                className="relative overflow-hidden px-4 py-1.5 rounded-lg text-[13px] font-bold text-white tracking-wide"
                 style={{
                   background: "linear-gradient(135deg, #0080c8 0%, #005b8f 100%)",
-                  boxShadow: "0 3px 12px rgba(0,100,148,0.3)",
+                  boxShadow: "0 3px 10px rgba(0,100,148,0.25)",
                 }}
               >
                 <motion.div
-                  className="absolute inset-0 rounded-xl"
+                  className="absolute inset-0 rounded-lg"
                   style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)" }}
                   initial={{ x: "-110%" }}
                   whileHover={{ x: "110%" }}
