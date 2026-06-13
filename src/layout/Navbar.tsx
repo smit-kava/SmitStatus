@@ -624,6 +624,7 @@ import doraemonFly from "@/assets/navImages/Doremon.png"
 import doraemonRun from "@/assets/navImages/Doraemon Running png.png"
 import nobitaSit from "@/assets/navImages/Nobita.png"
 import logoSmit from "@/assets/logo_smit.svg"
+import SearchTab from "@/components/ui/SearchTab"
 
 const navLinks = [
   { label: "Pocket", href: "home", icon: Home },
@@ -1193,6 +1194,10 @@ export default function Navbar() {
                 const Icon = link.icon
                 const isActive = activeSection === link.href
                 return (
+
+
+
+
                   <motion.button
                     key={link.href}
                     onClick={() => scrollTo(link.href)}
@@ -1213,6 +1218,11 @@ export default function Navbar() {
 
             {/* Right actions */}
             <div className="hidden md:flex items-center gap-3">
+              {/* Search Bar */}
+              <div className="w-48 lg:w-60 transition-all duration-300">
+                <SearchTab />
+              </div>
+
               <div style={{ position: "relative" }}>
                 <ThemeSwitcher />
               </div>
