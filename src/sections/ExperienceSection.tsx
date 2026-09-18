@@ -1,37 +1,41 @@
-import { useState } from "react"
-import { motion } from "framer-motion"
+import { useState, useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { GraduationCap, BookOpen, Briefcase, ExternalLink } from "@/components/ui/GlobalIcons"
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const timeline = [
   {
-    degree: "Software Developer Intern",
-    year: "Dec 2024 – Present",
-    institution: "Etech International Pvt. Ltd.",
-    description: "Completed 6 months of internship and currently continuing. Working on VumaxPro — real-time drilling data visualization for the VHTracks platform. Building live monitoring dashboards for oil & gas drilling operations.",
+    degree: "Junior Software Engineer",
+    year: "Dec 2025 – Present",
+    institution: "Etech International",
+    description: "Internship: Dec 2025 – May 2026 | Full-Time: Jun 2026 – Present (Total: 1 Year). Working on NextScript (nextscript.co.uk), a pharma-domain web app developing React/TypeScript front-end and .NET Core Web API back-end. Contributed to VumaxPro (Drilling Industry Software) building & maintaining modules end-to-end.",
     nodeColor: "bg-green-500",
     nodeIcon: Briefcase,
     alignment: "right",
     website: "https://www.etechinter.com",
     isCurrent: true,
-    badgeLabel: "CURRENTLY WORKING",
+    badgeLabel: "CURRENT ROLE",
   },
   {
     degree: "Master of Computer Applications (MCA)",
     year: "2024 – 2026",
     institution: "ISTAR College, Vallabh Vidyanagar",
-    description: "Currently pursuing MCA. Overall CGPA: 9.00 | Latest SGPA: 8.45. Focused on advanced software engineering, full-stack web development, and backend API design.",
+    description: "Sem I CGPA: 8.40 | Sem II CGPA: 8.80. Focused on advanced software engineering, full-stack web architectures, and REST API design.",
     nodeColor: "bg-[#006494]",
     nodeIcon: GraduationCap,
     alignment: "left",
     website: null,
     isCurrent: true,
-    badgeLabel: "Complete",
+    badgeLabel: "Post Graduation",
   },
   {
-    degree: "Bachelor of Science in IT (B.Sc. IT)",
+    degree: "B.Sc. Information Technology (with Distinction)",
     year: "2022 – 2024",
-    institution: "Charusat University, Changa",
-    description: "Graduated with distinction. CGPA: 7.62. Built strong foundations in programming, data structures, databases, web technologies, and core computer science principles.",
+    institution: "CHARUSAT University, Changa",
+    description: "Graduated with distinction. CGPA: 7.62. Built strong foundations in programming, database design, REST APIs, and core computer science.",
     nodeColor: "bg-[#c00014]",
     nodeIcon: GraduationCap,
     alignment: "right",
@@ -40,10 +44,10 @@ const timeline = [
     badgeLabel: null,
   },
   {
-    degree: "Higher Secondary (12th Standard)",
+    degree: "12th (HSC Standard)",
     year: "May 2021",
-    institution: "Science Stream",
-    description: "Completed higher secondary education with a science focus, cultivating analytical thinking and problem-solving skills that form the backbone of technology studies.",
+    institution: "A Success School, Jetpur",
+    description: "Percentile Rank: 57.22. Completed higher secondary education in the science stream.",
     nodeColor: "bg-[#fcd400]",
     nodeIcon: BookOpen,
     alignment: "left",
@@ -52,10 +56,10 @@ const timeline = [
     badgeLabel: null,
   },
   {
-    degree: "Secondary School (10th Standard)",
+    degree: "10th (SSC Standard)",
     year: "March 2019",
-    institution: "General Education",
-    description: "Completed secondary school, building a strong academic foundation with a focus on mathematics, science, and logical reasoning.",
+    institution: "Shree Ankur Vidhyalaya, Jetpur",
+    description: "Percentile Rank: 84.76. Completed secondary school with academic distinction.",
     nodeColor: "bg-[#10b981]",
     nodeIcon: BookOpen,
     alignment: "right",
@@ -67,6 +71,7 @@ const timeline = [
 
 export default function ExperienceSection() {
   const [expandedItems, setExpandedItems] = useState<{ [key: number]: boolean }>({})
+  const containerRef = useRef<HTMLElement>(null)
 
   const toggleExpand = (index: number) => {
     setExpandedItems(prev => ({
@@ -75,21 +80,42 @@ export default function ExperienceSection() {
     }))
   }
 
+  useGSAP(() => {
+    if (!containerRef.current) return;
+
+    // Header animation
+    gsap.fromTo('.exp-header', 
+      { opacity: 0, y: 20 },
+      { 
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%", once: true }
+      }
+    );
+
+    // Timeline items stagger
+    const items = gsap.utils.toArray('.exp-item') as HTMLElement[];
+    items.forEach((item, i) => {
+      gsap.fromTo(item,
+        { opacity: 0, scale: 0.95, y: 30 },
+        {
+          opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "power2.out", delay: i * 0.1,
+          scrollTrigger: { trigger: containerRef.current, start: "top 70%", once: true }
+        }
+      );
+    });
+
+  }, { scope: containerRef });
+
   return (
-    <section id="experience" className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative">
+    <section id="experience" ref={containerRef} className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative">
       <div className="text-center mb-20 flex flex-col items-center">
-        <div className="w-12 h-12 flex items-center justify-center text-doraemon-yellow mb-4">
+        <div className="exp-header opacity-0 w-12 h-12 flex items-center justify-center text-doraemon-yellow mb-4">
           <GraduationCap className="w-10 h-10" />
         </div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-4xl font-bold text-gray-900 tracking-tight font-display"
-        >
+        <h2 className="exp-header opacity-0 text-4xl font-bold text-gray-900 tracking-tight font-display">
           Journey & Experience
-        </motion.h2>
-        <p className="text-gray-500 text-base mt-2 font-medium font-body">Internship · Education · Milestones</p>
+        </h2>
+        <p className="exp-header opacity-0 text-gray-500 text-base mt-2 font-medium font-body">Internship · Education · Milestones</p>
       </div>
 
       <div className="relative">
@@ -100,13 +126,9 @@ export default function ExperienceSection() {
           {timeline.map((item, i) => {
             const isExpanded = !!expandedItems[i]
             return (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, scale: 0.95, y: 30 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
-                className={`flex items-start md:items-center justify-between w-full relative ${
+                className={`exp-item opacity-0 flex items-start md:items-center justify-between w-full relative ${
                   item.alignment === "right" ? "md:flex-row-reverse" : "md:flex-row"
                 } flex-row`}
               >
@@ -180,16 +202,17 @@ export default function ExperienceSection() {
 
                       {/* Collapsible description - Mobile only */}
                       <div className="block md:hidden">
-                        <motion.div
-                          initial={false}
-                          animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="overflow-hidden"
+                        <div
+                          className="overflow-hidden transition-all duration-300 ease-in-out"
+                          style={{ 
+                            maxHeight: isExpanded ? "200px" : "0px",
+                            opacity: isExpanded ? 1 : 0
+                          }}
                         >
                           <p className="text-gray-600 text-sm leading-relaxed font-body pt-2 pb-1">
                             {item.description}
                           </p>
-                        </motion.div>
+                        </div>
                         <button
                           onClick={() => toggleExpand(i)}
                           className="text-xs font-bold text-doraemon-blue hover:text-doraemon-darkBlue transition-colors focus:outline-none cursor-pointer mt-1"
@@ -200,7 +223,7 @@ export default function ExperienceSection() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )
           })}
         </div>

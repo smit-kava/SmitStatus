@@ -1,4 +1,3 @@
-import { motion } from "framer-motion"
 import { FaGithub, FaLinkedin, FaInstagram, FaFileAlt } from "@/components/ui/GlobalIcons"
 import logoSmit from "@/assets/logo_smit.svg"
 
@@ -59,14 +58,13 @@ export default function Footer({ onViewResume }: FooterProps) {
             }
 
             return (
-              <motion.a
+              <a
                 key={link.name}
                 href={link.url}
                 target={isResume ? undefined : "_blank"}
                 rel={isResume ? undefined : "noopener noreferrer"}
                 onClick={handleClick}
-                whileHover={{ y: -4 }}
-                className={`group relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-gray-200 text-gray-600 transition-all duration-300 ${link.color}`}
+                className={`group relative flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-gray-200 text-gray-600 transition-all duration-300 hover:-translate-y-1 ${link.color}`}
               >
                 <Icon className="w-5 h-5" />
                 {/* Tooltip */}
@@ -75,7 +73,7 @@ export default function Footer({ onViewResume }: FooterProps) {
                   {/* Tooltip Triangle */}
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></span>
                 </span>
-              </motion.a>
+              </a>
             )
           })}
         </div>

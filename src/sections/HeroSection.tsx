@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   RocketLaunch,
   LaptopMac,
@@ -19,6 +21,8 @@ import {
   NotificationsActive,
 } from "@/components/ui/GlobalIcons";
 import DevIllustration from "@/components/ui/DevIllustration";
+
+gsap.registerPlugin(useGSAP);
 
 // ── Typewriter hook ────────────────────────────────────────────────────────────
 function useTypewriter(phrases: string[], speed = 80, delSpeed = 45, pause = 1400) {
@@ -100,6 +104,38 @@ export default function HeroSection() {
     "Future Tech Builder",
   ]);
 
+  const containerRef = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    // Entrance animations for left content
+    gsap.fromTo('.h-anim', 
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power2.out", delay: 0.1 }
+    );
+    
+    // Entrance for right illustration
+    gsap.fromTo('.hright-anim',
+      { opacity: 0, x: 36 },
+      { 
+        opacity: 1, 
+        x: 0, 
+        duration: 0.7, 
+        ease: "power2.out",
+        delay: 0.7,
+        onComplete: () => {
+          // Floating animation after entrance
+          gsap.to('.hright-anim', {
+            y: -14,
+            duration: 2.25,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut"
+          });
+        }
+      }
+    );
+  }, { scope: containerRef });
+
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
@@ -108,28 +144,11 @@ export default function HeroSection() {
       <style>{`
         @keyframes cloudDrift { from{transform:translateX(-160px)} to{transform:translateX(calc(100vw + 160px))} }
         @keyframes twinkle    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.15;transform:scale(0.4)} }
-        @keyframes fadeUp     { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes slideInRight { from{opacity:0;transform:translateX(36px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes floatHero  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
-        @keyframes bellRing   { 0%,100%{transform:rotate(0)} 15%{transform:rotate(-18deg)} 30%{transform:rotate(18deg)} 55%{transform:rotate(-9deg)} 70%{transform:rotate(9deg)} 85%{transform:rotate(0)} }
-        @keyframes pulseRing  { 0%{transform:scale(1);opacity:0.7} 100%{transform:scale(2.2);opacity:0} }
         @keyframes bounce     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
 
-        /* Left content stagger */
-        .h1{animation:fadeUp .6s ease forwards;opacity:0;animation-delay:.1s}
-        .h2{animation:fadeUp .6s ease forwards;opacity:0;animation-delay:.25s}
-        .h3{animation:fadeUp .6s ease forwards;opacity:0;animation-delay:.4s}
-        .h4{animation:fadeUp .6s ease forwards;opacity:0;animation-delay:.55s}
-        .h5{animation:fadeUp .6s ease forwards;opacity:0;animation-delay:.7s}
-        .h6{animation:fadeUp .6s ease forwards;opacity:0;animation-delay:.85s}
-
-        /* Right illustration — slides in from right, floats after */
-        .hright-anim {
-          animation:
-            slideInRight 0.7s cubic-bezier(0.55,0,0.15,1) forwards,
-            floatHero 4.5s ease-in-out infinite 0.7s;
-          opacity: 0;
-        }
+        /* Initial states for GSAP */
+        .h-anim { opacity: 0; }
+        .hright-anim { opacity: 0; }
 
         .btn-p{
           display:inline-flex;align-items:center;gap:8px;
@@ -203,6 +222,7 @@ export default function HeroSection() {
       {/* ══ Hero ══════════════════════════════════════════════════════════════ */}
       <section
         id="home"
+        ref={containerRef}
         style={{
           position: "relative", minHeight: "100vh", overflow: "hidden",
           background: "linear-gradient(160deg,#e3f2fb 0%,#c8e9ff 28%,#f0faff 58%,#fffef0 100%)",
@@ -251,7 +271,7 @@ export default function HeroSection() {
           <div className="hleft" style={{ flex: "1 1 0", display: "flex", flexDirection: "column", gap: 0 }}>
 
             {/* Available badge */}
-            <div className="h1" style={{
+            <div className="h-anim" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               padding: "6px 16px", borderRadius: 999,
               border: "2px solid #fcd400", background: "rgba(252,212,0,0.16)",
@@ -266,14 +286,14 @@ export default function HeroSection() {
             </div>
 
             {/* Name + subtitle */}
-            <div className="h2" style={{ marginBottom: 10 }}>
+            <div className="h-anim" style={{ marginBottom: 10 }}>
               <h1 className="htitle" style={{
                 fontSize: "clamp(2rem,4.5vw,3rem)", fontWeight: 900,
                 color: "#00334e", fontFamily: "'Baloo 2',cursive",
                 lineHeight: 1.12, margin: 0,
               }}>
                 Hi, I'm{" "}
-                <span style={{ color: "#e53935", display: "inline-block", animation: "floatHero 3s ease-in-out infinite" }}>
+                <span style={{ color: "#e53935", display: "inline-block" }}>
                   Smit Kava
                 </span>
               </h1>
@@ -287,7 +307,7 @@ export default function HeroSection() {
             </div>
 
             {/* Typewriter */}
-            <div className="h3 htypewriter" style={{
+            <div className="h-anim htypewriter" style={{
               display: "flex", alignItems: "center", gap: 6,
               fontSize: 15, fontWeight: 700,
               color: "#006494", fontFamily: "'Baloo 2',cursive", marginBottom: 14,
@@ -299,17 +319,17 @@ export default function HeroSection() {
             </div>
 
             {/* Description */}
-            <p className="h3 hdesc" style={{
+            <p className="h-anim hdesc" style={{
               fontSize: 13.5, lineHeight: 1.75, color: "#2a3f4a",
               maxWidth: 400, marginBottom: 20, fontWeight: 600,
             }}>
-              MCA Student at Etech Consultancy &bull; CGPA 8.80<br />
-              Building modern web apps with React.js, TypeScript &amp; .NET Core —
+              Junior Software Engineer at Etech International &bull; MCA at ISTAR College<br />
+              Building modern web apps with React, TypeScript &amp; .NET Core Web API —
               turning ideas into clean, fast digital experiences.
             </p>
 
             {/* Pills */}
-            <div className="h4 hpills" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 22 }}>
+            <div className="h-anim hpills" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 22 }}>
               {[
                 { icon: <Code2 sx={{ fontSize: 14 }} />, label: "React.js" },
                 { icon: <Code sx={{ fontSize: 14 }} />, label: "TypeScript" },
@@ -322,17 +342,20 @@ export default function HeroSection() {
             </div>
 
             {/* CTA buttons */}
-            <div className="h5 hbtns" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 26 }}>
+            <div className="h-anim hbtns" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 26 }}>
               <button className="btn-p" onClick={() => scrollTo("skills")}>
                 <Widgets sx={{ fontSize: 16 }} /> Explore Pocket
               </button>
               <button className="btn-o" onClick={() => scrollTo("experience")}>
                 <Timeline sx={{ fontSize: 16 }} /> See Journey
               </button>
+              <button className="btn-o" onClick={() => window.open("/Smit_Kava_Resume_Updateds.pdf", "_blank")}>
+                <NotificationsActive sx={{ fontSize: 16 }} /> Resume
+              </button>
             </div>
 
             {/* Stats */}
-            <div className="h6 hstats" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div className="h-anim hstats" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <StatCard icon={<School sx={{ fontSize: 20 }} />} value="8.80" label="MCA CGPA" />
               <StatCard icon={<Grade sx={{ fontSize: 20 }} />} value="7.62" label="B.Sc CGPA" />
               <StatCard icon={<RocketLaunch sx={{ fontSize: 20 }} />} value="5+" label="Projects" />
@@ -341,11 +364,6 @@ export default function HeroSection() {
           </div>
 
           {/* ── Right column: Illustration ── */}
-          {/*
-            Note: During the SvgIntroTransition, a fixed-position copy of DevIllustration
-            slides into this exact slot. Once the transition is "done", this local copy
-            becomes visible and takes over seamlessly.
-          */}
           <div
             className="hright hright-anim"
             style={{

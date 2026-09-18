@@ -1,5 +1,5 @@
 /**
- * CustomCursor — Doraemon-themed arrow/pointer cursor
+ * CustomCursor — Doraemon-themed arrow/pointer cursor (GSAP Version)
  *
  * Uses actual cursor SVG shapes (not circles):
  *  default  → arrow pointer  (doraemon-blue gradient)
@@ -11,11 +11,12 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from "react"
-import { motion, useSpring, useMotionValue, AnimatePresence } from "framer-motion"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+
+gsap.registerPlugin(useGSAP)
 
 type CursorState = "default" | "hover" | "click" | "text"
-
-const TRAIL_SPRING = { damping: 28, stiffness: 260, mass: 0.6 }
 
 // ── SVG cursor shapes ─────────────────────────────────────────────────────────
 
@@ -114,33 +115,58 @@ const IBeamSVG = () => (
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function CustomCursor() {
-  const cursorX = useMotionValue(-300)
-  const cursorY = useMotionValue(-300)
-
-  // Soft trail follows cursor
-  const trailX = useSpring(cursorX, TRAIL_SPRING)
-  const trailY = useSpring(cursorY, TRAIL_SPRING)
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const trailRef = useRef<HTMLDivElement>(null)
+  const ripplesContainerRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
+  const arrowRef = useRef<HTMLDivElement>(null)
+  const handRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLDivElement>(null)
 
   const [state, setState] = useState<CursorState>("default")
   const [visible, setVisible] = useState(false)
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([])
   const rippleId = useRef(0)
 
+  const xTo = useRef<gsap.QuickToFunc | null>(null)
+  const yTo = useRef<gsap.QuickToFunc | null>(null)
+  const trailXTo = useRef<gsap.QuickToFunc | null>(null)
+  const trailYTo = useRef<gsap.QuickToFunc | null>(null)
+
+  useGSAP(() => {
+    if (cursorRef.current && trailRef.current) {
+      // Create quickTo functions for ultra-performant cursor following
+      xTo.current = gsap.quickTo(cursorRef.current, "x", { duration: 0, ease: "none" })
+      yTo.current = gsap.quickTo(cursorRef.current, "y", { duration: 0, ease: "none" })
+      
+      trailXTo.current = gsap.quickTo(trailRef.current, "x", { duration: 0.6, ease: "power3.out" })
+      trailYTo.current = gsap.quickTo(trailRef.current, "y", { duration: 0.6, ease: "power3.out" })
+    }
+  }, { scope: cursorRef })
+
   const onMove = useCallback((e: MouseEvent) => {
-    cursorX.set(e.clientX)
-    cursorY.set(e.clientY)
+    if (xTo.current && yTo.current && trailXTo.current && trailYTo.current) {
+      xTo.current(e.clientX)
+      yTo.current(e.clientY)
+      trailXTo.current(e.clientX)
+      trailYTo.current(e.clientY)
+    }
     setVisible(true)
-  }, [cursorX, cursorY])
+  }, [])
 
   const onLeave = useCallback(() => setVisible(false), [])
   const onEnter = useCallback(() => setVisible(true), [])
 
-  const onDown = useCallback((e: MouseEvent) => {
+  const { contextSafe } = useGSAP({ scope: cursorRef })
+
+  const onDown = contextSafe((e: MouseEvent) => {
     setState("click")
     const id = rippleId.current++
     setRipples(p => [...p, { id, x: e.clientX, y: e.clientY }])
+    
+    // Auto-remove ripple after animation
     setTimeout(() => setRipples(p => p.filter(r => r.id !== id)), 600)
-  }, [])
+  })
 
   const onUp = useCallback(() => setState(s => s === "click" ? "default" : s), [])
 
@@ -172,6 +198,36 @@ export default function CustomCursor() {
     }
   }, [onMove, onLeave, onEnter, onDown, onUp, onOver])
 
+  // React to state/visibility changes
+  useGSAP(() => {
+    if (!cursorRef.current || !trailRef.current || !innerRef.current) return;
+
+    // Visibility
+    gsap.to(cursorRef.current, { opacity: visible ? 1 : 0, duration: 0.15 })
+    gsap.to(trailRef.current, { opacity: visible ? (state === "text" ? 0 : 0.18) : 0, duration: 0.3 })
+
+    // Cursor animations based on state
+    gsap.to(innerRef.current, {
+      scale: state === "click" ? 0.88 : 1,
+      rotation: state === "hover" ? -10 : 0,
+      duration: 0.3,
+      ease: "back.out(1.7)",
+      overwrite: "auto"
+    })
+
+    // Crossfade SVG icons based on state
+    if (arrowRef.current && handRef.current && textRef.current) {
+      const isArrow = state === "default" || state === "click";
+      const isHand = state === "hover";
+      const isText = state === "text";
+
+      gsap.to(arrowRef.current, { opacity: isArrow ? 1 : 0, scale: isArrow ? 1 : 0.7, duration: 0.12 });
+      gsap.to(handRef.current, { opacity: isHand ? 1 : 0, scale: isHand ? 1 : 0.7, duration: 0.12 });
+      gsap.to(textRef.current, { opacity: isText ? 1 : 0, scale: isText ? 1 : 0.7, duration: 0.12 });
+    }
+
+  }, [state, visible])
+
   if (typeof window === "undefined") return null
 
   // Offset so tip of each cursor SVG aligns to the actual pointer position
@@ -186,26 +242,17 @@ export default function CustomCursor() {
   return (
     <>
       {/* ── Click ripples ── */}
-      <AnimatePresence>
+      <div ref={ripplesContainerRef}>
         {ripples.map(r => (
-          <motion.div
-            key={r.id}
-            className="fixed pointer-events-none z-9998"
-            style={{ left: r.x, top: r.y, translateX: "-50%", translateY: "-50%" }}
-            initial={{ width: 6, height: 6, opacity: 0.7, borderRadius: "50%", backgroundColor: "#005b8f" }}
-            animate={{ width: 48, height: 48, opacity: 0, borderRadius: "50%" }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
-          />
+          <Ripple key={r.id} x={r.x} y={r.y} />
         ))}
-      </AnimatePresence>
+      </div>
 
       {/* ── Soft glow trail ── */}
-      <motion.div
+      <div
+        ref={trailRef}
         className="fixed top-0 left-0 pointer-events-none z-9997"
-        style={{ x: trailX, y: trailY, translateX: "-50%", translateY: "-50%" }}
-        animate={{ opacity: visible ? (state === "text" ? 0 : 0.18) : 0 }}
-        transition={{ opacity: { duration: 0.3 } }}
+        style={{ transform: "translate(-50%, -50%)", opacity: 0 }}
       >
         <div
           className="rounded-full"
@@ -219,59 +266,46 @@ export default function CustomCursor() {
             filter: "blur(4px)",
           }}
         />
-      </motion.div>
+      </div>
 
       {/* ── Main cursor SVG ── */}
-      <motion.div
+      <div
+        ref={cursorRef}
         className="fixed top-0 left-0 pointer-events-none z-9999"
-        style={{ x: cursorX, y: cursorY, translateX: `-${ox}px`, translateY: `-${oy}px` }}
-        animate={{
-          opacity: visible ? 1 : 0,
-          scale: state === "click" ? 0.88 : 1,
-          rotate: state === "hover" ? -10 : 0,
-        }}
-        transition={{
-          opacity: { duration: 0.15 },
-          scale:   { type: "spring", stiffness: 500, damping: 22 },
-          rotate:  { type: "spring", stiffness: 400, damping: 20 },
-        }}
+        style={{ transform: `translate(-${ox}px, -${oy}px)`, opacity: 0 }}
       >
-        <AnimatePresence mode="wait">
-          {(state === "default" || state === "click") && (
-            <motion.div
-              key="arrow"
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.12 }}
-            >
-              <ArrowSVG pressed={state === "click"} />
-            </motion.div>
-          )}
-          {state === "hover" && (
-            <motion.div
-              key="hand"
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.12 }}
-            >
-              <HandSVG />
-            </motion.div>
-          )}
-          {state === "text" && (
-            <motion.div
-              key="ibeam"
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.12 }}
-            >
-              <IBeamSVG />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+        <div ref={innerRef} style={{ position: "relative" }}>
+          <div ref={arrowRef} style={{ position: "absolute", opacity: 0, transform: "scale(0.7)" }}>
+            <ArrowSVG pressed={state === "click"} />
+          </div>
+          <div ref={handRef} style={{ position: "absolute", opacity: 0, transform: "scale(0.7)" }}>
+            <HandSVG />
+          </div>
+          <div ref={textRef} style={{ position: "absolute", opacity: 0, transform: "scale(0.7)" }}>
+            <IBeamSVG />
+          </div>
+        </div>
+      </div>
     </>
   )
+}
+
+function Ripple({ x, y }: { x: number; y: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  
+  useGSAP(() => {
+    if (!ref.current) return;
+    gsap.fromTo(ref.current, 
+      { width: 6, height: 6, opacity: 0.7 },
+      { width: 48, height: 48, opacity: 0, duration: 0.55, ease: "power2.out" }
+    );
+  }, { scope: ref });
+
+  return (
+    <div
+      ref={ref}
+      className="fixed pointer-events-none z-9998 rounded-full"
+      style={{ left: x, top: y, transform: "translate(-50%, -50%)", backgroundColor: "#005b8f" }}
+    />
+  );
 }

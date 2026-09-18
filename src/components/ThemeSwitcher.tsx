@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 import { SettingIcons, Check } from '@/components/ui/GlobalIcons';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(useGSAP);
 
 const themes = [
   {
@@ -53,6 +56,8 @@ const themes = [
 export default function ThemeSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTheme, setActiveTheme] = useState('blue');
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('app-theme') || 'blue';
@@ -76,65 +81,84 @@ export default function ThemeSwitcher() {
     root.style.setProperty('--color-doraemon-yellow', theme.yellow);
   };
 
+  useGSAP(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      gsap.fromTo('.theme-backdrop', { opacity: 0 }, { opacity: 1, duration: 0.2 });
+      gsap.fromTo('.theme-dropdown', { opacity: 0, scale: 0.95, y: 10 }, { opacity: 1, scale: 1, y: 0, duration: 0.2, ease: "power2.out" });
+    } else if (shouldRender) {
+      const tl = gsap.timeline({ onComplete: () => setShouldRender(false) });
+      tl.to('.theme-dropdown', { opacity: 0, scale: 0.95, y: 10, duration: 0.2, ease: "power2.in" }, 0);
+      tl.to('.theme-backdrop', { opacity: 0, duration: 0.2 }, 0);
+    }
+  }, [isOpen]);
+
+  const handleMouseEnter = () => {
+    gsap.to('.theme-btn-icon', { rotate: 90, scale: 1.08, duration: 0.3, ease: "power2.out" });
+  };
+  const handleMouseLeave = () => {
+    gsap.to('.theme-btn-icon', { rotate: 0, scale: 1, duration: 0.3, ease: "power2.out" });
+  };
+  const handleMouseDown = () => {
+    gsap.to('.theme-btn-icon', { scale: 0.95, duration: 0.1 });
+  };
+  const handleMouseUp = () => {
+    gsap.to('.theme-btn-icon', { scale: 1.08, duration: 0.1 });
+  };
+
   return (
-    <div className="relative">
-      <motion.button
-        whileHover={{ rotate: 90, scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.3 }}
+    <div className="relative" ref={containerRef}>
+      <button
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
         onClick={() => setIsOpen(!isOpen)}
         className="w-8 h-8 flex items-center justify-center text-doraemon-blue hover:text-doraemon-darkBlue transition-colors focus:outline-none"
         aria-label="Theme Settings"
       >
-        <SettingIcons className="w-6.5 h-6.5" />
-      </motion.button>
+        <div className="theme-btn-icon flex items-center justify-center w-full h-full">
+          <SettingIcons className="w-6.5 h-6.5" />
+        </div>
+      </button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 md:hidden"
-              onClick={() => setIsOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ duration: 0.2 }}
-              className="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 z-50 origin-top-right"
-            >
-              <h3 className="text-sm font-bold text-gray-700 mb-3 px-1">Theme Colors</h3>
-              <div className="flex flex-col gap-2">
-                {themes.map((theme) => (
-                  <button
-                    key={theme.id}
-                    onClick={() => {
-                      applyTheme(theme);
-                      setIsOpen(false);
-                    }}
-                    className={`flex items-center justify-between px-3 py-2 rounded-xl transition-colors ${activeTheme === theme.id ? 'bg-gray-50 font-bold' : 'hover:bg-gray-50'
-                      }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-5 h-5 rounded-full shadow-inner border border-black/10"
-                        style={{ backgroundColor: theme.primary }}
-                      />
-                      <span className="text-sm text-gray-700">{theme.name}</span>
-                    </div>
-                    {activeTheme === theme.id && (
-                      <Check className="w-4 h-4" style={{ color: theme.primary }} />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      {shouldRender && (
+        <>
+          <div
+            className="theme-backdrop fixed inset-0 z-40 md:hidden"
+            onClick={() => setIsOpen(false)}
+          />
+          <div
+            className="theme-dropdown absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 z-50 origin-top-right"
+          >
+            <h3 className="text-sm font-bold text-gray-700 mb-3 px-1">Theme Colors</h3>
+            <div className="flex flex-col gap-2">
+              {themes.map((theme) => (
+                <button
+                  key={theme.id}
+                  onClick={() => {
+                    applyTheme(theme);
+                    setIsOpen(false);
+                  }}
+                  className={`flex items-center justify-between px-3 py-2 rounded-xl transition-colors ${activeTheme === theme.id ? 'bg-gray-50 font-bold' : 'hover:bg-gray-50'
+                    }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-5 h-5 rounded-full shadow-inner border border-black/10"
+                      style={{ backgroundColor: theme.primary }}
+                    />
+                    <span className="text-sm text-gray-700">{theme.name}</span>
+                  </div>
+                  {activeTheme === theme.id && (
+                    <Check className="w-4 h-4" style={{ color: theme.primary }} />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

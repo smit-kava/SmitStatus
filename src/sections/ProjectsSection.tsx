@@ -1,8 +1,13 @@
-import { motion } from "framer-motion"
+import { useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ArrowRight, Calendar, Layers, ExternalLink, Eye, FaGithub, WebIcon, DesktopIcon, MobileIcon, AndroidIcon } from "@/components/ui/GlobalIcons"
 import { Link } from "react-router-dom"
 import { ROUTES } from "@/routes/routes"
 import { FEATURED_PROJECTS } from "@/data/projects"
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 // ── Platform badge icon map ──────────────────────────────────────────────────
 const platformIcon: Record<string, React.ComponentType<any>> = {
@@ -13,37 +18,65 @@ const platformIcon: Record<string, React.ComponentType<any>> = {
 }
 
 export default function ProjectsSection() {
+  const containerRef = useRef<HTMLElement>(null)
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+
+    // Header animation
+    gsap.fromTo('.proj-header', 
+      { opacity: 0, x: -20 },
+      { 
+        opacity: 1, x: 0, duration: 0.6, ease: "power2.out", stagger: 0.1,
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%", once: true }
+      }
+    );
+
+    // Header button animation
+    gsap.fromTo('.proj-header-btn',
+      { opacity: 0, x: 20 },
+      {
+        opacity: 1, x: 0, duration: 0.6, ease: "power2.out", delay: 0.2,
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%", once: true }
+      }
+    );
+
+    // Cards stagger
+    gsap.fromTo('.proj-card',
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: "power2.out", delay: 0.1,
+        scrollTrigger: { trigger: containerRef.current, start: "top 75%", once: true }
+      }
+    );
+
+    // Bottom CTA animation
+    gsap.fromTo('.proj-cta',
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.5,
+        scrollTrigger: { trigger: containerRef.current, start: "bottom 95%", once: true }
+      }
+    );
+
+  }, { scope: containerRef });
+
   return (
-    <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+    <section id="projects" ref={containerRef} className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
 
       {/* ── Section Header ─────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-end mb-12 gap-4">
         <div>
-          <motion.h2
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl font-bold text-gray-900 mb-2 tracking-tight"
-          >
+          <h2 className="proj-header opacity-0 text-4xl font-bold text-gray-900 mb-2 tracking-tight">
             Gadget Showcase
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-gray-500 font-medium"
-          >
+          </h2>
+          <p className="proj-header opacity-0 text-gray-500 font-medium">
             Live products, internship work & personal projects
-          </motion.p>
+          </p>
         </div>
 
         {/* View All button */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
+        <div className="proj-header-btn opacity-0">
           <Link
             to={ROUTES.PROJECTS}
             target="_blank"
@@ -58,21 +91,14 @@ export default function ProjectsSection() {
             View All Projects
             <ArrowRight className="w-4 h-4" />
           </Link>
-        </motion.div>
+        </div>
       </div>
 
       {/* ── 3 Featured Gadget Cards ─────────────────────────────────────── */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {FEATURED_PROJECTS.map((project, i) => (
           <div key={project.title} className={`animate-float${i % 3 === 0 ? "-slow" : i % 3 === 1 ? "-delayed" : ""}`}>
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12, duration: 0.6 }}
-              whileHover={{ y: -8 }}
-              className="group relative bg-white/60 backdrop-blur-md rounded-4xl shadow-sm border border-white/50 transition-all duration-300 hover:shadow-xl overflow-hidden h-full flex flex-col"
-            >
+            <div className="proj-card opacity-0 group relative bg-white/60 backdrop-blur-md rounded-4xl shadow-sm border border-white/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 overflow-hidden h-full flex flex-col">
               {/* Image */}
               <div className="relative overflow-hidden aspect-4/3">
                 <img
@@ -156,19 +182,13 @@ export default function ProjectsSection() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         ))}
       </div>
 
       {/* ── Bottom CTA ─────────────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.5 }}
-        className="mt-12 flex justify-center"
-      >
+      <div className="proj-cta opacity-0 mt-12 flex justify-center">
         <Link
           to={ROUTES.PROJECTS}
           target="_blank"
@@ -179,7 +199,7 @@ export default function ProjectsSection() {
           See All {8} Projects
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </Link>
-      </motion.div>
+      </div>
     </section>
   )
 }

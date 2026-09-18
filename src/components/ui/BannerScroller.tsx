@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import gsap from "gsap"
 import bannerBg from "@/assets/banner_bg.png"
 import SpeedController from "./SpeedController"
+import { GSAPPresence } from "./GSAPPresence"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface MilestoneData {
@@ -383,19 +384,18 @@ export default function BannerScroller({ showImageLayer = true }: BannerScroller
       </div>
 
       {/* ── Collapsible details panel shown inline below scroller ── */}
-      <AnimatePresence>
+      <GSAPPresence
+        isPresent={!!selectedMilestone}
+        enterAnimation={(el) => gsap.fromTo(el, { height: 0, opacity: 0 }, { height: "auto", opacity: 1, duration: 0.35, ease: "power2.inOut" })}
+        exitAnimation={(el) => gsap.to(el, { height: 0, opacity: 0, duration: 0.35, ease: "power2.inOut" })}
+        className="bg-[#000d1a] border-t border-b border-white/5 px-6 py-8 relative overflow-hidden"
+        style={selectedMilestone ? { 
+          borderLeft: `4px solid ${selectedMilestone.accent}`,
+          boxShadow: "inset 0 10px 30px -10px rgba(0,0,0,0.5)"
+        } : {}}
+      >
         {selectedMilestone && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="bg-[#000d1a] border-t border-b border-white/5 px-6 py-8 relative overflow-hidden"
-            style={{ 
-              borderLeft: `4px solid ${selectedMilestone.accent}`,
-              boxShadow: "inset 0 10px 30px -10px rgba(0,0,0,0.5)"
-            }}
-          >
+          <>
             {/* Background glow matching the accent color */}
             <div 
               className="absolute -right-24 -top-24 w-64 h-64 rounded-full blur-3xl opacity-10 pointer-events-none"
@@ -436,9 +436,9 @@ export default function BannerScroller({ showImageLayer = true }: BannerScroller
                 </p>
               </div>
             </div>
-          </motion.div>
+          </>
         )}
-      </AnimatePresence>
+      </GSAPPresence>
     </>
   )
 }

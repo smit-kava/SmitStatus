@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import SearchModal from './SearchModal'
 
 const SearchTab = () => {
     const [isHovered, setIsHovered] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const buttonRef = useRef<HTMLButtonElement>(null)
+    const shimmerRef = useRef<HTMLDivElement>(null)
 
     // Liquid glass style from Navbar
     const glassStyle: React.CSSProperties = {
@@ -48,14 +51,33 @@ const SearchTab = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
+    useGSAP(() => {
+        if (!shimmerRef.current || !isHovered) return;
+        
+        gsap.fromTo(shimmerRef.current,
+            { x: "-100%" },
+            { x: "200%", duration: 1.5, ease: "power1.inOut" }
+        );
+    }, [isHovered]);
+
+    const handleMouseDown = () => {
+        if (buttonRef.current) gsap.to(buttonRef.current, { scale: 0.98, duration: 0.1 });
+    };
+
+    const handleMouseUp = () => {
+        if (buttonRef.current) gsap.to(buttonRef.current, { scale: 1, duration: 0.1 });
+    };
+
     return (
         <>
             <div className="relative w-full">
-                <motion.button
+                <button
+                    ref={buttonRef}
                     onClick={() => setIsModalOpen(true)}
                     onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    whileTap={{ scale: 0.98 }}
+                    onMouseLeave={() => { setIsHovered(false); handleMouseUp(); }}
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
                     className="relative flex items-center w-full rounded-[14px] overflow-hidden text-left"
                     style={glassStyle}
                 >
@@ -84,18 +106,17 @@ const SearchTab = () => {
                     {/* Water ripple shimmer overlay effect on hover */}
                     {isHovered && (
                         <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[14px]">
-                            <motion.div
+                            <div
+                                ref={shimmerRef}
                                 className="absolute top-0 h-full w-1/2 opacity-30"
                                 style={{
                                     background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
                                     filter: "blur(6px)",
                                 }}
-                                animate={{ x: ["-100%", "200%"] }}
-                                transition={{ duration: 1.5, ease: "easeInOut" }}
                             />
                         </div>
                     )}
-                </motion.button>
+                </button>
             </div>
 
             {/* Separate Command Palette Modal Component */}

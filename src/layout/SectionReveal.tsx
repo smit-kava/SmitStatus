@@ -15,8 +15,12 @@
 //   blur     — blur amount in px (default 6)
 //   once     — animate only once (default true)
 
-import { useRef, useEffect, useState } from "react"
-import { motion, type Variants } from "framer-motion"
+import { useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 interface SectionRevealProps {
     children: React.ReactNode
@@ -36,46 +40,32 @@ export default function SectionReveal({
     className = "",
 }: SectionRevealProps) {
     const ref = useRef<HTMLDivElement>(null)
-    const [isVisible, setIsVisible] = useState(false)
 
-    useEffect(() => {
-        const el = ref.current
-        if (!el) return
+    useGSAP(() => {
+        if (!ref.current) return;
 
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true)
-                    if (once) observer.disconnect()
-                } else if (!once) {
-                    setIsVisible(false)
-                }
-            },
-            { threshold: 0.12 }
-        )
-
-        observer.observe(el)
-        return () => observer.disconnect()
-    }, [once])
-
-    return (
-        <motion.div
-            ref={ref}
-            className={className}
-            initial={{ opacity: 0, y }}
-            animate={
-                isVisible
-                    ? { opacity: 1, y: 0 }
-                    : { opacity: 0, y }
-            }
-            transition={{
+        gsap.fromTo(ref.current,
+            { opacity: 0, y },
+            {
+                opacity: 1,
+                y: 0,
                 duration: 0.65,
                 delay,
-                ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-            }}
-        >
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ref.current,
+                    start: "top 88%",
+                    once: once,
+                    toggleActions: once ? "play none none none" : "play none none reverse"
+                }
+            }
+        );
+    }, { scope: ref });
+
+    return (
+        <div ref={ref} className={className}>
             {children}
-        </motion.div>
+        </div>
     )
 }
 
@@ -92,22 +82,6 @@ export default function SectionReveal({
 //     ))}
 //   </StaggerReveal>
 
-const staggerContainer: Variants = {
-    hidden: {},
-    visible: {
-        transition: { staggerChildren: 0.1, delayChildren: 0.05 },
-    },
-}
-
-const staggerItem: Variants = {
-    hidden: { opacity: 0, y: 36 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-    },
-}
-
 interface StaggerRevealProps {
     children: React.ReactNode
     className?: string
@@ -115,29 +89,34 @@ interface StaggerRevealProps {
 
 export function StaggerReveal({ children, className = "" }: StaggerRevealProps) {
     const ref = useRef<HTMLDivElement>(null)
-    const [isVisible, setIsVisible] = useState(false)
 
-    useEffect(() => {
-        const el = ref.current
-        if (!el) return
-        const observer = new IntersectionObserver(
-            ([entry]) => { if (entry.isIntersecting) setIsVisible(true) },
-            { threshold: 0.1 }
-        )
-        observer.observe(el)
-        return () => observer.disconnect()
-    }, [])
+    useGSAP(() => {
+        if (!ref.current) return;
+
+        const items = gsap.utils.toArray('.stagger-item');
+        if (items.length === 0) return;
+
+        gsap.fromTo(items,
+            { opacity: 0, y: 36 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.55,
+                stagger: 0.1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ref.current,
+                    start: "top 90%",
+                    once: true
+                }
+            }
+        );
+    }, { scope: ref });
 
     return (
-        <motion.div
-            ref={ref}
-            className={className}
-            variants={staggerContainer}
-            initial="hidden"
-            animate={isVisible ? "visible" : "hidden"}
-        >
+        <div ref={ref} className={className}>
             {children}
-        </motion.div>
+        </div>
     )
 }
 
@@ -149,8 +128,8 @@ export function StaggerItem({
     className?: string
 }) {
     return (
-        <motion.div className={className} variants={staggerItem}>
+        <div className={`stagger-item ${className}`}>
             {children}
-        </motion.div>
+        </div>
     )
 }

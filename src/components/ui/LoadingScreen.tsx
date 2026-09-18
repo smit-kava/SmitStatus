@@ -4,8 +4,10 @@
  */
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { Radio } from "@/components/ui/GlobalIcons";
+import { GSAPPresence } from "./GSAPPresence";
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -33,6 +35,16 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [ripples, setRipples] = useState<Ripple[]>([]);
   const [isExiting, setIsExiting] = useState(false);
   const rippleIdCounter = useRef(0);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shutterRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const floatRef = useRef<HTMLDivElement>(null);
+  const runnerRef = useRef<HTMLImageElement>(null);
+  const statusRef = useRef<HTMLParagraphElement>(null);
+  
+  // Custom context for animations
+  const { contextSafe } = useGSAP({ scope: containerRef });
 
   // Organic custom progress interval
   useEffect(() => {
@@ -75,7 +87,7 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   }, []);
 
   // Handle ripple placement
-  const handleSpaceClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleSpaceClick = contextSafe((e: React.MouseEvent<HTMLDivElement>) => {
     if (isExiting) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -88,7 +100,7 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
     setTimeout(() => {
       setRipples((prev) => prev.filter((r) => r.id !== id));
     }, 700);
-  };
+  });
 
   const isFinished = progress >= 100;
 
@@ -102,23 +114,70 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
     return () => clearTimeout(t)
   }, [isFinished])
 
+  // GSAP Animations
+  useGSAP(() => {
+    if (!floatRef.current || !runnerRef.current) return;
+
+    // Float Animation for Character
+    gsap.to(floatRef.current, {
+      y: 12,
+      scale: 1.015,
+      duration: 2.25,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut"
+    });
+
+    // Running character jump animation
+    if (!isFinished) {
+      gsap.to(runnerRef.current, {
+        y: -12,
+        duration: 0.275,
+        yoyo: true,
+        repeat: -1,
+        ease: "power1.out"
+      });
+    } else {
+      gsap.killTweensOf(runnerRef.current);
+      gsap.to(runnerRef.current, { y: 0, duration: 0.2 });
+    }
+  }, [isFinished]);
+
+  // Exit animations
+  useGSAP(() => {
+    if (isExiting && shutterRef.current && contentRef.current) {
+      gsap.to(shutterRef.current, { y: "-100%", duration: 0.8, ease: "power3.inOut", delay: 0.1 });
+      gsap.to(contentRef.current, { opacity: 0, scale: 0.96, duration: 0.6, ease: "power2.out" });
+    }
+  }, [isExiting]);
+  
+  // Status text animation
+  useGSAP(() => {
+    if (statusRef.current) {
+      gsap.fromTo(statusRef.current, 
+        { opacity: 0, y: 12 }, 
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
+      );
+    }
+  }, [statusIndex, isFinished]);
+
   return (
     <div
       id="splash-loader"
+      ref={containerRef}
       onClick={handleSpaceClick}
       className="text-[#141d21] overflow-hidden fixed inset-0 z-[100] w-full flex flex-col items-center justify-center select-none cursor-copy"
     >
       {/* Shutter Curtain (Slides bottom to top) */}
-      <motion.div
+      <div
+        ref={shutterRef}
         className="absolute top-0 left-0 w-full h-full bg-[#f4faff] z-[-1]"
-        animate={isExiting ? { y: "-100%" } : { y: 0 }}
-        transition={{ duration: 0.8, ease: [0.65, 0, 0.15, 1], delay: 0.1 }}
+        style={{ transform: "translateY(0)" }}
       />
 
       {/* Main Content (Fades out first) */}
-      <motion.div
-        animate={isExiting ? { opacity: 0, scale: 0.96 } : { opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+      <div
+        ref={contentRef}
         className="relative w-full h-full flex flex-col items-center justify-center"
       >
         {/* Ambient Atmos Backdrops */}
@@ -127,45 +186,18 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
         <div className="absolute rounded-full filter blur-[120px] z-0 opacity-[0.08] w-[400px] h-[400px] bg-[#ff6459] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
         {/* Ripple render elements */}
-        <AnimatePresence>
-          {ripples.map((ripple) => (
-            <motion.span
-              key={ripple.id}
-              initial={{ transform: "scale(0) -translate(-50%, -50%)", opacity: 0.9 }}
-              animate={{ transform: "scale(3.5) -translate(-50%, -50%)", opacity: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              style={{
-                position: "absolute",
-                left: ripple.x,
-                top: ripple.y,
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                backgroundColor: "rgba(0, 100, 148, 0.23)",
-                pointerEvents: "none",
-                zIndex: 30,
-                transformOrigin: "center"
-              }}
-            />
-          ))}
-        </AnimatePresence>
+        {ripples.map((ripple) => (
+          <RippleEffect key={ripple.id} x={ripple.x} y={ripple.y} />
+        ))}
 
         {/* Primary content area */}
         <div className="relative z-10 flex flex-col items-center max-w-[1200px] w-full px-6 text-center">
           
           {/* Float Animation Wrapper for Character */}
-          <motion.div
-            animate={{
-              y: [-12, 12, -12],
-              scale: [1, 1.015, 1],
-            }}
-            transition={{
-              duration: 4.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+          <div
+            ref={floatRef}
             className="relative mb-8 group"
+            style={{ transform: "translateY(-12px)" }}
           >
             <div className="absolute inset-0 bg-[#00a0e9] rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
             
@@ -177,7 +209,7 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
               referrerPolicy="no-referrer"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWx3sRwSnplMPfzze2y5zf1ibh9zbKR42dFxJqWldEAxmzVZl88fE-R56JJrdBwk_9MF3FSpPkK96Y2-m3SGcxXY5IVCqJS1QXKGqMS-_5xxOMWTuc6ClWAaMElDA6O_B8fHNQQI4QRi-Od3_oSwCfyb21smOMkaBLOT0E01zxu6Bh45Im1O5bLbVnu6EdXebpW6PMb2dLzUL2lCSmRytZ9Kippww8nFummEKfrOacUt6qvkBILRjFBqWm9cSvYaUrOqiCiaMMGbLt"
             />
-          </motion.div>
+          </div>
 
           {/* Branding Headers */}
           <div className="mb-6">
@@ -197,7 +229,7 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
               {/* Active loading flow */}
               <div
                 id="active-progress-fill"
-                className="absolute top-0 left-0 h-full bg-[#006494]"
+                className="absolute top-0 left-0 h-full bg-[#006494] transition-all duration-75"
                 style={{ width: `${progress}%` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent skew-x-[-22deg]" />
@@ -207,19 +239,12 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
             {/* Running character synchronized anchor */}
             <div
               id="mini-runner-anchor"
-              className="absolute -top-[52px]"
+              className="absolute -top-[52px] transition-all duration-75"
               style={{ left: `calc(${progress}% - 24px)` }}
             >
               {/* Smaller running character with jump animation */}
-              <motion.img
-                animate={{
-                  y: isFinished ? 0 : [0, -12, 0],
-                }}
-                transition={{
-                  duration: 0.55,
-                  repeat: isFinished ? 0 : Infinity,
-                  ease: "easeOut",
-                }}
+              <img
+                ref={runnerRef}
                 alt="Running Mini Doraemon"
                 className="w-12 h-12 mix-blend-multiply"
                 referrerPolicy="no-referrer"
@@ -240,33 +265,27 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
           {/* Dynamic status line updates */}
           <div id="status-terminal" className="mt-8 h-10 w-full flex justify-center items-center">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={statusIndex}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.4 }}
-                className="font-body-md text-[#3e4851] text-sm md:text-base italic font-medium"
-              >
-                {isFinished ? "System fully operational!" : STATUSES[statusIndex]}
-              </motion.p>
-            </AnimatePresence>
+            <p
+              ref={statusRef}
+              className="font-body-md text-[#3e4851] text-sm md:text-base italic font-medium"
+            >
+              {isFinished ? "System fully operational!" : STATUSES[statusIndex]}
+            </p>
           </div>
 
           {/* Auto-completes after 100% — no button shown */}
           <div className="mt-8 min-h-[40px]">
-            <AnimatePresence>
+            <GSAPPresence
+              isPresent={isFinished}
+              enterAnimation={el => gsap.fromTo(el, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3 })}
+              exitAnimation={el => gsap.to(el, { opacity: 0, y: -8, duration: 0.3 })}
+            >
               {isFinished && (
-                <motion.p
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-[#006494] text-sm font-bold tracking-wide"
-                >
+                <p className="text-[#006494] text-sm font-bold tracking-wide">
                   ✦ Launching...
-                </motion.p>
+                </p>
               )}
-            </AnimatePresence>
+            </GSAPPresence>
           </div>
         </div>
 
@@ -277,7 +296,38 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
             Connected to 22nd Century Labs
           </span>
         </div>
-      </motion.div>
+      </div>
     </div>
+  );
+}
+
+function RippleEffect({ x, y }: { x: number; y: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useGSAP(() => {
+    if (!ref.current) return;
+    gsap.fromTo(ref.current,
+      { scale: 0, opacity: 0.9 },
+      { scale: 3.5, opacity: 0, duration: 0.6, ease: "power2.out" }
+    );
+  }, []);
+
+  return (
+    <span
+      ref={ref}
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        width: "100px",
+        height: "100px",
+        borderRadius: "50%",
+        backgroundColor: "rgba(0, 100, 148, 0.23)",
+        pointerEvents: "none",
+        zIndex: 30,
+        transform: "translate(-50%, -50%)",
+        transformOrigin: "center"
+      }}
+    />
   );
 }

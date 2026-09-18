@@ -26,4 +26,4 @@ export { default as BannerScroller } from "./BannerScroller"
 export { default as DevIllustration } from "./DevIllustration"
 export { default as ResumeModal } from "./ResumeModal"
 export { default as DetailDialog } from "./DetailDialog"
-
+export { GSAPPresence } from "./GSAPPresence"

@@ -1,11 +1,38 @@
-import { useState } from "react"
-import { motion } from "framer-motion"
+import { useState, useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Mail, MapPin, Send, Check } from "@/components/ui/GlobalIcons"
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" })
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
   const [error, setError] = useState<string | null>(null)
+  const containerRef = useRef<HTMLElement>(null)
+  const errorRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+
+    gsap.fromTo('.contact-card', 
+      { opacity: 0, y: 40 },
+      { 
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%", once: true }
+      }
+    );
+  }, { scope: containerRef });
+
+  useGSAP(() => {
+    if (error && errorRef.current) {
+      gsap.fromTo(errorRef.current,
+        { opacity: 0, y: -10 },
+        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
+      );
+    }
+  }, { dependencies: [error] });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,15 +73,9 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative">
+    <section id="contact" ref={containerRef} className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative">
       <div className="animate-float-delayed">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-white/60 backdrop-blur-md rounded-4xl shadow-xl shadow-blue-900/5 relative overflow-hidden border border-white/50"
-        >
+        <div className="contact-card opacity-0 bg-white/60 backdrop-blur-md rounded-4xl shadow-xl shadow-blue-900/5 relative overflow-hidden border border-white/50">
           {/* Top red accent line */}
           <div className="absolute top-0 left-0 right-0 h-2 bg-doraemon-red"></div>
 
@@ -98,13 +119,12 @@ export default function ContactSection() {
             <div className="bg-white/40 backdrop-blur-md rounded-3xl p-8 shadow-inner border border-white/40">
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -10 }} 
-                    animate={{ opacity: 1, y: 0 }}
+                  <div 
+                    ref={errorRef}
                     className="bg-red-50 text-doraemon-red px-4 py-3 rounded-xl text-sm font-bold border border-red-200"
                   >
                     {error}
-                  </motion.div>
+                  </div>
                 )}
 
                 <div className="space-y-2">
@@ -146,7 +166,7 @@ export default function ContactSection() {
                 <button
                   type="submit"
                   disabled={status !== "idle"}
-                  className="w-full bg-[#006494] hover:bg-[#004d72] text-white font-bold py-3.5 rounded-full shadow-lg shadow-blue-900/20 transition-all duration-200 flex items-center justify-center gap-2 mt-2"
+                  className="w-full bg-[#006494] hover:bg-[#004d72] text-white font-bold py-3.5 rounded-full shadow-lg shadow-blue-900/20 transition-all duration-200 flex items-center justify-center gap-2 mt-2 disabled:opacity-70"
                 >
                   {status === "idle" && (
                     <>
@@ -155,7 +175,7 @@ export default function ContactSection() {
                   )}
                   {status === "sending" && "Teleporting..."}
                   {status === "sent" && (
-                    <span className="flex items-center gap-1">
+                     <span className="flex items-center gap-1">
                       Delivered! <Check className="w-4 h-4" />
                     </span>
                   )}
@@ -163,7 +183,7 @@ export default function ContactSection() {
               </form>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

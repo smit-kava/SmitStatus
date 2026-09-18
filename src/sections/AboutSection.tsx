@@ -1,9 +1,12 @@
-import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
 import { useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Zap, Target, Heart, Rocket } from "@/components/ui/GlobalIcons"
 import { Card, CardContent } from "@/components/ui/card"
 import { personalInfo } from "@/data/portfolioData"
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const values = [
   {
@@ -32,29 +35,76 @@ const values = [
   },
 ]
 
-function useScrollIn() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: "-100px" })
-  return { ref, inView }
-}
-
 export default function AboutSection() {
-  const { ref, inView } = useScrollIn()
+  const containerRef = useRef<HTMLElement>(null)
+
+  useGSAP(() => {
+    if (!containerRef.current) return;
+
+    // Header animation
+    gsap.fromTo('.about-header', 
+      { opacity: 0, y: 30 },
+      { 
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%", once: true }
+      }
+    );
+
+    // Left visual animation
+    gsap.fromTo('.about-visual',
+      { opacity: 0, x: -40 },
+      {
+        opacity: 1, x: 0, duration: 0.8, ease: "power2.out", delay: 0.2,
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%", once: true }
+      }
+    );
+
+    // Right text animation
+    gsap.fromTo('.about-text',
+      { opacity: 0, x: 40 },
+      {
+        opacity: 1, x: 0, duration: 0.8, ease: "power2.out", delay: 0.3,
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%", once: true }
+      }
+    );
+
+    // Values stagger
+    gsap.fromTo('.about-value',
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out", delay: 0.4,
+        scrollTrigger: { trigger: containerRef.current, start: "top 70%", once: true }
+      }
+    );
+
+    // Floating cards animations
+    gsap.to('.about-float-1', {
+      y: -16,
+      duration: 3,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut"
+    });
+    
+    gsap.to('.about-float-2', {
+      y: 16,
+      duration: 3.5,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut",
+      delay: 0.5
+    });
+
+  }, { scope: containerRef });
 
   return (
-    <section id="about" className="py-24 bg-doraemon-bg relative overflow-hidden">
+    <section id="about" ref={containerRef} className="py-24 bg-doraemon-bg relative overflow-hidden">
       {/* Subtle bg orb */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-doraemon-blue/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <div className="about-header text-center mb-16 opacity-0">
           <p className="text-doraemon-blue text-sm font-semibold tracking-widest uppercase mb-3">About Me</p>
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
             Who Am{" "}
@@ -65,16 +115,11 @@ export default function AboutSection() {
           <p className="text-gray-500 text-lg max-w-2xl mx-auto">
             A developer who combines technical expertise with creative thinking to build products people love.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Image / Visual */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
-          >
+          <div className="about-visual relative opacity-0">
             {/* Avatar placeholder */}
             <div className="relative w-80 h-80 mx-auto">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-doraemon-blue to-cyan-400 blur-2xl opacity-30" />
@@ -96,32 +141,19 @@ export default function AboutSection() {
             </div>
 
             {/* Floating cards */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="absolute -top-4 -right-4 bg-gradient-to-r from-doraemon-blue to-cyan-500 rounded-2xl p-4 shadow-xl shadow-doraemon-blue/20"
-            >
+            <div className="about-float-1 absolute -top-4 -right-4 bg-gradient-to-r from-doraemon-blue to-cyan-500 rounded-2xl p-4 shadow-xl shadow-doraemon-blue/20">
               <p className="text-white font-bold text-2xl">{personalInfo.yearsOfExp}</p>
               <p className="text-white/90 text-xs font-medium">Years Exp.</p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
-              className="absolute -bottom-4 -left-4 bg-white/60 backdrop-blur-md border border-white/50 rounded-2xl p-4 shadow-xl"
-            >
+            <div className="about-float-2 absolute -bottom-4 -left-4 bg-white/60 backdrop-blur-md border border-white/50 rounded-2xl p-4 shadow-xl">
               <p className="text-doraemon-darkBlue font-bold text-2xl">{personalInfo.projectsCompleted}</p>
               <p className="text-gray-500 text-xs font-medium">Projects</p>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Right: Text */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="space-y-6"
-          >
+          <div className="about-text space-y-6 opacity-0">
             <div className="space-y-4">
               <p className="text-gray-700 text-lg leading-relaxed font-medium">
                 {personalInfo.bio}
@@ -146,20 +178,15 @@ export default function AboutSection() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Values Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-20">
-          {values.map((val, index) => {
+          {values.map((val) => {
             const Icon = val.icon
             return (
-              <motion.div
-                key={val.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-              >
+              <div key={val.title} className="about-value opacity-0">
                 <Card className="group h-full bg-white/60 backdrop-blur-md border-white/50 hover:border-doraemon-blue/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                   <CardContent className="p-6 space-y-4">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${val.gradient} flex items-center justify-center shadow-md`}>
@@ -169,7 +196,7 @@ export default function AboutSection() {
                     <p className="text-gray-500 text-sm font-medium leading-relaxed">{val.description}</p>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             )
           })}
         </div>
