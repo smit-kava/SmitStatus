@@ -33,6 +33,10 @@ export default async function handler(req, res) {
     },
   });
 
+  console.log("Attempting to send email...");
+  console.log("Using email:", process.env.EMAIL_USER ? "Provided ✅" : "Missing ❌");
+  console.log("Using password:", process.env.EMAIL_PASS ? "Provided ✅" : "Missing ❌");
+
   const mailOptions = {
     from: email,
     to: process.env.EMAIL_USER,
