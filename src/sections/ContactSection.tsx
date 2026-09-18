@@ -86,13 +86,13 @@ export default function ContactSection() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        setStatus("sent");
-        setFormData({ name: "", email: "", message: "" });
-        setTimeout(() => setStatus("idle"), 4000);
-      } else {
-        throw new Error(data.error || "Failed to send message.");
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Failed to send message");
       }
+
+      setStatus("sent");
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 4000);
     } catch (err: any) {
       setError(
         err.message || "Could not connect to the server. Please try again.",
